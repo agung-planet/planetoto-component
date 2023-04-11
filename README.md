@@ -1,5 +1,6 @@
 # Planetoto Component
-[![](https://jitpack.io/v/oddy-dev/planetoto-component.svg)](https://jitpack.io/#oddy-dev/planetoto-component)
+
+[//]: # ([![]&#40;https://jitpack.io/v/oddy-dev/planetoto-component.svg&#41;]&#40;https://jitpack.io/#oddy-dev/planetoto-component&#41;)
 
 Planetoto Component is a collection of custom components used in the Planetoto project. Choose according the project used to be. 
 
