@@ -3,6 +3,7 @@ buildscript {
 
     repositories {
         google()
+        mavenCentral()
         maven { url "https://plugins.gradle.org/m2/" }
         maven { url "https://jitpack.io" }
     }
@@ -19,7 +20,7 @@ plugins{
 }
 
 allprojects {
-    group = 'com.github.oddy-dev.planetoto-component'
+    group = 'com.github.oddy-dev'
 }
 
 subprojects {
@@ -27,7 +28,7 @@ subprojects {
     afterEvaluate {
         publishing {
             publications {
-                release(MavenPublication) {
+                maven(MavenPublication) {
                     groupId project.group
                     artifactId project.name
                 }
