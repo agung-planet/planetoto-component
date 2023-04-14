@@ -15,7 +15,7 @@ buildscript {
 }
 
 allprojects {
-    group = 'oddy-dev.planetoto-component'
+    group = 'com.github.oddy-dev.planetoto-component'
 }
 
 subprojects {
