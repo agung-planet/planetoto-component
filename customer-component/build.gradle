@@ -4,6 +4,8 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
+group = 'com.github'
+
 android {
     namespace 'com.planetoto.customer_component'
     compileSdk 33
@@ -66,8 +68,15 @@ afterEvaluate {
         publications {
             release(MavenPublication) {
                 from components.release
-                groupId = 'com.github.oddy-dev.planetoto-component'
-                artifact sources
+                groupId = 'com.github.oddy-dev.planetoto-component.customer-component'
+                artifactId = 'customer-component'
+            }
+
+            debug(MavenPublication) {
+                from components.debug
+
+                groupId = 'com.github.oddy-dev.planetoto-component.customer-component'
+                artifactId = 'customer-component-debug'
             }
         }
     }
