@@ -39,6 +39,8 @@ android {
 }
 
 dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
     implementation "$libs.ktx"
     implementation "$libs.app_compat"
     implementation "$libs.material_component"
@@ -54,13 +56,18 @@ dependencies {
     implementation "$libs.constraint_compose"
 }
 
+task sources(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    archiveClassifier.set('sources')
+}
+
 afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
                 from components.release
                 groupId = 'com.github.oddy-dev.planetoto-component'
-                artifactId = 'customer-component'
+                artifact sources
             }
         }
     }
