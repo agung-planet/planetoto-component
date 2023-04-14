@@ -80,6 +80,9 @@ object PlanetColors {
             val turqoise08 = Solid(Color(0xFF00889D))
             val turqoise09 = Solid(Color(0xFF006676))
             val turqoise10 = Solid(Color(0xFF003740))
+
+            // Monochrome
+            val monochrome600 = Solid(Color(0xFF838B92))
         }
 
         fun alpha(value: Float): Solid = Solid(color.copy(alpha = value))
