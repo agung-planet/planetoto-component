@@ -23,7 +23,7 @@ subprojects {
     afterEvaluate {
         publishing {
             publications {
-                maven(MavenPublication) {
+                release(MavenPublication) {
                     groupId project.group
                     artifactId project.name
                 }
