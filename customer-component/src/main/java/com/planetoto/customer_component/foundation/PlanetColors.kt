@@ -81,6 +81,8 @@ object PlanetColors {
             val turqoise09 = Solid(Color(0xFF006676))
             val turqoise10 = Solid(Color(0xFF003740))
         }
+
+        fun alpha(value: Float): Solid = Solid(color.copy(alpha = value))
     }
 
     @Immutable
