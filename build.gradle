@@ -14,10 +14,6 @@ buildscript {
     }
 }
 
-configurations.all {
-    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-}
-
 allprojects {
     group = 'oddy-dev.planetoto-component'
 }
