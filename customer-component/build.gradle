@@ -59,7 +59,7 @@ afterEvaluate {
         publications {
             release(MavenPublication) {
                 from components.release
-                groupId = 'com.github.oddy-dev'
+                groupId = 'com.github.oddy-dev.planetoto-component'
                 artifactId = 'customer-component'
             }
         }
