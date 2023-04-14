@@ -12,6 +12,8 @@ android {
         minSdk 24
         targetSdk 33
 
+        versionCode 1
+        versionName "1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
@@ -52,4 +54,21 @@ dependencies {
     implementation "$libs.paging"
     implementation "$libs.insets"
     implementation "$libs.constraint_compose"
+}
+
+task sources(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    archiveClassifier.set('sources')
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.github.oddy-dev'
+                artifact sources
+            }
+        }
+    }
 }
