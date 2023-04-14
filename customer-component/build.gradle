@@ -5,7 +5,6 @@ plugins {
 }
 
 android {
-    namespace 'com.planetoto.customer_component'
     compileSdk 33
 
     defaultConfig {
