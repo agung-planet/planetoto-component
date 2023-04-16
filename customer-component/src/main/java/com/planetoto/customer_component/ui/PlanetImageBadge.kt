@@ -21,6 +21,7 @@ import com.planetoto.customer_component.utils.disableRipple
 
 @Composable
 fun PlanetImageBadge(
+    modifier: Modifier = Modifier,
     containerMinWidth: Dp = 32.dp,
     imageWidth: Dp = 20.dp,
     imageHeight: Dp = 24.dp,
@@ -32,7 +33,7 @@ fun PlanetImageBadge(
     onClick: () -> Unit
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .widthIn(min = containerMinWidth)
             .disableRipple(onClick = onClick)
     ) {

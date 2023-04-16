@@ -12,7 +12,7 @@ import com.skydoves.landscapist.ShimmerParams
 import com.skydoves.landscapist.coil.CoilImage
 
 @Composable
-fun PlanetDealerImage(
+fun PlanetImage(
     modifier: Modifier = Modifier,
     imageUrl: String,
     contentScale: ContentScale = ContentScale.Crop,
