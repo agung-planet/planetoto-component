@@ -49,6 +49,7 @@ dependencies {
     implementation "$libs.facebook_shimmer"
     implementation "$libs.ui_compose"
     implementation "$libs.ui_tooling"
+    debugImplementation "$libs.ui_tooling"
     implementation "$libs.material_compose"
     implementation "$libs.activity_compose"
     implementation "$libs.viewmodel_compose"
