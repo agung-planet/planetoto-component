@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.planetoto.customer_component.R
 import com.planetoto.customer_component.foundation.PlanetColors
+import com.planetoto.customer_component.foundation.PlanetTypography
 
 enum class PlanetTextFieldSize {
     Small, Large
@@ -51,7 +52,8 @@ fun PlanetTextField(
     maxLines: Int = Int.MAX_VALUE,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     size: PlanetTextFieldSize = PlanetTextFieldSize.Small,
-    errorMessage: String? = null,
+    isError: Boolean = false,
+    helperText: String? = null,
     hasClearAction: Boolean = false
 ) {
     BaseTextField(
@@ -68,7 +70,8 @@ fun PlanetTextField(
         maxLines = maxLines,
         visualTransformation = visualTransformation,
         size = size,
-        errorMessage = errorMessage,
+        helperText = helperText,
+        isError = isError,
         hasClearAction = hasClearAction,
         prefixBox = if (prefix != null) {
             {
@@ -127,7 +130,8 @@ internal fun BaseTextField(
     maxLines: Int = Int.MAX_VALUE,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     size: PlanetTextFieldSize = PlanetTextFieldSize.Small,
-    errorMessage: String? = null,
+    helperText: String? = null,
+    isError: Boolean = false,
     hasClearAction: Boolean = false,
     onClick: (() -> Unit)? = null
 ) {
@@ -138,15 +142,18 @@ internal fun BaseTextField(
             PlanetTextFieldSize.Large -> 50.dp
         }
     }
-    val borderColor by remember {
+    val borderColor by remember(enabled, isError) {
         derivedStateOf {
             when {
                 !enabled -> PlanetColors.Solid.neutralBorder02
                 isFocused -> PlanetColors.Solid.blue05
-                errorMessage != null -> PlanetColors.Solid.red05
+                isError -> PlanetColors.Solid.red05
                 else -> PlanetColors.Solid.neutralBorder01
             }
         }
+    }
+    val helperTextColor = remember(isError) {
+        if (isError) PlanetColors.Solid.red05 else PlanetColors.Solid.content03
     }
 
     BasicTextField(
@@ -223,6 +230,14 @@ internal fun BaseTextField(
 
                     suffixBox?.invoke(height)
                 }
+                helperText?.let {
+                    PlanetText(
+                        text = it,
+                        typography = PlanetTypography.CaptionHelper,
+                        color = helperTextColor,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
             }
         }
     )
@@ -243,7 +258,7 @@ private fun PreviewSearchInput() {
             placeholder = "Type here",
             label = "Search",
             hasClearAction = true,
-            errorMessage = ""
+            isError = false
         )
         PlanetTextField(
             text = text,
@@ -252,7 +267,7 @@ private fun PreviewSearchInput() {
             label = "Search",
             prefix = painterResource(id = R.drawable.ic_search),
             hasClearAction = true,
-            errorMessage = ""
+            isError = true
         )
         PlanetTextField(
             text = text,
@@ -261,7 +276,7 @@ private fun PreviewSearchInput() {
             label = "Search",
             suffix = painterResource(id = R.drawable.ic_search),
             hasClearAction = true,
-            errorMessage = ""
+            isError = true
         )
     }
 }

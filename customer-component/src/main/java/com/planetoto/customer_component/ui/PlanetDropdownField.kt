@@ -25,7 +25,8 @@ fun PlanetDropDownField(
     selectedValue: String? = null,
     enabled: Boolean = true,
     size: PlanetTextFieldSize = PlanetTextFieldSize.Small,
-    errorMessage: String? = null,
+    helperText: String? = null,
+    isError: Boolean = false,
     isSheetOpen: Boolean = false
 ) {
     BaseTextField(
@@ -38,7 +39,8 @@ fun PlanetDropDownField(
         readOnly = true,
         singleLine = true,
         size = size,
-        errorMessage = errorMessage,
+        isError = isError,
+        helperText = helperText,
         onClick = onClick,
         suffixBox = {
             val degree by animateFloatAsState(targetValue = if (isSheetOpen) 180f else 0f)
@@ -72,21 +74,21 @@ private fun PreviewSearchInput() {
             selectedValue = text,
             placeholder = "Type here",
             label = "Search",
-            errorMessage = "",
+            helperText = "",
             onClick = {}
         )
         PlanetDropDownField(
             selectedValue = text,
             placeholder = "Type here",
             label = "Search",
-            errorMessage = "",
+            helperText = "",
             onClick = {}
         )
         PlanetDropDownField(
             selectedValue = text,
             placeholder = "Type here",
             label = "Search",
-            errorMessage = "",
+            helperText = "",
             onClick = {}
         )
     }

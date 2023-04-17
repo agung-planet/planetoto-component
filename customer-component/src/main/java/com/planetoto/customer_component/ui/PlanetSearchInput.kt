@@ -30,7 +30,8 @@ fun PlanetSearchInput(
     onSearchClicked: (String) -> Unit,
     label: String,
     placeholder: String? = null,
-    errorMessage: String? = null,
+    helperText: String? = null,
+    isError: Boolean = false,
     size: PlanetTextFieldSize = PlanetTextFieldSize.Small,
     enabled: Boolean = true,
     editable: Boolean = true
@@ -47,7 +48,8 @@ fun PlanetSearchInput(
         keyboardActions = KeyboardActions(onSearch = { onSearchClicked(text) }),
         singleLine = true,
         size = size,
-        errorMessage = errorMessage,
+        helperText = helperText,
+        isError = isError,
         hasClearAction = true,
         suffixBox = {
             Box(
@@ -78,7 +80,8 @@ fun PlanetSearchInput(
     onClearText: () -> Unit,
     onClick: () -> Unit,
     placeholder: String? = null,
-    errorMessage: String? = null,
+    helperText: String? = null,
+    isError: Boolean = false,
     size: PlanetTextFieldSize = PlanetTextFieldSize.Small,
     enabled: Boolean = true
 ) {
@@ -92,7 +95,8 @@ fun PlanetSearchInput(
         readOnly = true,
         singleLine = true,
         size = size,
-        errorMessage = errorMessage,
+        helperText = helperText,
+        isError = isError,
         hasClearAction = true,
         onClick = onClick,
         suffixBox = {
@@ -129,7 +133,7 @@ private fun PreviewSearchInput() {
             onTextChange = { text = it },
             onSearchClicked = {},
             label = "Search",
-            errorMessage = "An error occurred"
+            helperText = "An error occurred"
         )
     }
 }
