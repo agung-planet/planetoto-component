@@ -1,11 +1,6 @@
 package com.planetoto.customer_component.ui
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.animateIntAsState
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
+import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -43,6 +38,7 @@ fun PlanetTextField(
     modifier: Modifier = Modifier,
     text: String,
     onTextChange: (String) -> Unit,
+    label: String,
     placeholder: String? = null,
     prefix: Painter? = null,
     suffix: Painter? = null,
@@ -93,89 +89,92 @@ fun PlanetTextField(
         maxLines = maxLines,
         visualTransformation = visualTransformation,
         decorationBox = { innerTextField ->
-            Row(
-                modifier = modifier
-                    .height(height)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(PlanetColors.Solid.neutralWhite.color)
-                    .border(
-                        width = 1.5.dp,
-                        color = borderColor.color,
-                        shape = RoundedCornerShape(8.dp)
-                    ),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                prefix?.let {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .width(height)
-                            .fillMaxHeight()
-                            .background(PlanetColors.Solid.neutralBg.color)
-                            .border(1.dp, PlanetColors.Solid.neutralBorder01.color)
-                    ) {
-                        Icon(
-                            painter = it,
-                            contentDescription = "prefix",
-                            tint = PlanetColors.Solid.blue07.color
-                        )
-                    }
-                }
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 14.dp),
-                    verticalArrangement = Arrangement.Center
+            Column {
+                PlanetText(text = label)
+                Row(
+                    modifier = modifier
+                        .padding(top = 4.dp)
+                        .height(height)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(PlanetColors.Solid.neutralWhite.color)
+                        .border(
+                            width = 1.5.dp,
+                            color = borderColor.color,
+                            shape = RoundedCornerShape(8.dp)
+                        ),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    placeholder?.let {
-                        val textSize by animateIntAsState(targetValue = if (isFocused) 9 else 12)
-                        val lineHeight by animateFloatAsState(targetValue = if (isFocused) 10.8f else 14.4f)
-                        PlanetText(
-                            text = it,
-                            fontWeight = FontWeight.W400,
-                            fontSize = textSize.sp,
-                            lineHeight = lineHeight.sp,
-                            color = PlanetColors.Solid.content03
-                        )
+                    prefix?.let {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .width(height)
+                                .fillMaxHeight()
+                                .background(PlanetColors.Solid.neutralBg.color)
+                                .border(1.dp, PlanetColors.Solid.neutralBorder01.color)
+                        ) {
+                            Icon(
+                                painter = it,
+                                contentDescription = "prefix",
+                                tint = PlanetColors.Solid.blue07.color
+                            )
+                        }
                     }
-
-                    if (isFocused) {
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(start = 14.dp),
+                        contentAlignment = Alignment.CenterStart
+                    ) {
+                        androidx.compose.animation.AnimatedVisibility(
+                            visible = placeholder != null && text.isEmpty(),
+                            enter = fadeIn(),
+                            exit = fadeOut()
+                        ) {
+                            PlanetText(
+                                text = placeholder.orEmpty(),
+                                fontWeight = FontWeight.W400,
+                                fontSize = 12.sp,
+                                lineHeight = 14.4.sp,
+                                color = PlanetColors.Solid.content03
+                            )
+                        }
                         innerTextField()
                     }
-                }
-                AnimatedVisibility(
-                    visible = text.isNotEmpty() && hasClearAction,
-                    enter = scaleIn(),
-                    exit = scaleOut()
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_close_rounded),
-                        contentDescription = "clear text",
-                        modifier = Modifier.clickable { onTextChange("") },
-                        tint = PlanetColors.Solid.content03.color
-                    )
-                }
-
-                if (suffix == null && prefix == null) {
-                    Spacer(modifier = Modifier.width(14.dp))
-                } else {
-                    Spacer(modifier = Modifier.width(8.dp))
-                }
-
-                suffix?.let {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .width(height)
-                            .fillMaxHeight()
-                            .background(PlanetColors.Solid.neutralBg.color)
-                            .border(1.dp, PlanetColors.Solid.neutralBorder01.color)
+                    AnimatedVisibility(
+                        visible = text.isNotEmpty() && hasClearAction,
+                        enter = scaleIn(),
+                        exit = scaleOut()
                     ) {
                         Icon(
-                            painter = it,
-                            contentDescription = "prefix",
-                            tint = PlanetColors.Solid.blue07.color
+                            painter = painterResource(id = R.drawable.ic_close_rounded),
+                            contentDescription = "clear text",
+                            modifier = Modifier.clickable { onTextChange("") },
+                            tint = PlanetColors.Solid.content03.color
                         )
+                    }
+
+                    if (suffix == null && prefix == null) {
+                        Spacer(modifier = Modifier.width(14.dp))
+                    } else {
+                        Spacer(modifier = Modifier.width(8.dp))
+                    }
+
+                    suffix?.let {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .width(height)
+                                .fillMaxHeight()
+                                .background(PlanetColors.Solid.neutralBg.color)
+                                .border(1.dp, PlanetColors.Solid.neutralBorder01.color)
+                        ) {
+                            Icon(
+                                painter = it,
+                                contentDescription = "prefix",
+                                tint = PlanetColors.Solid.blue07.color
+                            )
+                        }
                     }
                 }
             }
@@ -188,21 +187,23 @@ fun PlanetTextField(
 @Composable
 private fun PreviewSearchInput() {
     var text by remember {
-        mutableStateOf("abc")
+        mutableStateOf("")
     }
 
     Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         PlanetTextField(
             text = text,
             onTextChange = { text = it },
-            placeholder = "Search",
+            placeholder = "Type here",
+            label = "Search",
             hasClearAction = true,
             errorMessage = ""
         )
         PlanetTextField(
             text = text,
             onTextChange = { text = it },
-            placeholder = "Search",
+            placeholder = "Type here",
+            label = "Search",
             prefix = painterResource(id = R.drawable.ic_search),
             hasClearAction = true,
             errorMessage = ""
@@ -210,7 +211,8 @@ private fun PreviewSearchInput() {
         PlanetTextField(
             text = text,
             onTextChange = { text = it },
-            placeholder = "Search",
+            placeholder = "Type here",
+            label = "Search",
             suffix = painterResource(id = R.drawable.ic_search),
             hasClearAction = true,
             errorMessage = ""
