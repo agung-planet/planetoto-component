@@ -1,35 +1,26 @@
 package com.planetoto.customer_component.ui
 
-import androidx.compose.animation.*
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.animateIntAsState
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.planetoto.customer_component.R
 import com.planetoto.customer_component.foundation.PlanetColors
-import com.planetoto.customer_component.foundation.PlanetTypography
 
+/**
+ * An editable search input field
+ */
 @ExperimentalAnimationApi
 @Composable
 fun PlanetSearchInput(
@@ -38,109 +29,87 @@ fun PlanetSearchInput(
     onTextChange: (String) -> Unit,
     onSearchClicked: (String) -> Unit,
     label: String,
+    placeholder: String? = null,
+    errorMessage: String? = null,
+    size: PlanetTextFieldSize = PlanetTextFieldSize.Small,
+    enabled: Boolean = true,
+    editable: Boolean = true
+) {
+    BaseTextField(
+        modifier = modifier,
+        text = text,
+        onTextChange = onTextChange,
+        label = label,
+        placeholder = placeholder,
+        enabled = enabled,
+        readOnly = !editable,
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+        keyboardActions = KeyboardActions(onSearch = { onSearchClicked(text) }),
+        singleLine = true,
+        size = size,
+        errorMessage = errorMessage,
+        hasClearAction = true,
+        suffixBox = {
+            Box(
+                modifier = Modifier
+                    .size(it)
+                    .clickable { onSearchClicked(text) },
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_search),
+                    contentDescription = "search",
+                    tint = PlanetColors.Solid.content03.color
+                )
+            }
+        }
+    )
+}
+
+/**
+ * Non-editable search input field
+ */
+@ExperimentalAnimationApi
+@Composable
+fun PlanetSearchInput(
+    modifier: Modifier = Modifier,
+    text: String,
+    label: String,
+    onClearText: () -> Unit,
+    onClick: () -> Unit,
+    placeholder: String? = null,
     errorMessage: String? = null,
     size: PlanetTextFieldSize = PlanetTextFieldSize.Small,
     enabled: Boolean = true
 ) {
-    var isFocused by remember { mutableStateOf(false) }
-    val height = remember(size) {
-        when (size) {
-            PlanetTextFieldSize.Small -> 40.dp
-            PlanetTextFieldSize.Large -> 50.dp
-        }
-    }
-    val borderColor by remember(isFocused, errorMessage) {
-        derivedStateOf {
-            when {
-                !enabled -> PlanetColors.Solid.neutralBorder02
-                isFocused -> PlanetColors.Solid.blue05
-                !errorMessage.isNullOrEmpty() -> PlanetColors.Solid.red05
-                else -> PlanetColors.Solid.neutralBorder01
-            }
-        }
-    }
-
-    BasicTextField(
-        value = text,
-        onValueChange = onTextChange,
-        modifier = modifier.onFocusChanged { isFocused = it.isFocused || it.hasFocus },
+    BaseTextField(
+        modifier = modifier,
+        text = text,
+        onTextChange = { if (it.isEmpty()) onClearText() },
+        label = label,
+        placeholder = placeholder,
+        enabled = enabled,
+        readOnly = true,
         singleLine = true,
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-        keyboardActions = KeyboardActions(onSearch = { onSearchClicked(text) }),
-        textStyle = TextStyle(
-            color = PlanetColors.Solid.content02.color,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.W600,
-            fontFamily = FontFamily(Font(R.font.figtree)),
-            lineHeight = 14.4.sp
-        ),
-        decorationBox = { innerTextField ->
-            Column {
-                Row(
-                    modifier = modifier
-                        .height(height)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(PlanetColors.Solid.neutralWhite.color)
-                        .border(
-                            width = 1.5.dp,
-                            color = borderColor.color,
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                        .padding(horizontal = 14.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxHeight(),
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        val textSize by animateIntAsState(targetValue = if (isFocused) 9 else 12)
-                        val lineHeight by animateFloatAsState(targetValue = if (isFocused) 10.8f else 14.4f)
-                        PlanetText(
-                            text = label,
-                            fontWeight = FontWeight.W400,
-                            fontSize = textSize.sp,
-                            lineHeight = lineHeight.sp,
-                            color = PlanetColors.Solid.content03
-                        )
-                        if (isFocused) {
-                            innerTextField()
-                        }
-                    }
-                    AnimatedVisibility(
-                        visible = text.isNotEmpty(),
-                        enter = scaleIn(),
-                        exit = scaleOut()
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_close_rounded),
-                            contentDescription = "clear text",
-                            modifier = Modifier.clickable { onTextChange("") },
-                            tint = PlanetColors.Solid.content03.color
-                        )
-                    }
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_search),
-                        contentDescription = "search",
-                        tint = PlanetColors.Solid.content03.color,
-                        modifier = Modifier
-                            .clickable { onSearchClicked(text) }
-                            .padding(start = 10.dp)
-                    )
-                }
-                AnimatedVisibility(
-                    visible = !errorMessage.isNullOrEmpty(),
-                    enter = slideInVertically(),
-                    exit = slideOutVertically()
-                ) {
-                    PlanetText(
-                        text = errorMessage!!,
-                        typography = PlanetTypography.CaptionLabelOrTag,
-                        lineHeight = 20.sp,
-                        color = PlanetColors.Solid.red05
-                    )
-                }
+        size = size,
+        errorMessage = errorMessage,
+        hasClearAction = true,
+        onClick = onClick,
+        suffixBox = {
+            Box(
+                modifier = Modifier
+                    .size(it)
+                    .clickable(onClick = onClick),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_search),
+                    contentDescription = "search",
+                    tint = PlanetColors.Solid.content03.color,
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clickable(onClick = onClick)
+                )
             }
         }
     )

@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.planetoto.customer_component.R
@@ -52,6 +53,83 @@ fun PlanetTextField(
     size: PlanetTextFieldSize = PlanetTextFieldSize.Small,
     errorMessage: String? = null,
     hasClearAction: Boolean = false
+) {
+    BaseTextField(
+        modifier = modifier,
+        text = text,
+        onTextChange = onTextChange,
+        label = label,
+        placeholder = placeholder,
+        enabled = enabled,
+        readOnly = readOnly,
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
+        singleLine = singleLine,
+        maxLines = maxLines,
+        visualTransformation = visualTransformation,
+        size = size,
+        errorMessage = errorMessage,
+        hasClearAction = hasClearAction,
+        prefixBox = if (prefix != null) {
+            {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .width(it)
+                        .fillMaxHeight()
+                        .background(PlanetColors.Solid.neutralBg.color)
+                        .border(1.dp, PlanetColors.Solid.neutralBorder01.color)
+                ) {
+                    Icon(
+                        painter = prefix,
+                        contentDescription = "prefix",
+                        tint = PlanetColors.Solid.blue07.color
+                    )
+                }
+            }
+        } else null,
+        suffixBox = if (suffix != null) {
+            {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .width(it)
+                        .fillMaxHeight()
+                        .background(PlanetColors.Solid.neutralBg.color)
+                        .border(1.dp, PlanetColors.Solid.neutralBorder01.color)
+                ) {
+                    Icon(
+                        painter = suffix,
+                        contentDescription = "suffix",
+                        tint = PlanetColors.Solid.blue07.color
+                    )
+                }
+            }
+        } else null
+    )
+}
+
+@ExperimentalAnimationApi
+@Composable
+internal fun BaseTextField(
+    modifier: Modifier = Modifier,
+    text: String,
+    onTextChange: (String) -> Unit,
+    label: String,
+    placeholder: String? = null,
+    prefixBox: (@Composable (Dp) -> Unit)? = null,
+    suffixBox: (@Composable (Dp) -> Unit)? = null,
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    singleLine: Boolean = false,
+    maxLines: Int = Int.MAX_VALUE,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    size: PlanetTextFieldSize = PlanetTextFieldSize.Small,
+    errorMessage: String? = null,
+    hasClearAction: Boolean = false,
+    onClick: (() -> Unit)? = null
 ) {
     var isFocused by remember { mutableStateOf(false) }
     val height = remember(size) {
@@ -87,12 +165,13 @@ fun PlanetTextField(
         ),
         readOnly = readOnly,
         maxLines = maxLines,
+        enabled = enabled,
         visualTransformation = visualTransformation,
         decorationBox = { innerTextField ->
             Column {
                 PlanetText(text = label)
                 Row(
-                    modifier = modifier
+                    modifier = Modifier
                         .padding(top = 4.dp)
                         .height(height)
                         .clip(RoundedCornerShape(8.dp))
@@ -101,29 +180,17 @@ fun PlanetTextField(
                             width = 1.5.dp,
                             color = borderColor.color,
                             shape = RoundedCornerShape(8.dp)
-                        ),
+                        ).run {
+                            if (onClick != null) clickable(onClick = onClick) else this
+                        },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    prefix?.let {
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier
-                                .width(height)
-                                .fillMaxHeight()
-                                .background(PlanetColors.Solid.neutralBg.color)
-                                .border(1.dp, PlanetColors.Solid.neutralBorder01.color)
-                        ) {
-                            Icon(
-                                painter = it,
-                                contentDescription = "prefix",
-                                tint = PlanetColors.Solid.blue07.color
-                            )
-                        }
-                    }
+                    prefixBox?.invoke(height)
+
                     Box(
                         modifier = Modifier
                             .weight(1f)
-                            .padding(start = 14.dp),
+                            .padding(start = 16.dp),
                         contentAlignment = Alignment.CenterStart
                     ) {
                         androidx.compose.animation.AnimatedVisibility(
@@ -133,9 +200,7 @@ fun PlanetTextField(
                         ) {
                             PlanetText(
                                 text = placeholder.orEmpty(),
-                                fontWeight = FontWeight.W400,
-                                fontSize = 12.sp,
-                                lineHeight = 14.4.sp,
+                                lineHeight = 16.8.sp,
                                 color = PlanetColors.Solid.content03
                             )
                         }
@@ -149,33 +214,14 @@ fun PlanetTextField(
                         Icon(
                             painter = painterResource(id = R.drawable.ic_close_rounded),
                             contentDescription = "clear text",
-                            modifier = Modifier.clickable { onTextChange("") },
+                            modifier = Modifier
+                                .size(24.dp)
+                                .clickable { onTextChange("") },
                             tint = PlanetColors.Solid.content03.color
                         )
                     }
 
-                    if (suffix == null && prefix == null) {
-                        Spacer(modifier = Modifier.width(14.dp))
-                    } else {
-                        Spacer(modifier = Modifier.width(8.dp))
-                    }
-
-                    suffix?.let {
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier
-                                .width(height)
-                                .fillMaxHeight()
-                                .background(PlanetColors.Solid.neutralBg.color)
-                                .border(1.dp, PlanetColors.Solid.neutralBorder01.color)
-                        ) {
-                            Icon(
-                                painter = it,
-                                contentDescription = "prefix",
-                                tint = PlanetColors.Solid.blue07.color
-                            )
-                        }
-                    }
+                    suffixBox?.invoke(height)
                 }
             }
         }
