@@ -76,7 +76,7 @@ fun PlanetSearchInput(
 fun PlanetSearchInput(
     modifier: Modifier = Modifier,
     text: String,
-    label: String,
+    label: String?,
     onClearText: () -> Unit,
     onClick: () -> Unit,
     placeholder: String? = null,

@@ -27,6 +27,35 @@ fun PlanetToolbar(
     },
     onNavigateUp: (() -> Unit)? = null
 ) {
+    PlanetToolbar(
+        title = {
+            PlanetText(
+                text = title,
+                color = PlanetColors.Solid.neutralWhite,
+                typography = PlanetTypography.TitleBody
+            )
+        },
+        backgroundColor = backgroundColor,
+        showNavigateUp = showNavigateUp,
+        navigateUpIcon = navigateUpIcon,
+        onNavigateUp = onNavigateUp
+    )
+}
+
+@Composable
+fun PlanetToolbar(
+    title: @Composable () -> Unit,
+    backgroundColor: PlanetColors.Solid = PlanetColors.Solid.blue07,
+    showNavigateUp: Boolean = false,
+    navigateUpIcon: @Composable () -> Unit = {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_arrow_left_16),
+            contentDescription = "up",
+            tint = PlanetColors.Solid.neutralWhite.color
+        )
+    },
+    onNavigateUp: (() -> Unit)? = null
+) {
     Box {
         Column(
             modifier = Modifier
@@ -49,11 +78,7 @@ fun PlanetToolbar(
                     Spacer(modifier = Modifier.width(12.dp))
                 }
 
-                PlanetText(
-                    text = title,
-                    color = PlanetColors.Solid.neutralWhite,
-                    typography = PlanetTypography.TitleBody
-                )
+                title()
             }
         }
     }

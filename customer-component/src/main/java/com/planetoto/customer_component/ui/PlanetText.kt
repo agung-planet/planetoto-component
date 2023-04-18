@@ -3,6 +3,7 @@ package com.planetoto.customer_component.ui
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
@@ -92,8 +93,12 @@ fun PlanetText(
     onTextLayout: (TextLayoutResult) -> Unit = {},
     style: TextStyle = LocalTextStyle.current
 ) {
+    val finalText = remember(typography) {
+        if (typography::class.simpleName?.contains("uppercase") == true) text.uppercase() else text
+    }
+
     Text(
-        text = text,
+        text = finalText,
         modifier = modifier,
         color = color.color,
         fontSize = fontSize,
