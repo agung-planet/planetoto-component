@@ -118,7 +118,7 @@ internal fun BaseTextField(
     modifier: Modifier = Modifier,
     text: String,
     onTextChange: (String) -> Unit,
-    label: String,
+    label: String?,
     placeholder: String? = null,
     prefixBox: (@Composable (Dp) -> Unit)? = null,
     suffixBox: (@Composable (Dp) -> Unit)? = null,
@@ -176,7 +176,9 @@ internal fun BaseTextField(
         visualTransformation = visualTransformation,
         decorationBox = { innerTextField ->
             Column {
-                PlanetText(text = label)
+                label?.let {
+                    PlanetText(text = it)
+                }
                 Row(
                     modifier = Modifier
                         .padding(top = 4.dp)

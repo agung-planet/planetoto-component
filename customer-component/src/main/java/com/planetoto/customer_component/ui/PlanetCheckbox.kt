@@ -23,7 +23,7 @@ import com.planetoto.customer_component.foundation.PlanetTypography
 fun PlanetCheckbox(
     modifier: Modifier = Modifier,
     checked: Boolean,
-    text: String,
+    text: String?,
     isError: Boolean = false,
     onCheckedChange: (Boolean) -> Unit,
     textColor: PlanetColors.Solid = PlanetColors.Solid.content01
@@ -38,14 +38,16 @@ fun PlanetCheckbox(
             onCheckedChange = onCheckedChange,
             isError = isError
         )
-        PlanetText(
-            text = text,
-            color = textColor,
-            modifier = Modifier
-                .clickable { onCheckedChange(!checked) }
-                .padding(end = 8.dp),
-            typography = if (checked) PlanetTypography.BodyDefaultBold else PlanetTypography.BodyDefault14
-        )
+        text?.let {
+            PlanetText(
+                text = it,
+                color = textColor,
+                modifier = Modifier
+                    .clickable { onCheckedChange(!checked) }
+                    .padding(end = 8.dp),
+                typography = if (checked) PlanetTypography.BodyDefaultBold else PlanetTypography.BodyDefault14
+            )
+        }
     }
 }
 

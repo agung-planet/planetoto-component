@@ -20,9 +20,9 @@ import com.planetoto.customer_component.foundation.PlanetTypography
 fun PlanetRadio(
     modifier: Modifier = Modifier,
     checked: Boolean,
-    text: String,
+    text: String?,
     isError: Boolean = false,
-    onCheckedChange: (Boolean) -> Unit,
+    onChecked: () -> Unit,
     textColor: PlanetColors.Solid = PlanetColors.Solid.content01
 ) {
     Row(
@@ -32,17 +32,19 @@ fun PlanetRadio(
     ) {
         RadioIndicator(
             checked = checked,
-            onCheckedChange = onCheckedChange,
+            onChecked = onChecked,
             isError = isError
         )
-        PlanetText(
-            text = text,
-            color = textColor,
-            modifier = Modifier
-                .clickable { onCheckedChange(true) }
-                .padding(end = 8.dp),
-            typography = if (checked) PlanetTypography.BodyDefaultBold else PlanetTypography.BodyDefault14
-        )
+        text?.let {
+            PlanetText(
+                text = it,
+                color = textColor,
+                modifier = Modifier
+                    .clickable(onClick = onChecked)
+                    .padding(end = 8.dp),
+                typography = if (checked) PlanetTypography.BodyDefaultBold else PlanetTypography.BodyDefault14
+            )
+        }
     }
 }
 
@@ -50,7 +52,7 @@ fun PlanetRadio(
 private fun RadioIndicator(
     modifier: Modifier = Modifier,
     checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
+    onChecked: () -> Unit,
     isError: Boolean = false
 ) {
     val background = remember(checked) {
@@ -74,7 +76,7 @@ private fun RadioIndicator(
             .clip(CircleShape)
             .background(bgAnimation)
             .border(1.dp, borderColorAnimation, CircleShape)
-            .clickable { onCheckedChange(true) },
+            .clickable(onClick = onChecked),
         contentAlignment = Alignment.Center
     ) {
         AnimatedVisibility(visible = checked) {
@@ -95,7 +97,7 @@ private fun PreviewRadio() {
     Box {
         PlanetRadio(
             checked = checked,
-            onCheckedChange = { checked = it },
+            onChecked = { checked = true },
             isError = true,
             text = "What a radio"
         )
