@@ -20,7 +20,7 @@ import com.planetoto.customer_component.foundation.PlanetTypography
 fun PlanetRadio(
     modifier: Modifier = Modifier,
     checked: Boolean,
-    text: String,
+    text: String?,
     isError: Boolean = false,
     onCheckedChange: (Boolean) -> Unit,
     textColor: PlanetColors.Solid = PlanetColors.Solid.content01
@@ -35,14 +35,16 @@ fun PlanetRadio(
             onCheckedChange = onCheckedChange,
             isError = isError
         )
-        PlanetText(
-            text = text,
-            color = textColor,
-            modifier = Modifier
-                .clickable { onCheckedChange(true) }
-                .padding(end = 8.dp),
-            typography = if (checked) PlanetTypography.BodyDefaultBold else PlanetTypography.BodyDefault14
-        )
+        text?.let {
+            PlanetText(
+                text = it,
+                color = textColor,
+                modifier = Modifier
+                    .clickable { onCheckedChange(true) }
+                    .padding(end = 8.dp),
+                typography = if (checked) PlanetTypography.BodyDefaultBold else PlanetTypography.BodyDefault14
+            )
+        }
     }
 }
 
