@@ -28,7 +28,7 @@ sealed class PlanetTypography(
     object BodyDefault14 : PlanetTypography(size = 14.sp, lineHeight = 24.sp, weight = FontWeight.W400)
     object BodyDefaultBold : PlanetTypography(size = 14.sp, lineHeight = 24.sp, weight = FontWeight.W700)
     object BodyDefault12 : PlanetTypography(size = 12.sp, lineHeight = 22.sp, weight = FontWeight.W400)
-    object CaptionHelper : PlanetTypography(size = 12.sp, lineHeight = 22.sp, weight = FontWeight.W400)
+    object CaptionHelper : PlanetTypography(size = 11.sp, lineHeight = 20.sp, weight = FontWeight.W400)
     object CaptionUppercase : PlanetTypography(size = 11.sp, lineHeight = null, weight = FontWeight.W600)
     object CaptionLabelOrTag : PlanetTypography(size = 11.sp, lineHeight = null, weight = FontWeight.W600)
     object CaptionCodeType : PlanetTypography(size = 14.sp, lineHeight = 24.sp, weight = FontWeight.W400)
