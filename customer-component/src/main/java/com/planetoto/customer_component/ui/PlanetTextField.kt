@@ -177,11 +177,10 @@ internal fun BaseTextField(
         decorationBox = { innerTextField ->
             Column {
                 label?.let {
-                    PlanetText(text = it)
+                    PlanetText(text = it, modifier = Modifier.padding(bottom = 4.dp))
                 }
                 Row(
                     modifier = Modifier
-                        .padding(top = 4.dp)
                         .height(height)
                         .clip(RoundedCornerShape(8.dp))
                         .background(PlanetColors.Solid.neutralWhite.color)

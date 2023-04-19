@@ -28,7 +28,7 @@ fun PlanetSearchInput(
     text: String,
     onTextChange: (String) -> Unit,
     onSearchClicked: (String) -> Unit,
-    label: String,
+    label: String?,
     placeholder: String? = null,
     helperText: String? = null,
     isError: Boolean = false,
