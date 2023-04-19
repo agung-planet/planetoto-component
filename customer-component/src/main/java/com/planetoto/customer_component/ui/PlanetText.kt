@@ -94,7 +94,9 @@ fun PlanetText(
     style: TextStyle = LocalTextStyle.current
 ) {
     val finalText = remember(typography) {
-        if (typography::class.simpleName?.contains("uppercase") == true) text.uppercase() else text
+        if (typography::class.simpleName?.contains("uppercase", ignoreCase = true) == true) {
+            text.uppercase()
+        } else text
     }
 
     Text(
