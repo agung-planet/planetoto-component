@@ -22,6 +22,9 @@ enum class PlanetTextFieldSize {
     Small, Large
 }
 
+/**
+ * Editable, non clickable by default
+ */
 @ExperimentalAnimationApi
 @Composable
 fun PlanetTextField(
@@ -100,6 +103,9 @@ fun PlanetTextField(
     )
 }
 
+/**
+ * Non editable, clickable by default
+ */
 @ExperimentalAnimationApi
 @Composable
 fun PlanetTextField(
