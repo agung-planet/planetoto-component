@@ -33,8 +33,7 @@ fun PlanetSearchInput(
     helperText: String? = null,
     isError: Boolean = false,
     size: PlanetTextFieldSize = PlanetTextFieldSize.Small,
-    enabled: Boolean = true,
-    editable: Boolean = true
+    enabled: Boolean = true
 ) {
     BaseTextField(
         modifier = modifier,
@@ -43,7 +42,7 @@ fun PlanetSearchInput(
         label = label,
         placeholder = placeholder,
         enabled = enabled,
-        readOnly = !editable,
+        readOnly = false,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         keyboardActions = KeyboardActions(onSearch = { onSearchClicked(text) }),
         singleLine = true,
