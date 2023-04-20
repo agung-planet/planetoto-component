@@ -33,7 +33,8 @@ fun PlanetSearchInput(
     helperText: String? = null,
     isError: Boolean = false,
     size: PlanetTextFieldSize = PlanetTextFieldSize.Small,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    hasClearAction: Boolean = true
 ) {
     BaseTextField(
         modifier = modifier,
@@ -49,7 +50,7 @@ fun PlanetSearchInput(
         size = size,
         helperText = helperText,
         isError = isError,
-        hasClearAction = true,
+        hasClearAction = hasClearAction,
         suffixBox = {
             Box(
                 modifier = Modifier
@@ -82,7 +83,8 @@ fun PlanetSearchInput(
     helperText: String? = null,
     isError: Boolean = false,
     size: PlanetTextFieldSize = PlanetTextFieldSize.Small,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    hasClearAction: Boolean = false
 ) {
     BaseTextField(
         modifier = modifier,
@@ -96,7 +98,7 @@ fun PlanetSearchInput(
         size = size,
         helperText = helperText,
         isError = isError,
-        hasClearAction = true,
+        hasClearAction = hasClearAction,
         onClick = onClick,
         suffixBox = {
             Box(
