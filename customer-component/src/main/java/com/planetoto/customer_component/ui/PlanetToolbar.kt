@@ -22,7 +22,8 @@ fun PlanetToolbar(
         Icon(
             painter = painterResource(id = R.drawable.ic_arrow_left_16),
             contentDescription = "up",
-            tint = PlanetColors.Solid.neutralWhite.color
+            tint = PlanetColors.Solid.neutralWhite.color,
+            modifier = Modifier.size(24.dp)
         )
     },
     onNavigateUp: (() -> Unit)? = null
@@ -51,35 +52,29 @@ fun PlanetToolbar(
         Icon(
             painter = painterResource(id = R.drawable.ic_arrow_left_16),
             contentDescription = "up",
-            tint = PlanetColors.Solid.neutralWhite.color
+            tint = PlanetColors.Solid.neutralWhite.color,
+            modifier = Modifier.size(24.dp)
         )
     },
     onNavigateUp: (() -> Unit)? = null
 ) {
-    Box {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(backgroundColor.color),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Spacer(modifier = Modifier.windowInsetsTopHeight(WindowInsets.statusBars))
-
-            Row(
-                modifier = Modifier
-                    .height(60.dp)
-                    .padding(horizontal = 12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                if (showNavigateUp) {
-                    if (onNavigateUp == null) throw IllegalArgumentException("must implement onNavigateUp!")
-                    IconButton(onClick = onNavigateUp, content = navigateUpIcon)
-                } else {
-                    Spacer(modifier = Modifier.width(12.dp))
-                }
-
-                title()
-            }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(backgroundColor.color)
+            .padding(horizontal = 16.dp, vertical = 20.dp)
+            .heightIn(min = 40.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        if (showNavigateUp) {
+            if (onNavigateUp == null) throw IllegalArgumentException("must implement onNavigateUp!")
+            IconButton(
+                onClick = onNavigateUp,
+                content = navigateUpIcon,
+                modifier = Modifier.padding(end = 16.dp)
+            )
         }
+
+        title()
     }
 }
