@@ -1,39 +1,30 @@
 package com.planetoto.customer_component.ui
 
-import androidx.compose.animation.*
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.planetoto.customer_component.R
 import com.planetoto.customer_component.foundation.PlanetColors
-import com.planetoto.customer_component.foundation.PlanetTypography
 
 enum class PlanetTextFieldSize {
     Small, Large
 }
 
+/**
+ * Editable, non clickable by default
+ */
 @ExperimentalAnimationApi
 @Composable
 fun PlanetTextField(
@@ -112,135 +103,75 @@ fun PlanetTextField(
     )
 }
 
+/**
+ * Non editable, clickable by default
+ */
 @ExperimentalAnimationApi
 @Composable
-internal fun BaseTextField(
+fun PlanetTextField(
     modifier: Modifier = Modifier,
     text: String,
-    onTextChange: (String) -> Unit,
-    label: String?,
+    label: String,
     placeholder: String? = null,
-    prefixBox: (@Composable (Dp) -> Unit)? = null,
-    suffixBox: (@Composable (Dp) -> Unit)? = null,
+    prefix: Painter? = null,
+    suffix: Painter? = null,
     enabled: Boolean = true,
-    readOnly: Boolean = false,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions.Default,
-    singleLine: Boolean = false,
-    maxLines: Int = Int.MAX_VALUE,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
     size: PlanetTextFieldSize = PlanetTextFieldSize.Small,
-    helperText: String? = null,
     isError: Boolean = false,
+    helperText: String? = null,
     hasClearAction: Boolean = false,
-    onClick: (() -> Unit)? = null
+    onClick: () -> Unit
 ) {
-    var isFocused by remember { mutableStateOf(false) }
-    val height = remember(size) {
-        when (size) {
-            PlanetTextFieldSize.Small -> 40.dp
-            PlanetTextFieldSize.Large -> 50.dp
-        }
-    }
-    val borderColor by remember(enabled, isError) {
-        derivedStateOf {
-            when {
-                !enabled -> PlanetColors.Solid.neutralBorder02
-                isFocused -> PlanetColors.Solid.blue05
-                isError -> PlanetColors.Solid.red05
-                else -> PlanetColors.Solid.neutralBorder01
-            }
-        }
-    }
-    val helperTextColor = remember(isError) {
-        if (isError) PlanetColors.Solid.red05 else PlanetColors.Solid.content03
-    }
-
-    BasicTextField(
-        value = text,
-        onValueChange = onTextChange,
-        modifier = modifier.onFocusChanged { isFocused = it.isFocused || it.hasFocus },
-        singleLine = singleLine,
-        keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions,
-        textStyle = TextStyle(
-            color = PlanetColors.Solid.content02.color,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.W600,
-            fontFamily = FontFamily(Font(R.font.figtree)),
-            lineHeight = 14.4.sp
-        ),
-        readOnly = readOnly,
-        maxLines = maxLines,
+    BaseTextField(
+        modifier = modifier,
+        text = text,
+        onTextChange = {},
+        label = label,
+        placeholder = placeholder,
         enabled = enabled,
-        visualTransformation = visualTransformation,
-        decorationBox = { innerTextField ->
-            Column {
-                label?.let {
-                    PlanetText(text = it, modifier = Modifier.padding(bottom = 4.dp))
-                }
-                Row(
+        readOnly = true,
+        singleLine = true,
+        size = size,
+        helperText = helperText,
+        isError = isError,
+        hasClearAction = hasClearAction,
+        onClick = onClick,
+        prefixBox = if (prefix != null) {
+            {
+                Box(
+                    contentAlignment = Alignment.Center,
                     modifier = Modifier
-                        .height(height)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(PlanetColors.Solid.neutralWhite.color)
-                        .border(
-                            width = 1.5.dp,
-                            color = borderColor.color,
-                            shape = RoundedCornerShape(8.dp)
-                        ).run {
-                            if (onClick != null) clickable(onClick = onClick) else this
-                        },
-                    verticalAlignment = Alignment.CenterVertically
+                        .width(it)
+                        .fillMaxHeight()
+                        .background(PlanetColors.Solid.neutralBg.color)
+                        .border(1.dp, PlanetColors.Solid.neutralBorder01.color)
                 ) {
-                    prefixBox?.invoke(height)
-
-                    Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(start = 16.dp),
-                        contentAlignment = Alignment.CenterStart
-                    ) {
-                        androidx.compose.animation.AnimatedVisibility(
-                            visible = placeholder != null && text.isEmpty(),
-                            enter = fadeIn(),
-                            exit = fadeOut()
-                        ) {
-                            PlanetText(
-                                text = placeholder.orEmpty(),
-                                lineHeight = 16.8.sp,
-                                color = PlanetColors.Solid.content03
-                            )
-                        }
-                        innerTextField()
-                    }
-                    AnimatedVisibility(
-                        visible = text.isNotEmpty() && hasClearAction,
-                        enter = scaleIn(),
-                        exit = scaleOut()
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_close_rounded),
-                            contentDescription = "clear text",
-                            modifier = Modifier
-                                .size(24.dp)
-                                .clickable { onTextChange("") },
-                            tint = PlanetColors.Solid.content03.color
-                        )
-                    }
-
-                    suffixBox?.invoke(height)
-                }
-                helperText?.let {
-                    PlanetText(
-                        text = it,
-                        typography = PlanetTypography.CaptionHelper,
-                        color = helperTextColor,
-                        modifier = Modifier.padding(top = 4.dp)
+                    Icon(
+                        painter = prefix,
+                        contentDescription = "prefix",
+                        tint = PlanetColors.Solid.blue07.color
                     )
                 }
             }
-        }
+        } else null,
+        suffixBox = if (suffix != null) {
+            {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .width(it)
+                        .fillMaxHeight()
+                        .background(PlanetColors.Solid.neutralBg.color)
+                        .border(1.dp, PlanetColors.Solid.neutralBorder01.color)
+                ) {
+                    Icon(
+                        painter = suffix,
+                        contentDescription = "suffix",
+                        tint = PlanetColors.Solid.blue07.color
+                    )
+                }
+            }
+        } else null
     )
 }
 

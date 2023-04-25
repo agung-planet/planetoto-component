@@ -25,7 +25,7 @@ enum class PlanetButtonSize {
 }
 
 enum class PlanetButtonType {
-    Primary, Secondary, Tertiary
+    Primary, Secondary
 }
 
 @Composable
@@ -145,47 +145,74 @@ fun PlanetButton(
                 }
             }
         }
-        PlanetButtonType.Tertiary -> {
-            val textColor = remember(enabled) {
-                val color = PlanetColors.Solid.neutralWhite
-                if (enabled) color else color.alpha(0.3f)
-            }
-            OutlinedButton(
-                modifier = modifier
-                    .height(height)
-                    .onFocusChanged {
-                        hasFocus = it.hasFocus || it.isFocused
-                    },
-                onClick = onClick,
-                enabled = enabled,
-                contentPadding = contentPadding,
-                shape = RoundedCornerShape(LocalBorderRadius.current.large),
-                elevation = ButtonDefaults.elevation(
-                    defaultElevation = 0.dp,
-                    pressedElevation = 4.dp,
-                    hoveredElevation = 2.dp,
-                    focusedElevation = 2.dp
-                ),
-                border = borderColor ?: BorderStroke(1.dp, PlanetColors.Solid.neutralWhite.color),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    backgroundColor = Color.Transparent,
-                    contentColor = Color.White,
-                    disabledContentColor = textColor.color
-                )
-            ) {
-                PlanetText(
-                    text = text.capitalizeWords(),
-                    typography = typography,
-                    color = textColor
-                )
-                iconPainter?.let {
-                    Icon(
-                        painter = it,
-                        contentDescription = null,
-                        modifier = Modifier.padding(start = 10.dp)
-                    )
-                }
-            }
+    }
+}
+
+@Composable
+fun PlanetOutlinedButton(
+    modifier: Modifier = Modifier,
+    text: String,
+    enabled: Boolean = true,
+    size: PlanetButtonSize = PlanetButtonSize.Medium,
+    iconPainter: Painter? = null,
+    contentPadding: PaddingValues = PaddingValues(vertical = 10.dp, horizontal = 15.dp),
+    color: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
+    onClick: () -> Unit
+) {
+    var hasFocus by remember { mutableStateOf(false) }
+    val borderColor by remember {
+        derivedStateOf {
+            if (hasFocus && enabled) BorderStroke(1.dp, PlanetColors.Solid.red07.color) else null
+        }
+    }
+    val height = remember(size) {
+        when (size) {
+            PlanetButtonSize.Medium -> 36.dp
+            PlanetButtonSize.Large -> 50.dp
+        }
+    }
+    val typography = remember(size) {
+        when (size) {
+            PlanetButtonSize.Medium -> PlanetTypography.LabelSmallButton
+            PlanetButtonSize.Large -> PlanetTypography.LabelMediumButton
+        }
+    }
+
+    OutlinedButton(
+        modifier = modifier
+            .height(height)
+            .onFocusChanged {
+                hasFocus = it.hasFocus || it.isFocused
+            },
+        onClick = onClick,
+        enabled = enabled,
+        contentPadding = contentPadding,
+        shape = RoundedCornerShape(LocalBorderRadius.current.large),
+        elevation = ButtonDefaults.elevation(
+            defaultElevation = 0.dp,
+            pressedElevation = 4.dp,
+            hoveredElevation = 2.dp,
+            focusedElevation = 2.dp
+        ),
+        border = borderColor ?: BorderStroke(1.dp, PlanetColors.Solid.neutralWhite.color),
+        colors = ButtonDefaults.outlinedButtonColors(
+            backgroundColor = Color.Transparent,
+            contentColor = color.color,
+            disabledContentColor = color.color.copy(.3f)
+        )
+    ) {
+        PlanetText(
+            text = text.capitalizeWords(),
+            typography = typography,
+            color = color
+        )
+        iconPainter?.let {
+            Icon(
+                painter = it,
+                contentDescription = null,
+                modifier = Modifier.padding(start = 10.dp),
+                tint = color.color
+            )
         }
     }
 }
@@ -198,30 +225,30 @@ private fun PreviewButton() {
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            PlanetButton(text = "Primary enabled") {}
-            PlanetButton(text = "Primary disabled", enabled = false) {}
+            PlanetButton(text = "Primary enabled", onClick = {})
+            PlanetButton(text = "Primary disabled", enabled = false, onClick = {})
         }
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            PlanetButton(text = "Secondary enabled", type = PlanetButtonType.Secondary) {}
+            PlanetButton(
+                text = "Secondary enabled",
+                type = PlanetButtonType.Secondary,
+                onClick = {}
+            )
             PlanetButton(
                 text = "Secondary disabled",
                 enabled = false,
-                type = PlanetButtonType.Secondary
-            ) {}
+                type = PlanetButtonType.Secondary,
+                onClick = {})
         }
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            PlanetButton(text = "Tertiary enabled", type = PlanetButtonType.Tertiary) {}
-            PlanetButton(
-                text = "Tertiary disabled",
-                enabled = false,
-                type = PlanetButtonType.Tertiary
-            ) {}
+            PlanetOutlinedButton(text = "Tertiary enabled", onClick = {})
+            PlanetOutlinedButton(text = "Tertiary disabled", enabled = false, onClick = {})
         }
     }
 }
