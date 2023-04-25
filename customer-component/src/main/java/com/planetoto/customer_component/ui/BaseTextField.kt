@@ -33,11 +33,8 @@ import com.planetoto.customer_component.foundation.PlanetTypography
 internal fun BaseTextField(
     modifier: Modifier = Modifier,
     text: String,
-    onTextChange: (String) -> Unit,
     label: String?,
     placeholder: String? = null,
-    prefixBox: (@Composable (Dp) -> Unit)? = null,
-    suffixBox: (@Composable (Dp) -> Unit)? = null,
     enabled: Boolean = true,
     readOnly: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -49,6 +46,9 @@ internal fun BaseTextField(
     helperText: String? = null,
     isError: Boolean = false,
     hasClearAction: Boolean = false,
+    onTextChange: (String) -> Unit,
+    prefixBox: (@Composable (Dp) -> Unit)? = null,
+    suffixBox: (@Composable (Dp) -> Unit)? = null,
     onClick: (() -> Unit)? = null
 ) {
     var isFocused by remember { mutableStateOf(false) }

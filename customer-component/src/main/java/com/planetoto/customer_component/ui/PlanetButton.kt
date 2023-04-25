@@ -32,12 +32,12 @@ enum class PlanetButtonType {
 fun PlanetButton(
     modifier: Modifier = Modifier,
     text: String,
-    onClick: () -> Unit,
     enabled: Boolean = true,
     size: PlanetButtonSize = PlanetButtonSize.Medium,
     type: PlanetButtonType = PlanetButtonType.Primary,
     iconPainter: Painter? = null,
-    contentPadding: PaddingValues = PaddingValues(vertical = 10.dp, horizontal = 15.dp)
+    contentPadding: PaddingValues = PaddingValues(vertical = 10.dp, horizontal = 15.dp),
+    onClick: () -> Unit
 ) {
     var hasFocus by remember { mutableStateOf(false) }
     val borderColor by remember {
@@ -152,12 +152,12 @@ fun PlanetButton(
 fun PlanetOutlinedButton(
     modifier: Modifier = Modifier,
     text: String,
-    onClick: () -> Unit,
     enabled: Boolean = true,
     size: PlanetButtonSize = PlanetButtonSize.Medium,
     iconPainter: Painter? = null,
     contentPadding: PaddingValues = PaddingValues(vertical = 10.dp, horizontal = 15.dp),
-    color: PlanetColors.Solid = PlanetColors.Solid.neutralWhite
+    color: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
+    onClick: () -> Unit
 ) {
     var hasFocus by remember { mutableStateOf(false) }
     val borderColor by remember {

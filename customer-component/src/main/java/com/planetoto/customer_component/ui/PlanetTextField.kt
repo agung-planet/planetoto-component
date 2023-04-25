@@ -112,7 +112,6 @@ fun PlanetTextField(
     modifier: Modifier = Modifier,
     text: String,
     label: String,
-    onClick: () -> Unit,
     placeholder: String? = null,
     prefix: Painter? = null,
     suffix: Painter? = null,
@@ -120,7 +119,8 @@ fun PlanetTextField(
     size: PlanetTextFieldSize = PlanetTextFieldSize.Small,
     isError: Boolean = false,
     helperText: String? = null,
-    hasClearAction: Boolean = false
+    hasClearAction: Boolean = false,
+    onClick: () -> Unit
 ) {
     BaseTextField(
         modifier = modifier,
