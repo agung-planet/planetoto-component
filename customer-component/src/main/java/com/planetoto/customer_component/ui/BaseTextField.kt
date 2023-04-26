@@ -81,10 +81,10 @@ internal fun BaseTextField(
         keyboardActions = keyboardActions,
         textStyle = TextStyle(
             color = PlanetColors.Solid.content02.color,
-            fontSize = 12.sp,
+            fontSize = 14.sp,
             fontWeight = FontWeight.W600,
             fontFamily = FontFamily(Font(R.font.figtree)),
-            lineHeight = 14.4.sp
+            lineHeight = 16.8.sp
         ),
         readOnly = readOnly,
         maxLines = maxLines,

@@ -26,15 +26,15 @@ import com.planetoto.customer_component.foundation.PlanetColors
 fun PlanetSearchInput(
     modifier: Modifier = Modifier,
     text: String,
-    onTextChange: (String) -> Unit,
-    onSearchClicked: (String) -> Unit,
-    label: String?,
+    label: String? = null,
     placeholder: String? = null,
     helperText: String? = null,
     isError: Boolean = false,
     size: PlanetTextFieldSize = PlanetTextFieldSize.Small,
     enabled: Boolean = true,
-    hasClearAction: Boolean = true
+    hasClearAction: Boolean = true,
+    onTextChange: (String) -> Unit,
+    onSearchClicked: (String) -> Unit
 ) {
     BaseTextField(
         modifier = modifier,
@@ -76,15 +76,15 @@ fun PlanetSearchInput(
 fun PlanetSearchInput(
     modifier: Modifier = Modifier,
     text: String,
-    label: String?,
-    onClearText: () -> Unit,
-    onClick: () -> Unit,
+    label: String? = null,
     placeholder: String? = null,
     helperText: String? = null,
     isError: Boolean = false,
     size: PlanetTextFieldSize = PlanetTextFieldSize.Small,
     enabled: Boolean = true,
-    hasClearAction: Boolean = false
+    hasClearAction: Boolean = false,
+    onClearText: () -> Unit,
+    onClick: () -> Unit
 ) {
     BaseTextField(
         modifier = modifier,
