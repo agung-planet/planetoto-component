@@ -53,8 +53,8 @@ fun PlanetButton(
     }
     val typography = remember(size) {
         when (size) {
-            PlanetButtonSize.Medium -> PlanetTypography.LabelSmallButton
-            PlanetButtonSize.Large -> PlanetTypography.LabelMediumButton
+            PlanetButtonSize.Medium -> PlanetTypography.LabelMediumButton
+            PlanetButtonSize.Large -> PlanetTypography.LabelBigButton
         }
     }
 
@@ -173,8 +173,8 @@ fun PlanetOutlinedButton(
     }
     val typography = remember(size) {
         when (size) {
-            PlanetButtonSize.Medium -> PlanetTypography.LabelSmallButton
-            PlanetButtonSize.Large -> PlanetTypography.LabelMediumButton
+            PlanetButtonSize.Medium -> PlanetTypography.LabelMediumButton
+            PlanetButtonSize.Large -> PlanetTypography.LabelBigButton
         }
     }
 
