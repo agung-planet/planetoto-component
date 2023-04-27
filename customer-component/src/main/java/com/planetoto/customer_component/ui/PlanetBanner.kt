@@ -36,7 +36,7 @@ fun PlanetBanner(modifier: Modifier = Modifier, icon: Painter, text: String, onC
         )
         PlanetText(
             text = text,
-            typography = PlanetTypography.BodyDefault12,
+            typography = PlanetTypography.SmallBody,
             lineHeight = 12.sp,
             color = PlanetColors.Solid.blue07
         )
