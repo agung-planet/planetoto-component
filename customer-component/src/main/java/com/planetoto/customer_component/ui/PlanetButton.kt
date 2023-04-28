@@ -11,7 +11,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -156,13 +155,14 @@ fun PlanetOutlinedButton(
     size: PlanetButtonSize = PlanetButtonSize.Medium,
     iconPainter: Painter? = null,
     contentPadding: PaddingValues = PaddingValues(vertical = 10.dp, horizontal = 15.dp),
-    color: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
+    color: PlanetColors.Solid = PlanetColors.Solid.content03,
+    backgroundColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
     onClick: () -> Unit
 ) {
     var hasFocus by remember { mutableStateOf(false) }
     val borderColor by remember {
         derivedStateOf {
-            if (hasFocus && enabled) BorderStroke(1.dp, PlanetColors.Solid.red07.color) else null
+            if (hasFocus && enabled) PlanetColors.Solid.red07 else null
         }
     }
     val height = remember(size) {
@@ -194,9 +194,9 @@ fun PlanetOutlinedButton(
             hoveredElevation = 2.dp,
             focusedElevation = 2.dp
         ),
-        border = borderColor ?: BorderStroke(1.dp, PlanetColors.Solid.neutralWhite.color),
+        border = BorderStroke(1.dp, (borderColor ?: color).color),
         colors = ButtonDefaults.outlinedButtonColors(
-            backgroundColor = Color.Transparent,
+            backgroundColor = backgroundColor.color,
             contentColor = color.color,
             disabledContentColor = color.color.copy(.3f)
         )
