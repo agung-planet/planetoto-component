@@ -83,13 +83,13 @@ fun PlanetSearchInput(
     size: PlanetTextFieldSize = PlanetTextFieldSize.Small,
     enabled: Boolean = true,
     hasClearAction: Boolean = false,
-    onClearText: () -> Unit,
+    onClearText: (() -> Unit)? = null,
     onClick: () -> Unit
 ) {
     BaseTextField(
         modifier = modifier,
         text = text,
-        onTextChange = { if (it.isEmpty()) onClearText() },
+        onTextChange = { if (it.isEmpty()) onClearText?.invoke() },
         label = label,
         placeholder = placeholder,
         enabled = enabled,
