@@ -34,7 +34,7 @@ fun PlanetSearchInput(
     enabled: Boolean = true,
     hasClearAction: Boolean = true,
     onTextChange: (String) -> Unit,
-    onSearchClicked: (String) -> Unit
+    onSearchClicked: ((String) -> Unit)? = null
 ) {
     BaseTextField(
         modifier = modifier,
@@ -45,7 +45,7 @@ fun PlanetSearchInput(
         enabled = enabled,
         readOnly = false,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-        keyboardActions = KeyboardActions(onSearch = { onSearchClicked(text) }),
+        keyboardActions = KeyboardActions(onSearch = { onSearchClicked?.invoke(text) }),
         singleLine = true,
         size = size,
         helperText = helperText,
@@ -55,7 +55,7 @@ fun PlanetSearchInput(
             Box(
                 modifier = Modifier
                     .size(it)
-                    .clickable { onSearchClicked(text) },
+                    .clickable { onSearchClicked?.invoke(text) },
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
