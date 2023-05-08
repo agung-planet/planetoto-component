@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
@@ -30,6 +31,7 @@ fun PlanetImageBadge(
     badgeBorderColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
     painter: Painter,
     count: Int = 0,
+    isRounded: Boolean = false,
     onClick: () -> Unit
 ) {
     Box(
@@ -37,8 +39,15 @@ fun PlanetImageBadge(
             .widthIn(min = containerMinWidth)
             .disableRipple(onClick = onClick)
     ) {
+
+        val imageModifier = if (isRounded) Modifier.border(
+            width = 1.dp,
+            color = PlanetColors.Solid.neutralBorder01.color,
+            shape = CircleShape
+        ) else Modifier
+
         Image(
-            modifier = Modifier
+            modifier = imageModifier
                 .padding(vertical = 8.dp, horizontal = 10.dp)
                 .size(width = imageWidth, height = imageHeight),
             painter = painter,
@@ -80,6 +89,7 @@ private fun PlanetImageBadgePreview() {
     Box {
         PlanetImageBadge(
             count = 105,
+            isRounded = true,
             painter = painterResource(id = com.planetoto.customer_component.R.drawable.ic_arrow_left_16)
         ) {
 
