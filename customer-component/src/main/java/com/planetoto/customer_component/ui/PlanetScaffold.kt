@@ -104,7 +104,7 @@ fun PlanetScaffold(
     drawerBackgroundColor: Color = MaterialTheme.colors.surface,
     drawerContentColor: Color = contentColorFor(drawerBackgroundColor),
     drawerScrimColor: Color = DrawerDefaults.scrimColor,
-    backgroundColor: Color = Color.Transparent,
+    backgroundColor: Color = Color.White,
     backgroundImage: (@Composable () -> Unit)? = null,
     contentColor: Color = contentColorFor(backgroundColor),
     content: @Composable (PaddingValues) -> Unit
@@ -180,7 +180,7 @@ fun PlanetScaffold(
     sideDialogContent: @Composable ColumnScope.() -> Unit,
     sideDialogWidth: Dp? = null,
     sideDialogBackgroundColor: Color = MaterialTheme.colors.surface,
-    backgroundColor: Color = Color.Transparent,
+    backgroundColor: Color = Color.White,
     backgroundImage: (@Composable () -> Unit)? = null,
     contentColor: Color = contentColorFor(backgroundColor),
     content: @Composable (PaddingValues) -> Unit
@@ -249,7 +249,7 @@ fun PlanetScaffold(
     sheetElevation: Dp = ModalBottomSheetDefaults.Elevation,
     isSheetDraggable: Boolean = true,
     tapOutsideSheetToDismiss: Boolean = true,
-    backgroundColor: Color = Color.Transparent,
+    backgroundColor: Color = Color.White,
     backgroundImage: (@Composable () -> Unit)? = null,
     contentColor: Color = contentColorFor(backgroundColor),
     content: @Composable (PaddingValues) -> Unit
@@ -324,7 +324,7 @@ fun PlanetScaffold(
     sheetElevation: Dp = ModalBottomSheetDefaults.Elevation,
     isSheetDraggable: Boolean = true,
     tapOutsideSheetToDismiss: Boolean = true,
-    backgroundColor: Color = Color.Transparent,
+    backgroundColor: Color = Color.White,
     contentColor: Color = contentColorFor(backgroundColor),
     backgroundImage: (@Composable () -> Unit)? = null,
     content: @Composable (PaddingValues) -> Unit

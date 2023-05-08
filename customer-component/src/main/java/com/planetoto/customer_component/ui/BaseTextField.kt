@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.planetoto.customer_component.R
+import com.planetoto.customer_component.foundation.LocalPadding
 import com.planetoto.customer_component.foundation.PlanetColors
 import com.planetoto.customer_component.foundation.PlanetTypography
 
@@ -133,7 +134,8 @@ internal fun BaseTextField(
                     AnimatedVisibility(
                         visible = text.isNotEmpty() && hasClearAction,
                         enter = scaleIn(),
-                        exit = scaleOut()
+                        exit = scaleOut(),
+                        modifier = Modifier.padding(end = LocalPadding.current.xSmall)
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_close_rounded),
