@@ -13,18 +13,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.planetoto.customer_component.foundation.LocalBorderRadius
 import com.planetoto.customer_component.foundation.PlanetColors
 import com.planetoto.customer_component.foundation.PlanetTypography
 import com.planetoto.customer_component.utils.capitalizeWords
 
-enum class PlanetButtonSize {
-    Medium, Large
+sealed class PlanetButtonSize(val height: Dp, val typography: PlanetTypography) {
+    object Medium : PlanetButtonSize(36.dp, PlanetTypography.LabelMediumButton)
+    object Large : PlanetButtonSize(50.dp, PlanetTypography.LabelBigButton)
 }
 
-enum class PlanetButtonType {
-    Primary, Secondary
+sealed interface PlanetButtonType {
+    object Primary : PlanetButtonType
+    object Secondary : PlanetButtonType
+    data class Tertiary(
+        val contentColor: PlanetColors.Solid,
+        val backgroundColor: PlanetColors.Solid
+    ) : PlanetButtonType
 }
 
 @Composable
@@ -32,7 +39,7 @@ fun PlanetButton(
     modifier: Modifier = Modifier,
     text: String,
     enabled: Boolean = true,
-    size: PlanetButtonSize = PlanetButtonSize.Medium,
+    size: PlanetButtonSize = PlanetButtonSize.Large,
     type: PlanetButtonType = PlanetButtonType.Primary,
     iconPainter: Painter? = null,
     contentPadding: PaddingValues = PaddingValues(vertical = 10.dp, horizontal = 15.dp),
@@ -44,18 +51,6 @@ fun PlanetButton(
             if (hasFocus && enabled) BorderStroke(1.dp, PlanetColors.Solid.red07.color) else null
         }
     }
-    val height = remember(size) {
-        when (size) {
-            PlanetButtonSize.Medium -> 36.dp
-            PlanetButtonSize.Large -> 50.dp
-        }
-    }
-    val typography = remember(size) {
-        when (size) {
-            PlanetButtonSize.Medium -> PlanetTypography.LabelMediumButton
-            PlanetButtonSize.Large -> PlanetTypography.LabelBigButton
-        }
-    }
 
     when (type) {
         PlanetButtonType.Primary -> {
@@ -65,7 +60,7 @@ fun PlanetButton(
 
             Button(
                 modifier = modifier
-                    .height(height)
+                    .height(size.height)
                     .onFocusChanged {
                         hasFocus = it.hasFocus || it.isFocused
                     },
@@ -89,7 +84,7 @@ fun PlanetButton(
             ) {
                 PlanetText(
                     text = text.capitalizeWords(),
-                    typography = typography,
+                    typography = size.typography,
                     color = textColor
                 )
                 iconPainter?.let {
@@ -108,7 +103,7 @@ fun PlanetButton(
 
             Button(
                 modifier = modifier
-                    .height(height)
+                    .height(size.height)
                     .onFocusChanged {
                         hasFocus = it.hasFocus || it.isFocused
                     },
@@ -132,7 +127,7 @@ fun PlanetButton(
             ) {
                 PlanetText(
                     text = text.capitalizeWords(),
-                    typography = typography,
+                    typography = size.typography,
                     color = textColor
                 )
                 iconPainter?.let {
@@ -144,11 +139,24 @@ fun PlanetButton(
                 }
             }
         }
+        is PlanetButtonType.Tertiary -> {
+            PlanetOutlinedButton(
+                modifier = modifier,
+                text = text,
+                enabled = enabled,
+                size = size,
+                iconPainter = iconPainter,
+                contentPadding = contentPadding,
+                color = type.contentColor,
+                backgroundColor = type.backgroundColor,
+                onClick = onClick
+            )
+        }
     }
 }
 
 @Composable
-fun PlanetOutlinedButton(
+private fun PlanetOutlinedButton(
     modifier: Modifier = Modifier,
     text: String,
     enabled: Boolean = true,
@@ -165,22 +173,10 @@ fun PlanetOutlinedButton(
             if (hasFocus && enabled) PlanetColors.Solid.red07 else null
         }
     }
-    val height = remember(size) {
-        when (size) {
-            PlanetButtonSize.Medium -> 36.dp
-            PlanetButtonSize.Large -> 50.dp
-        }
-    }
-    val typography = remember(size) {
-        when (size) {
-            PlanetButtonSize.Medium -> PlanetTypography.LabelMediumButton
-            PlanetButtonSize.Large -> PlanetTypography.LabelBigButton
-        }
-    }
 
     OutlinedButton(
         modifier = modifier
-            .height(height)
+            .height(size.height)
             .onFocusChanged {
                 hasFocus = it.hasFocus || it.isFocused
             },
@@ -203,7 +199,7 @@ fun PlanetOutlinedButton(
     ) {
         PlanetText(
             text = text.capitalizeWords(),
-            typography = typography,
+            typography = size.typography,
             color = color
         )
         iconPainter?.let {

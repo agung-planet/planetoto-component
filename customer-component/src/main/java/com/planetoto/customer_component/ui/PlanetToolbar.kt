@@ -33,7 +33,8 @@ fun PlanetToolbar(
             PlanetText(
                 text = title,
                 color = PlanetColors.Solid.neutralWhite,
-                typography = PlanetTypography.TitleBody
+                typography = PlanetTypography.TitleBody,
+                maxLines = 1
             )
         },
         backgroundColor = backgroundColor,
@@ -71,7 +72,7 @@ fun PlanetToolbar(
             IconButton(
                 onClick = onNavigateUp,
                 content = navigateUpIcon,
-                modifier = Modifier.padding(end = 16.dp)
+                modifier = Modifier.padding(end = 10.dp)
             )
         }
 
