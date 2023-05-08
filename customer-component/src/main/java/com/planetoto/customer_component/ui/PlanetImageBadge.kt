@@ -40,16 +40,16 @@ fun PlanetImageBadge(
             .disableRipple(onClick = onClick)
     ) {
 
-        val imageModifier = if (isRounded) Modifier.border(
-            width = 1.dp,
-            color = PlanetColors.Solid.neutralBorder01.color,
-            shape = CircleShape
-        ) else Modifier
+        val imageModifier = if (isRounded) Modifier
+            .padding(vertical = 8.dp)
+            .border(
+                width = 1.dp,
+                color = PlanetColors.Solid.neutralBorder01.color,
+                shape = CircleShape
+            ) else Modifier.padding(vertical = 8.dp, horizontal = 10.dp)
 
         Image(
-            modifier = imageModifier
-                .padding(vertical = 8.dp, horizontal = 10.dp)
-                .size(width = imageWidth, height = imageHeight),
+            modifier = imageModifier.size(width = imageWidth, height = imageHeight),
             painter = painter,
             contentDescription = "ic_image"
         )
@@ -90,6 +90,8 @@ private fun PlanetImageBadgePreview() {
         PlanetImageBadge(
             count = 105,
             isRounded = true,
+            imageHeight = 32.dp,
+            imageWidth = 32.dp,
             painter = painterResource(id = com.planetoto.customer_component.R.drawable.ic_arrow_left_16)
         ) {
 
