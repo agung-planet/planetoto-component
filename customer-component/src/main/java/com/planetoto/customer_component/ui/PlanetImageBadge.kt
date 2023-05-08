@@ -42,6 +42,7 @@ fun PlanetImageBadge(
 
         val imageModifier = if (isRounded) Modifier
             .padding(vertical = 8.dp)
+            .clip(shape = CircleShape)
             .border(
                 width = 1.dp,
                 color = PlanetColors.Solid.neutralBorder01.color,
@@ -92,7 +93,7 @@ private fun PlanetImageBadgePreview() {
             isRounded = true,
             imageHeight = 32.dp,
             imageWidth = 32.dp,
-            painter = painterResource(id = com.planetoto.customer_component.R.drawable.ic_arrow_left_16)
+            painter = painterResource(id = com.planetoto.customer_component.R.drawable.placeholder_avatar)
         ) {
 
         }
