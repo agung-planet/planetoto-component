@@ -93,7 +93,7 @@ fun PlanetText(
     onTextLayout: (TextLayoutResult) -> Unit = {},
     style: TextStyle = LocalTextStyle.current
 ) {
-    val finalText = remember(typography) {
+    val finalText = remember(typography, text) {
         if (typography::class.simpleName?.contains("uppercase", ignoreCase = true) == true) {
             text.uppercase()
         } else text
