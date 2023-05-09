@@ -29,8 +29,9 @@ sealed interface PlanetButtonType {
     object Primary : PlanetButtonType
     object Secondary : PlanetButtonType
     data class Tertiary(
-        val contentColor: PlanetColors.Solid,
-        val backgroundColor: PlanetColors.Solid
+        val contentColor: PlanetColors.Solid = PlanetColors.Solid.content03,
+        val borderColor: PlanetColors.Solid = contentColor,
+        val backgroundColor: PlanetColors.Solid = PlanetColors.Solid.content03
     ) : PlanetButtonType
 }
 
@@ -147,8 +148,9 @@ fun PlanetButton(
                 size = size,
                 iconPainter = iconPainter,
                 contentPadding = contentPadding,
-                color = type.contentColor,
+                contentColor = type.contentColor,
                 backgroundColor = type.backgroundColor,
+                borderColor = type.borderColor,
                 onClick = onClick
             )
         }
@@ -163,14 +165,15 @@ private fun PlanetOutlinedButton(
     size: PlanetButtonSize = PlanetButtonSize.Medium,
     iconPainter: Painter? = null,
     contentPadding: PaddingValues = PaddingValues(vertical = 10.dp, horizontal = 15.dp),
-    color: PlanetColors.Solid = PlanetColors.Solid.content03,
+    contentColor: PlanetColors.Solid = PlanetColors.Solid.content03,
+    borderColor: PlanetColors.Solid = contentColor,
     backgroundColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
     onClick: () -> Unit
 ) {
     var hasFocus by remember { mutableStateOf(false) }
-    val borderColor by remember {
+    val borderColorByState by remember {
         derivedStateOf {
-            if (hasFocus && enabled) PlanetColors.Solid.red07 else null
+            if (hasFocus && enabled) PlanetColors.Solid.red07 else borderColor
         }
     }
 
@@ -190,24 +193,24 @@ private fun PlanetOutlinedButton(
             hoveredElevation = 2.dp,
             focusedElevation = 2.dp
         ),
-        border = BorderStroke(1.dp, (borderColor ?: color).color),
+        border = BorderStroke(1.dp, borderColorByState.color),
         colors = ButtonDefaults.outlinedButtonColors(
             backgroundColor = backgroundColor.color,
-            contentColor = color.color,
-            disabledContentColor = color.color.copy(.3f)
+            contentColor = contentColor.color,
+            disabledContentColor = contentColor.color.copy(.3f)
         )
     ) {
         PlanetText(
             text = text.capitalizeWords(),
             typography = size.typography,
-            color = color
+            color = contentColor
         )
         iconPainter?.let {
             Icon(
                 painter = it,
                 contentDescription = null,
                 modifier = Modifier.padding(start = 10.dp),
-                tint = color.color
+                tint = contentColor.color
             )
         }
     }
