@@ -5,7 +5,10 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -24,7 +27,7 @@ fun PlanetDropDownField(
     placeholder: String? = null,
     selectedValue: String? = null,
     enabled: Boolean = true,
-    size: PlanetTextFieldSize = PlanetTextFieldSize.Small,
+    size: PlanetTextFieldSize = PlanetTextFieldSize.Large,
     helperText: String? = null,
     isError: Boolean = false,
     isSheetOpen: Boolean = false
