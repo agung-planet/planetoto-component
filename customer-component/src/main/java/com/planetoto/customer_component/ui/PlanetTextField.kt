@@ -42,7 +42,7 @@ fun PlanetTextField(
     singleLine: Boolean = false,
     maxLines: Int = Int.MAX_VALUE,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    size: PlanetTextFieldSize = PlanetTextFieldSize.Small,
+    size: PlanetTextFieldSize = PlanetTextFieldSize.Large,
     isError: Boolean = false,
     helperText: String? = null,
     hasClearAction: Boolean = false
@@ -116,7 +116,7 @@ fun PlanetTextField(
     prefix: Painter? = null,
     suffix: Painter? = null,
     enabled: Boolean = true,
-    size: PlanetTextFieldSize = PlanetTextFieldSize.Small,
+    size: PlanetTextFieldSize = PlanetTextFieldSize.Large,
     isError: Boolean = false,
     helperText: String? = null,
     hasClearAction: Boolean = false,
