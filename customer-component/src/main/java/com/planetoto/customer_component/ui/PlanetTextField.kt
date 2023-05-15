@@ -17,6 +17,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.planetoto.customer_component.R
 import com.planetoto.customer_component.foundation.PlanetColors
+import com.planetoto.customer_component.foundation.PlanetTypography
+import java.lang.Exception
 
 enum class PlanetTextFieldSize {
     Small, Large
@@ -33,8 +35,10 @@ fun PlanetTextField(
     onTextChange: (String) -> Unit,
     label: String,
     placeholder: String? = null,
-    prefix: Painter? = null,
-    suffix: Painter? = null,
+    prefixPainter: Painter? = null,
+    suffixPainter: Painter? = null,
+    prefixText: String? = null,
+    suffixText: String? = null,
     enabled: Boolean = true,
     readOnly: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -47,8 +51,10 @@ fun PlanetTextField(
     helperText: String? = null,
     hasClearAction: Boolean = false
 ) {
-    BaseTextField(
-        modifier = modifier,
+    if (prefixText != null && prefixPainter != null) throw Exception("You can't use more than one for prefix")
+    if (suffixText != null && suffixPainter != null) throw Exception("You can't use more than one for suffix")
+
+    BaseTextField(modifier = modifier,
         text = text,
         onTextChange = onTextChange,
         label = label,
@@ -64,7 +70,7 @@ fun PlanetTextField(
         helperText = helperText,
         isError = isError,
         hasClearAction = hasClearAction,
-        prefixBox = if (prefix != null) {
+        prefixBox = if (prefixPainter != null || prefixText != null) {
             {
                 Box(
                     contentAlignment = Alignment.Center,
@@ -74,15 +80,25 @@ fun PlanetTextField(
                         .background(PlanetColors.Solid.neutralBg.color)
                         .border(1.dp, PlanetColors.Solid.neutralBorder01.color)
                 ) {
-                    Icon(
-                        painter = prefix,
-                        contentDescription = "prefix",
-                        tint = PlanetColors.Solid.blue07.color
-                    )
+                    if (prefixPainter != null) {
+                        Icon(
+                            painter = prefixPainter,
+                            contentDescription = "prefix",
+                            tint = PlanetColors.Solid.blue07.color
+                        )
+                    }
+
+                    if (prefixText != null) {
+                        PlanetText(
+                            text = prefixText,
+                            color = PlanetColors.Solid.blue07,
+                            typography = PlanetTypography.BodyDefaultBold
+                        )
+                    }
                 }
             }
         } else null,
-        suffixBox = if (suffix != null) {
+        suffixBox = if (suffixPainter != null || suffixText != null) {
             {
                 Box(
                     contentAlignment = Alignment.Center,
@@ -92,15 +108,24 @@ fun PlanetTextField(
                         .background(PlanetColors.Solid.neutralBg.color)
                         .border(1.dp, PlanetColors.Solid.neutralBorder01.color)
                 ) {
-                    Icon(
-                        painter = suffix,
-                        contentDescription = "suffix",
-                        tint = PlanetColors.Solid.blue07.color
-                    )
+                    if (suffixPainter != null) {
+                        Icon(
+                            painter = suffixPainter,
+                            contentDescription = "suffix",
+                            tint = PlanetColors.Solid.blue07.color
+                        )
+                    }
+
+                    if (suffixText != null) {
+                        PlanetText(
+                            text = suffixText,
+                            color = PlanetColors.Solid.blue07,
+                            typography = PlanetTypography.BodyDefaultBold
+                        )
+                    }
                 }
             }
-        } else null
-    )
+        } else null)
 }
 
 /**
@@ -113,8 +138,10 @@ fun PlanetTextField(
     text: String,
     label: String,
     placeholder: String? = null,
-    prefix: Painter? = null,
-    suffix: Painter? = null,
+    prefixPainter: Painter? = null,
+    suffixPainter: Painter? = null,
+    prefixText: String? = null,
+    suffixText: String? = null,
     enabled: Boolean = true,
     size: PlanetTextFieldSize = PlanetTextFieldSize.Large,
     isError: Boolean = false,
@@ -122,8 +149,10 @@ fun PlanetTextField(
     hasClearAction: Boolean = false,
     onClick: () -> Unit
 ) {
-    BaseTextField(
-        modifier = modifier,
+    if (prefixText != null && prefixPainter != null) throw Exception("You can't use more than one for prefix")
+    if (suffixText != null && suffixPainter != null) throw Exception("You can't use more than one for suffix")
+    
+    BaseTextField(modifier = modifier,
         text = text,
         onTextChange = {},
         label = label,
@@ -136,7 +165,7 @@ fun PlanetTextField(
         isError = isError,
         hasClearAction = hasClearAction,
         onClick = onClick,
-        prefixBox = if (prefix != null) {
+        prefixBox = if (prefixPainter != null || prefixText != null) {
             {
                 Box(
                     contentAlignment = Alignment.Center,
@@ -146,15 +175,25 @@ fun PlanetTextField(
                         .background(PlanetColors.Solid.neutralBg.color)
                         .border(1.dp, PlanetColors.Solid.neutralBorder01.color)
                 ) {
-                    Icon(
-                        painter = prefix,
-                        contentDescription = "prefix",
-                        tint = PlanetColors.Solid.blue07.color
-                    )
+                    if (prefixPainter != null) {
+                        Icon(
+                            painter = prefixPainter,
+                            contentDescription = "prefix",
+                            tint = PlanetColors.Solid.blue07.color
+                        )
+                    }
+
+                    if (prefixText != null) {
+                        PlanetText(
+                            text = prefixText,
+                            color = PlanetColors.Solid.blue07,
+                            typography = PlanetTypography.BodyDefaultBold
+                        )
+                    }
                 }
             }
         } else null,
-        suffixBox = if (suffix != null) {
+        suffixBox = if (suffixPainter != null || suffixText != null) {
             {
                 Box(
                     contentAlignment = Alignment.Center,
@@ -164,15 +203,24 @@ fun PlanetTextField(
                         .background(PlanetColors.Solid.neutralBg.color)
                         .border(1.dp, PlanetColors.Solid.neutralBorder01.color)
                 ) {
-                    Icon(
-                        painter = suffix,
-                        contentDescription = "suffix",
-                        tint = PlanetColors.Solid.blue07.color
-                    )
+                    if (suffixPainter != null) {
+                        Icon(
+                            painter = suffixPainter,
+                            contentDescription = "suffix",
+                            tint = PlanetColors.Solid.blue07.color
+                        )
+                    }
+
+                    if (suffixText != null) {
+                        PlanetText(
+                            text = suffixText,
+                            color = PlanetColors.Solid.blue07,
+                            typography = PlanetTypography.BodyDefaultBold
+                        )
+                    }
                 }
             }
-        } else null
-    )
+        } else null)
 }
 
 @ExperimentalAnimationApi
@@ -197,7 +245,7 @@ private fun PreviewSearchInput() {
             onTextChange = { text = it },
             placeholder = "Type here",
             label = "Search",
-            prefix = painterResource(id = R.drawable.ic_search),
+            prefixPainter = painterResource(id = R.drawable.ic_search),
             hasClearAction = true,
             isError = true
         )
@@ -206,7 +254,27 @@ private fun PreviewSearchInput() {
             onTextChange = { text = it },
             placeholder = "Type here",
             label = "Search",
-            suffix = painterResource(id = R.drawable.ic_search),
+            suffixPainter = painterResource(id = R.drawable.ic_search),
+            hasClearAction = true,
+            isError = true
+        )
+
+        PlanetTextField(
+            text = text,
+            onTextChange = { text = it },
+            placeholder = "Type here",
+            label = "Search",
+            suffixText = "+62",
+            hasClearAction = true,
+            isError = true
+        )
+
+        PlanetTextField(
+            text = text,
+            onTextChange = { text = it },
+            placeholder = "Type here",
+            label = "Search",
+            prefixText = "+62",
             hasClearAction = true,
             isError = true
         )
