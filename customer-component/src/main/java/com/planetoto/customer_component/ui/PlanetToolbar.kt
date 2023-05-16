@@ -17,12 +17,14 @@ import com.planetoto.customer_component.foundation.PlanetTypography
 fun PlanetToolbar(
     title: String,
     backgroundColor: PlanetColors.Solid = PlanetColors.Solid.blue07,
+    titleColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
+    navigateUpIconColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
     showNavigateUp: Boolean = false,
     navigateUpIcon: @Composable () -> Unit = {
         Icon(
             painter = painterResource(id = R.drawable.ic_arrow_left_16),
             contentDescription = "up",
-            tint = PlanetColors.Solid.neutralWhite.color,
+            tint = navigateUpIconColor.color,
             modifier = Modifier.size(24.dp)
         )
     },
@@ -32,7 +34,7 @@ fun PlanetToolbar(
         title = {
             PlanetText(
                 text = title,
-                color = PlanetColors.Solid.neutralWhite,
+                color = titleColor,
                 typography = PlanetTypography.TitleBody,
                 maxLines = 1
             )
@@ -48,12 +50,13 @@ fun PlanetToolbar(
 fun PlanetToolbar(
     title: @Composable () -> Unit,
     backgroundColor: PlanetColors.Solid = PlanetColors.Solid.blue07,
+    navigateUpIconColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
     showNavigateUp: Boolean = false,
     navigateUpIcon: @Composable () -> Unit = {
         Icon(
             painter = painterResource(id = R.drawable.ic_arrow_left_16),
             contentDescription = "up",
-            tint = PlanetColors.Solid.neutralWhite.color,
+            tint = navigateUpIconColor.color,
             modifier = Modifier.size(24.dp)
         )
     },
