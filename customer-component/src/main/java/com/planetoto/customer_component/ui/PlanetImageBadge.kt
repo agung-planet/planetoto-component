@@ -1,29 +1,24 @@
 package com.planetoto.customer_component.ui
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.planetoto.customer_component.foundation.PlanetColors
-import com.planetoto.customer_component.foundation.PlanetTypography
 import com.planetoto.customer_component.utils.disableRipple
 
 @Composable
 fun PlanetImageBadge(
     modifier: Modifier = Modifier,
-    containerMinWidth: Dp = 32.dp,
     imageWidth: Dp = 20.dp,
     imageHeight: Dp = 24.dp,
     badgeCorner: Dp = 20.dp,
@@ -34,14 +29,11 @@ fun PlanetImageBadge(
     isRounded: Boolean = false,
     onClick: () -> Unit
 ) {
-    Box(
-        modifier = modifier
-            .widthIn(min = containerMinWidth)
-            .disableRipple(onClick = onClick)
-    ) {
+    Box(modifier = modifier.disableRipple(onClick = onClick)) {
 
+        val paddingTop = if (count > 0) 8.dp else 0.dp
         val imageModifier = if (isRounded) Modifier
-            .padding(vertical = 8.dp)
+            .padding(top = paddingTop)
             .clip(shape = CircleShape)
             .border(
                 width = 1.dp,
@@ -56,30 +48,15 @@ fun PlanetImageBadge(
         )
 
         if (count > 0) {
-            Box(
+            PlanetBadgeCount(
                 modifier = Modifier
-                    .widthIn(min = 39.dp)
                     .padding(start = 20.dp)
-                    .align(Alignment.TopStart)
-                    .border(
-                        width = badgeBorder,
-                        color = badgeBorderColor.color,
-                        shape = CircleShape
-                    )
-                    .background(
-                        color = PlanetColors.Solid.red07.color,
-                        shape = RoundedCornerShape(badgeCorner)
-                    )
-                    .padding(horizontal = 6.dp, vertical = 3.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                val textCount = if (count > 99) "99+" else count.toString()
-                PlanetText(
-                    text = textCount,
-                    typography = PlanetTypography.CaptionLabelOrTag,
-                    color = PlanetColors.Solid.neutralWhite
-                )
-            }
+                    .align(Alignment.TopStart),
+                badgeCorner = badgeCorner,
+                badgeBorder = badgeBorder,
+                badgeBorderColor = badgeBorderColor,
+                count = count
+            )
         }
     }
 }
@@ -89,7 +66,7 @@ fun PlanetImageBadge(
 private fun PlanetImageBadgePreview() {
     Box {
         PlanetImageBadge(
-            count = 105,
+            count = 80,
             isRounded = true,
             imageHeight = 32.dp,
             imageWidth = 32.dp,
