@@ -2,8 +2,11 @@ package com.planetoto.customer_component.ui
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,7 +36,7 @@ fun PlanetDropDownField(
     isSheetOpen: Boolean = false
 ) {
     BaseTextField(
-        modifier = modifier.clickable(onClick = onClick),
+        modifier = modifier,
         text = selectedValue.orEmpty(),
         onTextChange = {},
         label = label,
