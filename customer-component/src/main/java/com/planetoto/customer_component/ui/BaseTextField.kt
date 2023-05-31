@@ -123,7 +123,7 @@ internal fun BaseTextField(
                             shape = RoundedCornerShape(8.dp)
                         )
                         .then(
-                            if (isFocused && onClick != null) {
+                            if (enabled && onClick != null) {
                                 Modifier.clickable(onClick = onClick)
                             } else Modifier
                         ),
@@ -259,7 +259,7 @@ internal fun BaseTextField(
                             shape = RoundedCornerShape(8.dp)
                         )
                         .then(
-                            if (isFocused && onClick != null) {
+                            if (enabled && onClick != null) {
                                 Modifier.clickable(onClick = onClick)
                             } else Modifier
                         ),
