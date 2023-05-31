@@ -8,11 +8,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.planetoto.customer_component.R
@@ -35,6 +40,56 @@ fun PlanetSearchInput(
     hasClearAction: Boolean = true,
     onTextChange: (String) -> Unit,
     onSearchClicked: ((String) -> Unit)? = null
+) {
+    BaseTextField(
+        modifier = modifier,
+        text = text,
+        onTextChange = onTextChange,
+        label = label,
+        placeholder = placeholder,
+        enabled = enabled,
+        readOnly = false,
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+        keyboardActions = KeyboardActions(onSearch = { onSearchClicked?.invoke(text) }),
+        singleLine = true,
+        size = size,
+        helperText = helperText,
+        isError = isError,
+        hasClearAction = hasClearAction,
+        suffixBox = {
+            Box(
+                modifier = Modifier
+                    .size(it)
+                    .clickable { onSearchClicked?.invoke(text) },
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_search),
+                    contentDescription = "search",
+                    tint = PlanetColors.Solid.content03.color
+                )
+            }
+        }
+    )
+}
+
+/**
+ * An editable search input field
+ */
+@ExperimentalAnimationApi
+@Composable
+fun PlanetSearchInput(
+    modifier: Modifier = Modifier,
+    text: TextFieldValue,
+    label: String? = null,
+    placeholder: String? = null,
+    helperText: String? = null,
+    isError: Boolean = false,
+    size: PlanetTextFieldSize = PlanetTextFieldSize.Large,
+    enabled: Boolean = true,
+    hasClearAction: Boolean = true,
+    onTextChange: (TextFieldValue) -> Unit,
+    onSearchClicked: ((TextFieldValue) -> Unit)? = null
 ) {
     BaseTextField(
         modifier = modifier,
