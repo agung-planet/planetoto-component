@@ -15,6 +15,7 @@ import com.planetoto.customer_component.foundation.PlanetTypography
 
 @Composable
 fun PlanetToolbar(
+    modifier: Modifier = Modifier,
     title: String,
     backgroundColor: PlanetColors.Solid = PlanetColors.Solid.blue07,
     titleColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
@@ -31,6 +32,7 @@ fun PlanetToolbar(
     onNavigateUp: (() -> Unit)? = null
 ) {
     PlanetToolbar(
+        modifier = modifier,
         title = {
             PlanetText(
                 text = title,
@@ -48,6 +50,7 @@ fun PlanetToolbar(
 
 @Composable
 fun PlanetToolbar(
+    modifier: Modifier = Modifier,
     title: @Composable () -> Unit,
     backgroundColor: PlanetColors.Solid = PlanetColors.Solid.blue07,
     navigateUpIconColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
@@ -63,7 +66,7 @@ fun PlanetToolbar(
     onNavigateUp: (() -> Unit)? = null
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(backgroundColor.color)
             .padding(horizontal = 16.dp, vertical = 20.dp)
