@@ -78,9 +78,9 @@ internal fun BaseTextField(
     val borderColor by remember(enabled, isError) {
         derivedStateOf {
             when {
+                isError -> PlanetColors.Solid.red05
                 !enabled -> PlanetColors.Solid.neutralBorder02
                 isFocused -> PlanetColors.Solid.blue05
-                isError -> PlanetColors.Solid.red05
                 else -> PlanetColors.Solid.neutralBorder01
             }
         }
