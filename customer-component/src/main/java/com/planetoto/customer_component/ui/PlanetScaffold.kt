@@ -159,9 +159,7 @@ fun PlanetScaffold(
                 val systemBarsInset =
                     WindowInsets.systemBars.asPaddingValues().calculateBottomPadding()
                 content(
-                    PaddingValues(
-                        bottom = it.calculateBottomPadding() + systemBarsInset
-                    )
+                    it
                 )
             }
         )
