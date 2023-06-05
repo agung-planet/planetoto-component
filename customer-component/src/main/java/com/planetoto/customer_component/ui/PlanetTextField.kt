@@ -3,11 +3,20 @@ package com.planetoto.customer_component.ui
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
@@ -18,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import com.planetoto.customer_component.R
 import com.planetoto.customer_component.foundation.PlanetColors
 import com.planetoto.customer_component.foundation.PlanetTypography
-import java.lang.Exception
 
 enum class PlanetTextFieldSize {
     Small, Large
@@ -49,12 +57,13 @@ fun PlanetTextField(
     size: PlanetTextFieldSize = PlanetTextFieldSize.Large,
     isError: Boolean = false,
     helperText: String? = null,
-    hasClearAction: Boolean = false
+    hasClearAction: Boolean = true
 ) {
     if (prefixText != null && prefixPainter != null) throw Exception("You can't use more than one for prefix")
     if (suffixText != null && suffixPainter != null) throw Exception("You can't use more than one for suffix")
 
-    BaseTextField(modifier = modifier,
+    BaseTextField(
+        modifier = modifier,
         text = text,
         onTextChange = onTextChange,
         label = label,
