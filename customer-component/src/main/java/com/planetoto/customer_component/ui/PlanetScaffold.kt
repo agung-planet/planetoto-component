@@ -1,5 +1,6 @@
 package com.planetoto.customer_component.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -9,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
+import com.planetoto.customer_component.foundation.PlanetColors
 
 @Stable
 class PlanetScaffoldState(
@@ -107,6 +109,7 @@ fun PlanetScaffold(
     backgroundColor: Color = Color.White,
     backgroundImage: (@Composable () -> Unit)? = null,
     contentColor: Color = contentColorFor(backgroundColor),
+    statusBarColor: PlanetColors.Solid = PlanetColors.Solid.blue07,
     content: @Composable (PaddingValues) -> Unit
 ) {
     backgroundImage?.let {
@@ -152,7 +155,22 @@ fun PlanetScaffold(
             drawerScrimColor = drawerScrimColor,
             backgroundColor = backgroundColor,
             contentColor = contentColor,
-            content = content
+            content = {
+                val statusBarInset = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+                val systemBarsInset =
+                    WindowInsets.systemBars.asPaddingValues().calculateBottomPadding()
+
+                Column {
+                    Box(
+                        modifier = Modifier
+                            .height(statusBarInset)
+                            .background(color = statusBarColor.color)
+                            .fillMaxWidth()
+                    )
+                    content(it)
+                    Spacer(modifier = Modifier.height(systemBarsInset))
+                }
+            }
         )
     }
 }
