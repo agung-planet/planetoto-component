@@ -160,7 +160,6 @@ fun PlanetScaffold(
                     WindowInsets.systemBars.asPaddingValues().calculateBottomPadding()
                 content(
                     PaddingValues(
-                        top = it.calculateTopPadding() + statusBarInset,
                         bottom = it.calculateBottomPadding() + systemBarsInset
                     )
                 )
