@@ -167,8 +167,7 @@ fun PlanetScaffold(
                             .background(color = statusBarColor.color)
                             .fillMaxWidth()
                     )
-                    content(it)
-                    Spacer(modifier = Modifier.height(systemBarsInset))
+                    content(PaddingValues(bottom = it.calculateBottomPadding() + systemBarsInset))
                 }
             }
         )
