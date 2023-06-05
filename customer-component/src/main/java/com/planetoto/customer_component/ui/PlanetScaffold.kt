@@ -109,7 +109,6 @@ fun PlanetScaffold(
     backgroundColor: Color = Color.White,
     backgroundImage: (@Composable () -> Unit)? = null,
     contentColor: Color = contentColorFor(backgroundColor),
-    statusBarColor: PlanetColors.Solid = PlanetColors.Solid.blue07,
     content: @Composable (PaddingValues) -> Unit
 ) {
     backgroundImage?.let {
@@ -159,16 +158,12 @@ fun PlanetScaffold(
                 val statusBarInset = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
                 val systemBarsInset =
                     WindowInsets.systemBars.asPaddingValues().calculateBottomPadding()
-
-                Column {
-                    Box(
-                        modifier = Modifier
-                            .height(statusBarInset)
-                            .background(color = statusBarColor.color)
-                            .fillMaxWidth()
+                content(
+                    PaddingValues(
+                        top = it.calculateTopPadding() + statusBarInset,
+                        bottom = it.calculateBottomPadding() + systemBarsInset
                     )
-                    content(PaddingValues(bottom = it.calculateBottomPadding() + systemBarsInset))
-                }
+                )
             }
         )
     }
@@ -200,7 +195,6 @@ fun PlanetScaffold(
     backgroundColor: Color = Color.White,
     backgroundImage: (@Composable () -> Unit)? = null,
     contentColor: Color = contentColorFor(backgroundColor),
-    statusBarColor: PlanetColors.Solid = PlanetColors.Solid.blue07,
     content: @Composable (PaddingValues) -> Unit
 ) {
     requireNotNull(planetScaffoldState.sideDialogState) {
@@ -234,7 +228,6 @@ fun PlanetScaffold(
                 backgroundColor = backgroundColor,
                 backgroundImage = backgroundImage,
                 contentColor = contentColor,
-                statusBarColor = statusBarColor,
                 content = content
             )
         }
@@ -271,7 +264,6 @@ fun PlanetScaffold(
     backgroundColor: Color = Color.White,
     backgroundImage: (@Composable () -> Unit)? = null,
     contentColor: Color = contentColorFor(backgroundColor),
-    statusBarColor: PlanetColors.Solid = PlanetColors.Solid.blue07,
     content: @Composable (PaddingValues) -> Unit
 ) {
     requireNotNull(planetScaffoldState.modalBottomSheetState) {
@@ -307,7 +299,6 @@ fun PlanetScaffold(
                 backgroundColor = backgroundColor,
                 backgroundImage = backgroundImage,
                 contentColor = contentColor,
-                statusBarColor = statusBarColor,
                 content = content
             )
         }
@@ -348,7 +339,6 @@ fun PlanetScaffold(
     backgroundColor: Color = Color.White,
     contentColor: Color = contentColorFor(backgroundColor),
     backgroundImage: (@Composable () -> Unit)? = null,
-    statusBarColor: PlanetColors.Solid = PlanetColors.Solid.blue07,
     content: @Composable (PaddingValues) -> Unit
 ) {
     requireNotNull(planetScaffoldState.modalBottomSheetState) {
@@ -395,7 +385,6 @@ fun PlanetScaffold(
                         backgroundColor = backgroundColor,
                         backgroundImage = backgroundImage,
                         contentColor = contentColor,
-                        statusBarColor = statusBarColor,
                         content = content
                     )
                 }
