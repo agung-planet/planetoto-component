@@ -85,6 +85,11 @@ internal fun BaseTextField(
             }
         }
     }
+    val background by remember(enabled, isError) {
+        derivedStateOf {
+            if (enabled) PlanetColors.Solid.neutralWhite else PlanetColors.Solid.neutralBg
+        }
+    }
     val helperTextColor = remember(isError) {
         if (isError) PlanetColors.Solid.red05 else PlanetColors.Solid.content03
     }
@@ -116,7 +121,7 @@ internal fun BaseTextField(
                     modifier = Modifier
                         .height(height)
                         .clip(RoundedCornerShape(8.dp))
-                        .background(PlanetColors.Solid.neutralWhite.color)
+                        .background(background.color)
                         .border(
                             width = 1.5.dp,
                             color = borderColor.color,
