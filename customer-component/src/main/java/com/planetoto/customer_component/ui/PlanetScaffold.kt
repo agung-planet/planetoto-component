@@ -9,7 +9,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.planetoto.customer_component.foundation.PlanetColors
 
 @Stable
@@ -133,7 +135,12 @@ fun PlanetScaffold(
                         topBar()
                     }
                 },
-                bottomBar = bottomBar,
+                bottomBar = {
+                    Column {
+                        bottomBar()
+                        Spacer(modifier = Modifier.height(systemBarInset))
+                    }
+                },
                 snackbarHost = snackbarHost,
                 floatingActionButton = floatingActionButton,
                 floatingActionButtonPosition = floatingActionButtonPosition,
@@ -172,7 +179,11 @@ fun PlanetScaffold(
                     topBar()
                 }
             },
-            bottomBar = bottomBar,
+            bottomBar = {
+                Column(modifier = Modifier.padding(bottom = systemBarInset)) {
+                    bottomBar()
+                }
+            },
             snackbarHost = snackbarHost,
             floatingActionButton = floatingActionButton,
             floatingActionButtonPosition = floatingActionButtonPosition,
@@ -426,4 +437,25 @@ fun PlanetScaffold(
             )
         }
     )
+}
+
+@Preview
+@Composable
+private fun Preview() {
+    PlanetScaffold(bottomBar = {
+        PlanetButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp),
+            text = "WOI WOI WOIW OI"
+        ) {
+
+        }
+    }) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = PlanetColors.Solid.red05.color)
+        )
+    }
 }
