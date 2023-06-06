@@ -292,7 +292,7 @@ internal fun BaseTextField(
                         innerTextField()
                     }
                     AnimatedVisibility(
-                        visible = text.text.isNotEmpty() && hasClearAction,
+                        visible = text.text.isNotEmpty() && hasClearAction && isFocused,
                         enter = scaleIn(),
                         exit = scaleOut(),
                         modifier = Modifier.padding(end = LocalPadding.current.xSmall)
