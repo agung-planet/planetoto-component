@@ -1,13 +1,18 @@
 package com.planetoto.customer_component.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.planetoto.customer_component.R
 import com.planetoto.customer_component.foundation.PlanetColors
@@ -38,7 +43,11 @@ fun PlanetToolbar(
                 text = title,
                 color = titleColor,
                 typography = PlanetTypography.TitleBody,
-                maxLines = 1
+                maxLines = 1,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = 50.dp)
             )
         },
         backgroundColor = backgroundColor,
