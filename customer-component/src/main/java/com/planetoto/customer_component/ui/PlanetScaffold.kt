@@ -154,14 +154,7 @@ fun PlanetScaffold(
                 drawerScrimColor = drawerScrimColor,
                 backgroundColor = backgroundColor,
                 contentColor = contentColor,
-                content = {
-                    content(
-                        PaddingValues(
-                            top = it.calculateTopPadding() + statusBarInset,
-                            bottom = it.calculateBottomPadding() + systemBarInset
-                        )
-                    )
-                }
+                content = content
             )
         }
     } ?: run {
@@ -197,14 +190,7 @@ fun PlanetScaffold(
             drawerScrimColor = drawerScrimColor,
             backgroundColor = backgroundColor,
             contentColor = contentColor,
-            content = {
-                content(
-                    PaddingValues(
-                        top = it.calculateTopPadding() + statusBarInset,
-                        bottom = it.calculateBottomPadding() + systemBarInset
-                    )
-                )
-            }
+            content = content
         )
     }
 }
