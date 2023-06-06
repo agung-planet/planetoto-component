@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
@@ -52,8 +51,7 @@ fun PlanetSearchInput(
         placeholder = placeholder,
         enabled = enabled,
         readOnly = false,
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-        keyboardActions = KeyboardActions(onSearch = { onSearchClicked?.invoke(text) }),
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         singleLine = true,
         size = size,
         helperText = helperText,
@@ -62,14 +60,15 @@ fun PlanetSearchInput(
         suffixBox = {
             Box(
                 modifier = Modifier
-                    .size(it)
-                    .clickable { onSearchClicked?.invoke(text) },
+                    .height(it)
+                    .disableRipple { onSearchClicked?.invoke(text) },
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_search),
                     contentDescription = "search",
-                    tint = PlanetColors.Solid.content03.color
+                    tint = PlanetColors.Solid.content03.color,
+                    modifier = Modifier.padding(end = LocalPadding.current.small)
                 )
             }
         }
@@ -102,8 +101,7 @@ fun PlanetSearchInput(
         placeholder = placeholder,
         enabled = enabled,
         readOnly = false,
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-        keyboardActions = KeyboardActions(onSearch = { onSearchClicked?.invoke(text) }),
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         singleLine = true,
         size = size,
         helperText = helperText,
