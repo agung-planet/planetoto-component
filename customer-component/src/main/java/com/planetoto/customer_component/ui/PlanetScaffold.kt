@@ -112,6 +112,10 @@ fun PlanetScaffold(
     statusBarColor: Color = PlanetColors.Solid.neutralWhite.color,
     content: @Composable (PaddingValues) -> Unit
 ) {
+    val statusBarInset =
+        WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+    val systemBarInset =
+        WindowInsets.systemBars.asPaddingValues().calculateBottomPadding()
     backgroundImage?.let {
         Box(modifier = Modifier.fillMaxSize()) {
             it()
@@ -122,6 +126,7 @@ fun PlanetScaffold(
                     Column {
                         Box(
                             modifier = Modifier
+                                .height(statusBarInset)
                                 .background(color = statusBarColor)
                                 .fillMaxWidth()
                         )
@@ -143,10 +148,6 @@ fun PlanetScaffold(
                 backgroundColor = backgroundColor,
                 contentColor = contentColor,
                 content = {
-                    val statusBarInset =
-                        WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
-                    val systemBarInset =
-                        WindowInsets.systemBars.asPaddingValues().calculateBottomPadding()
                     content(
                         PaddingValues(
                             top = it.calculateTopPadding() + statusBarInset,
@@ -164,6 +165,7 @@ fun PlanetScaffold(
                 Column {
                     Box(
                         modifier = Modifier
+                            .height(statusBarInset)
                             .background(color = statusBarColor)
                             .fillMaxWidth()
                     )
@@ -185,10 +187,6 @@ fun PlanetScaffold(
             backgroundColor = backgroundColor,
             contentColor = contentColor,
             content = {
-                val statusBarInset =
-                    WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
-                val systemBarInset =
-                    WindowInsets.systemBars.asPaddingValues().calculateBottomPadding()
                 content(
                     PaddingValues(
                         top = it.calculateTopPadding() + statusBarInset,
