@@ -118,7 +118,16 @@ fun PlanetScaffold(
             Scaffold(
                 modifier = modifier.imePadding(),
                 scaffoldState = scaffoldState,
-                topBar = topBar,
+                topBar = {
+                    Column {
+                        Box(
+                            modifier = Modifier
+                                .background(color = statusBarColor)
+                                .fillMaxWidth()
+                        )
+                        topBar()
+                    }
+                },
                 bottomBar = bottomBar,
                 snackbarHost = snackbarHost,
                 floatingActionButton = floatingActionButton,
@@ -138,19 +147,12 @@ fun PlanetScaffold(
                         WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
                     val systemBarInset =
                         WindowInsets.systemBars.asPaddingValues().calculateBottomPadding()
-                    Column {
-                        Box(
-                            modifier = Modifier
-                                .background(color = statusBarColor)
-                                .fillMaxWidth()
+                    content(
+                        PaddingValues(
+                            top = it.calculateTopPadding() + statusBarInset,
+                            bottom = it.calculateBottomPadding() + systemBarInset
                         )
-                        content(
-                            PaddingValues(
-                                top = it.calculateTopPadding() + statusBarInset,
-                                bottom = it.calculateBottomPadding() + systemBarInset
-                            )
-                        )
-                    }
+                    )
                 }
             )
         }
@@ -158,7 +160,16 @@ fun PlanetScaffold(
         Scaffold(
             modifier = modifier.imePadding(),
             scaffoldState = scaffoldState,
-            topBar = topBar,
+            topBar = {
+                Column {
+                    Box(
+                        modifier = Modifier
+                            .background(color = statusBarColor)
+                            .fillMaxWidth()
+                    )
+                    topBar()
+                }
+            },
             bottomBar = bottomBar,
             snackbarHost = snackbarHost,
             floatingActionButton = floatingActionButton,
@@ -178,20 +189,12 @@ fun PlanetScaffold(
                     WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
                 val systemBarInset =
                     WindowInsets.systemBars.asPaddingValues().calculateBottomPadding()
-                Column {
-                    Box(
-                        modifier = Modifier
-                            .background(color = statusBarColor)
-                            .height(statusBarInset)
-                            .fillMaxWidth()
+                content(
+                    PaddingValues(
+                        top = it.calculateTopPadding() + statusBarInset,
+                        bottom = it.calculateBottomPadding() + systemBarInset
                     )
-                    content(
-                        PaddingValues(
-                            top = it.calculateTopPadding() + statusBarInset,
-                            bottom = it.calculateBottomPadding() + systemBarInset
-                        )
-                    )
-                }
+                )
             }
         )
     }
