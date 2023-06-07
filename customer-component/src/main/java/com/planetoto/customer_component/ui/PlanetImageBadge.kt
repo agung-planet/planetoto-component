@@ -24,6 +24,7 @@ fun PlanetImageBadge(
     imageHeight: Dp = 24.dp,
     badgeCorner: Dp = 20.dp,
     badgeBorder: Dp = 1.5.dp,
+    badgeEndPadding: Dp = (-10).dp,
     badgeBorderColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
     painter: Painter,
     count: Int = 0,
@@ -58,7 +59,7 @@ fun PlanetImageBadge(
                 modifier = Modifier
                     .constrainAs(badge) {
                         top.linkTo(parent.top)
-                        end.linkTo(icon.end, (-10).dp)
+                        end.linkTo(icon.end, badgeEndPadding)
                     },
                 badgeCorner = badgeCorner,
                 badgeBorder = badgeBorder,
@@ -76,6 +77,7 @@ fun PlanetImageBadge(
     iconHeight: Dp = 24.dp,
     badgeCorner: Dp = 20.dp,
     badgeBorder: Dp = 1.5.dp,
+    badgeEndPadding: Dp = (-10).dp,
     badgeBorderColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
     iconPainter: Painter,
     iconTint: PlanetColors.Solid,
@@ -112,7 +114,7 @@ fun PlanetImageBadge(
                 modifier = Modifier
                     .constrainAs(badge) {
                         top.linkTo(parent.top)
-                        end.linkTo(icon.end, (-10).dp)
+                        end.linkTo(icon.end, badgeEndPadding)
                     },
                 badgeCorner = badgeCorner,
                 badgeBorder = badgeBorder,
@@ -130,9 +132,8 @@ private fun PlanetImageBadgePreview() {
         Box {
             PlanetImageBadge(
                 count = 80,
-                isRounded = true,
-                iconHeight = 40.dp,
-                iconWidth = 40.dp,
+                iconHeight = 32.dp,
+                iconWidth = 32.dp,
                 iconTint = PlanetColors.Solid.blue07,
                 iconPainter = painterResource(id = com.planetoto.customer_component.R.drawable.placeholder_avatar)
             ) {
