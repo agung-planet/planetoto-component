@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.planetoto.customer_component.foundation.LocalBorderRadius
@@ -32,6 +33,36 @@ fun PlanetBanner(modifier: Modifier = Modifier, icon: Painter, text: String, onC
         Icon(
             painter = icon,
             contentDescription = text,
+            tint = PlanetColors.Solid.blue07.color
+        )
+        PlanetText(
+            text = text,
+            typography = PlanetTypography.SmallBody,
+            lineHeight = 12.sp,
+            color = PlanetColors.Solid.blue07
+        )
+    }
+}
+
+@Composable
+fun PlanetBanner(
+    modifier: Modifier = Modifier,
+    icon: Painter,
+    text: AnnotatedString,
+    onClick: () -> Unit
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = modifier
+            .clip(RoundedCornerShape(LocalBorderRadius.current.large))
+            .background(PlanetColors.Solid.blue01.color)
+            .clickable(onClick = onClick)
+            .padding(vertical = 6.dp, horizontal = 10.dp)
+    ) {
+        Icon(
+            painter = icon,
+            contentDescription = text.text,
             tint = PlanetColors.Solid.blue07.color
         )
         PlanetText(
