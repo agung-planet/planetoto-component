@@ -37,9 +37,9 @@ fun PlanetBanner(modifier: Modifier = Modifier, icon: Painter, text: String, onC
         )
         PlanetText(
             text = text,
-            typography = PlanetTypography.SmallBody,
-            lineHeight = 12.sp,
-            color = PlanetColors.Solid.blue07
+            typography = PlanetTypography.CaptionLabelOrTag,
+            color = PlanetColors.Solid.blue08,
+            lineHeight = 13.2.sp
         )
     }
 }
@@ -67,9 +67,9 @@ fun PlanetBanner(
         )
         PlanetText(
             text = text,
-            typography = PlanetTypography.SmallBody,
-            lineHeight = 12.sp,
-            color = PlanetColors.Solid.blue07
+            typography = PlanetTypography.CaptionLabelOrTag,
+            color = PlanetColors.Solid.blue08,
+            lineHeight = 13.2.sp
         )
     }
 }
