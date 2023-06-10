@@ -187,7 +187,8 @@ private fun OtpCodeTextField(
             Box(contentAlignment = Alignment.Center) {
                 innerTextField()
             }
-        }
+        },
+        enabled = false
     )
 }
 
