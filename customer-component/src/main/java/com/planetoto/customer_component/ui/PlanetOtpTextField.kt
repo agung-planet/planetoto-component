@@ -29,6 +29,13 @@ import androidx.compose.ui.unit.sp
 import com.planetoto.customer_component.R
 import com.planetoto.customer_component.foundation.PlanetColors
 import com.planetoto.customer_component.utils.CursorOnLastIndexVisualTransformation
+import com.planetoto.customer_component.utils.updateElement
+
+data class OtpFieldModel(
+    val index: Int,
+    val value: String,
+    val shouldEnable: Boolean
+)
 
 @ExperimentalComposeUiApi
 @Composable
@@ -39,12 +46,33 @@ fun PlanetOtpTextField(
     isError: Boolean = false,
     onComplete: () -> Unit
 ) {
+    var otpFieldModels by remember {
+        mutableStateOf(
+            listOf(
+                OtpFieldModel(index = 0, value = "", shouldEnable = true),
+                OtpFieldModel(index = 1, value = "", shouldEnable = false),
+                OtpFieldModel(index = 2, value = "", shouldEnable = false),
+                OtpFieldModel(index = 3, value = "", shouldEnable = false)
+            )
+        )
+    }
+
     var otpSent by remember { mutableStateOf(false) }
+    var isTapBackSpace = false
 
     val focusManager = LocalFocusManager.current
     val (first, second, third, fourth) = FocusRequester.createRefs()
 
     val space = 12.dp
+
+    LaunchedEffect(otpFieldModels) {
+        if (otpFieldModels.any { it.value.isEmpty() }) {
+            if (isTapBackSpace) focusManager.moveFocus(FocusDirection.Up)
+            else focusManager.moveFocus(FocusDirection.Down)
+        } else {
+            focusManager.clearFocus(true)
+        }
+    }
 
     Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(space)) {
         repeat(4) { i ->
@@ -84,28 +112,39 @@ fun PlanetOtpTextField(
                 modifier = otpCodeFieldModifier,
                 focusManager = focusManager,
                 isError = isError,
-                value = value.getOrNull(i)?.toString().orEmpty(),
+                value = otpFieldModels[i].value,
+                shouldEnable = otpFieldModels[i].shouldEnable,
+                onBackSpaceTap = {
+                    if (otpFieldModels[0].value.isEmpty()) return@OtpCodeTextField
+                    isTapBackSpace = true
+                    otpFieldModels = otpFieldModels.updateElement({ it.index == i - 1 }) {
+                        it.copy(value = "", shouldEnable = true)
+                    }.let {
+                        it.updateElement({ m -> m.index == i }) { mod ->
+                            mod.copy(shouldEnable = false)
+                        }
+                    }
+                },
                 onValueChanged = { newStr ->
                     try {
-                        val str = value.toMutableList()
-                        val oldValue = str.getOrNull(i)
-                        val newValue = newStr.toIntOrNull()?.toString().orEmpty()
-
-                        if (oldValue != null) {
-                            str[i] = if (newValue.isBlank()) Char.MIN_VALUE else newValue.first()
-                        } else {
-                            str.add(newStr.first())
-                        }
-                        onValueChanged(str.joinToString(""))
-
-                        // switch focus automagically
-                        if (newStr.isNotBlank()) {
-                            if (i < 3) {
-                                focusManager.moveFocus(FocusDirection.Down)
+                        isTapBackSpace = false
+                        val tmp = otpFieldModels.updateElement({ it.index == i }) {
+                            it.copy(value = newStr, shouldEnable = false)
+                        }.let {
+                            if (it.all { f -> f.value.isNotEmpty() }) {
+                                it
                             } else {
-                                focusManager.clearFocus(true)
+                                val nextIndex = it.first { m -> m.value.isEmpty() }.index
+                                it.updateElement({ m -> m.index == nextIndex }) { mod ->
+                                    mod.copy(shouldEnable = true)
+                                }
                             }
                         }
+
+                        val str = tmp.joinToString(separator = "") { it.value }
+                        onValueChanged(str)
+
+                        otpFieldModels = tmp
 
                         otpSent = false
                     } catch (e: Exception) {
@@ -125,10 +164,12 @@ fun PlanetOtpTextField(
 @Composable
 private fun OtpCodeTextField(
     value: String,
+    shouldEnable: Boolean,
     onValueChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
     isError: Boolean = false,
-    focusManager: FocusManager = LocalFocusManager.current
+    focusManager: FocusManager = LocalFocusManager.current,
+    onBackSpaceTap: () -> Unit
 ) {
     var isFocused by remember { mutableStateOf(false) }
     val borderColorId = when {
@@ -178,7 +219,7 @@ private fun OtpCodeTextField(
                 val isEmpty = value.isBlank() || value.contains(Char.MIN_VALUE)
 
                 if (isBackspace && isEmpty) {
-                    focusManager.moveFocus(FocusDirection.Up)
+                    onBackSpaceTap()
                     true
                 } else false
             },
@@ -188,7 +229,7 @@ private fun OtpCodeTextField(
                 innerTextField()
             }
         },
-        enabled = false
+        enabled = shouldEnable
     )
 }
 
