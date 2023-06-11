@@ -23,7 +23,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.planetoto.customer_component.R
@@ -74,6 +73,18 @@ fun PlanetOtpTextField(
         }
     }
 
+    LaunchedEffect(isError) {
+        println("MASUK SINI ::$isError")
+        if (isError) {
+            otpFieldModels = listOf(
+                OtpFieldModel(index = 0, value = "", shouldEnable = true),
+                OtpFieldModel(index = 1, value = "", shouldEnable = false),
+                OtpFieldModel(index = 2, value = "", shouldEnable = false),
+                OtpFieldModel(index = 3, value = "", shouldEnable = false)
+            )
+        }
+    }
+
     Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(space)) {
         repeat(4) { i ->
             val otpCodeFieldModifier = Modifier.weight(1f).let {
@@ -114,14 +125,25 @@ fun PlanetOtpTextField(
                 isError = isError,
                 value = otpFieldModels[i].value,
                 shouldEnable = otpFieldModels[i].shouldEnable,
+                isLastIndex = i == 3,
                 onBackSpaceTap = {
                     if (otpFieldModels[0].value.isEmpty()) return@OtpCodeTextField
                     isTapBackSpace = true
-                    otpFieldModels = otpFieldModels.updateElement({ it.index == i - 1 }) {
-                        it.copy(value = "", shouldEnable = true)
-                    }.let {
-                        it.updateElement({ m -> m.index == i }) { mod ->
-                            mod.copy(shouldEnable = false)
+                    otpFieldModels = if (i == 3 && otpFieldModels[3].value.isNotEmpty()) {
+                        otpFieldModels.updateElement({ it.index == i }) {
+                            it.copy(value = "", shouldEnable = false)
+                        }.let {
+                            it.updateElement({ m -> m.index == i - 1 }) { mod ->
+                                mod.copy(shouldEnable = true)
+                            }
+                        }
+                    } else {
+                        otpFieldModels.updateElement({ it.index == i - 1 }) {
+                            it.copy(value = "", shouldEnable = true)
+                        }.let {
+                            it.updateElement({ m -> m.index == i }) { mod ->
+                                mod.copy(shouldEnable = false)
+                            }
                         }
                     }
                 },
@@ -170,6 +192,7 @@ private fun OtpCodeTextField(
     modifier: Modifier = Modifier,
     isError: Boolean = false,
     focusManager: FocusManager = LocalFocusManager.current,
+    isLastIndex: Boolean,
     onBackSpaceTap: () -> Unit
 ) {
     var isFocused by remember { mutableStateOf(false) }
@@ -219,7 +242,7 @@ private fun OtpCodeTextField(
                 val isBackspace = it.type == KeyEventType.KeyUp && it.key == Key.Backspace
                 val isEmpty = value.isBlank() || value.contains(Char.MIN_VALUE)
 
-                if (isBackspace && isEmpty) {
+                if ((isBackspace && isEmpty) || (isLastIndex && isBackspace)) {
                     onBackSpaceTap()
                     true
                 } else false
@@ -232,13 +255,4 @@ private fun OtpCodeTextField(
         },
         enabled = shouldEnable
     )
-}
-
-@OptIn(ExperimentalComposeUiApi::class)
-@Preview
-@Composable
-private fun Preview() {
-    PlanetOtpTextField(value = "4567", onValueChanged = {}) {
-
-    }
 }
