@@ -129,7 +129,8 @@ fun PlanetOtpTextField(
                     try {
                         isTapBackSpace = false
                         val tmp = otpFieldModels.updateElement({ it.index == i }) {
-                            it.copy(value = newStr, shouldEnable = false)
+                            val shouldEnable = i == 3
+                            it.copy(value = newStr, shouldEnable = shouldEnable)
                         }.let {
                             if (it.all { f -> f.value.isNotEmpty() }) {
                                 it
