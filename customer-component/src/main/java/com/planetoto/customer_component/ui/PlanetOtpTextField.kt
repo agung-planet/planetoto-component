@@ -74,7 +74,6 @@ fun PlanetOtpTextField(
     }
 
     LaunchedEffect(isError) {
-        println("MASUK SINI ::$isError")
         if (isError) {
             otpFieldModels = listOf(
                 OtpFieldModel(index = 0, value = "", shouldEnable = true),
