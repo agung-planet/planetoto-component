@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.*
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -128,7 +129,7 @@ fun PlanetOtpTextField(
                 shouldEnable = otpFieldModels[i].shouldEnable,
                 isLastIndex = i == 3,
                 onBackSpaceTap = {
-                    if (otpFieldModels[0].value.isEmpty() || (everFullFilledOtp && i==3)){
+                    if (otpFieldModels[0].value.isEmpty() || (everFullFilledOtp && i == 3)) {
                         everFullFilledOtp = false
                         return@OtpCodeTextField
                     }
@@ -192,7 +193,9 @@ private fun OtpCodeTextField(
     isLastIndex: Boolean,
     onBackSpaceTap: () -> Unit
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
     var isFocused by remember { mutableStateOf(false) }
+
     val borderColorId = when {
         isError -> PlanetColors.Solid.red07
         isFocused -> PlanetColors.Solid.contentLink
@@ -200,6 +203,7 @@ private fun OtpCodeTextField(
         else -> PlanetColors.Solid.neutralBorder01
     }
     val backgroundId = PlanetColors.Solid.neutralWhite
+    val imeAction = if (isLastIndex) ImeAction.Done else ImeAction.Next
 
     BasicTextField(
         value = value,
@@ -211,11 +215,14 @@ private fun OtpCodeTextField(
         },
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.NumberPassword,
-            imeAction = ImeAction.Next
+            imeAction = imeAction
         ),
         keyboardActions = KeyboardActions(
             onNext = {
                 focusManager.moveFocus(FocusDirection.Down)
+            },
+            onDone = {
+                keyboardController?.hide()
             }
         ),
         singleLine = true,
