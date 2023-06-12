@@ -61,6 +61,7 @@ fun PlanetOtpTextField(
 
     val focusManager = LocalFocusManager.current
     val (first, second, third, fourth) = FocusRequester.createRefs()
+    var everFullFilledOtp by remember { mutableStateOf(false) }
 
     val space = 12.dp
 
@@ -69,12 +70,13 @@ fun PlanetOtpTextField(
             if (isTapBackSpace) focusManager.moveFocus(FocusDirection.Up)
             else focusManager.moveFocus(FocusDirection.Down)
         } else {
+            everFullFilledOtp = true
             focusManager.clearFocus(true)
         }
     }
 
-    LaunchedEffect(isError) {
-        if (isError) {
+    LaunchedEffect(value) {
+        if (value.isEmpty()) {
             otpFieldModels = listOf(
                 OtpFieldModel(index = 0, value = "", shouldEnable = true),
                 OtpFieldModel(index = 1, value = "", shouldEnable = false),
@@ -126,23 +128,16 @@ fun PlanetOtpTextField(
                 shouldEnable = otpFieldModels[i].shouldEnable,
                 isLastIndex = i == 3,
                 onBackSpaceTap = {
-                    if (otpFieldModels[0].value.isEmpty()) return@OtpCodeTextField
+                    if (otpFieldModels[0].value.isEmpty() || (everFullFilledOtp && i==3)){
+                        everFullFilledOtp = false
+                        return@OtpCodeTextField
+                    }
                     isTapBackSpace = true
-                    otpFieldModels = if (i == 3 && otpFieldModels[3].value.isNotEmpty()) {
-                        otpFieldModels.updateElement({ it.index == i }) {
-                            it.copy(value = "", shouldEnable = false)
-                        }.let {
-                            it.updateElement({ m -> m.index == i - 1 }) { mod ->
-                                mod.copy(shouldEnable = true)
-                            }
-                        }
-                    } else {
-                        otpFieldModels.updateElement({ it.index == i - 1 }) {
-                            it.copy(value = "", shouldEnable = true)
-                        }.let {
-                            it.updateElement({ m -> m.index == i }) { mod ->
-                                mod.copy(shouldEnable = false)
-                            }
+                    otpFieldModels = otpFieldModels.updateElement({ it.index == i - 1 }) {
+                        it.copy(value = "", shouldEnable = true)
+                    }.let {
+                        it.updateElement({ m -> m.index == i }) { mod ->
+                            mod.copy(shouldEnable = false)
                         }
                     }
                 },
@@ -153,12 +148,15 @@ fun PlanetOtpTextField(
                             val shouldEnable = i == 3
                             it.copy(value = newStr, shouldEnable = shouldEnable)
                         }.let {
-                            if (it.all { f -> f.value.isNotEmpty() }) {
-                                it
-                            } else {
-                                val nextIndex = it.first { m -> m.value.isEmpty() }.index
-                                it.updateElement({ m -> m.index == nextIndex }) { mod ->
-                                    mod.copy(shouldEnable = true)
+                            if (i == 3 && newStr.isEmpty()) it
+                            else {
+                                if (it.all { f -> f.value.isNotEmpty() }) {
+                                    it
+                                } else {
+                                    val nextIndex = it.first { m -> m.value.isEmpty() }.index
+                                    it.updateElement({ m -> m.index == nextIndex }) { mod ->
+                                        mod.copy(shouldEnable = true)
+                                    }
                                 }
                             }
                         }
