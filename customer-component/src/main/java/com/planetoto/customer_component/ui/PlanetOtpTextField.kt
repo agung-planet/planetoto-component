@@ -203,7 +203,6 @@ private fun OtpCodeTextField(
         else -> PlanetColors.Solid.neutralBorder01
     }
     val backgroundId = PlanetColors.Solid.neutralWhite
-    val imeAction = if (isLastIndex) ImeAction.Done else ImeAction.Next
 
     BasicTextField(
         value = value,
@@ -215,12 +214,9 @@ private fun OtpCodeTextField(
         },
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.NumberPassword,
-            imeAction = imeAction
+            imeAction = ImeAction.Done
         ),
         keyboardActions = KeyboardActions(
-            onNext = {
-                focusManager.moveFocus(FocusDirection.Down)
-            },
             onDone = {
                 keyboardController?.hide()
             }
