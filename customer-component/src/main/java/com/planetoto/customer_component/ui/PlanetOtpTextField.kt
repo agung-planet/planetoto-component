@@ -87,6 +87,12 @@ fun PlanetOtpTextField(
         }
     }
 
+    LaunchedEffect(isError) {
+        if (isError) {
+            fourth.requestFocus()
+        }
+    }
+
     Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(space)) {
         repeat(4) { i ->
             val otpCodeFieldModifier = Modifier.weight(1f).let {
