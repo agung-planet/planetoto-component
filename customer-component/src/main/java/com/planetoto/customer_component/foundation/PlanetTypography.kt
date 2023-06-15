@@ -27,7 +27,7 @@ sealed class PlanetTypography(
     object TitleSubsection :
         PlanetTypography(size = 18.sp, lineHeight = 24.sp, weight = FontWeight.SemiBold)
 
-    object TitleBody : PlanetTypography(size = 18.sp, lineHeight = 24.sp, weight = FontWeight.Bold)
+    object TitleBody : PlanetTypography(size = 16.sp, lineHeight = 24.sp, weight = FontWeight.Bold)
     object SubtitleBody :
         PlanetTypography(size = 14.sp, lineHeight = 22.sp, weight = FontWeight.SemiBold)
 
