@@ -47,6 +47,9 @@ sealed class PlanetTypography(
     object SmallBody :
         PlanetTypography(size = 12.sp, lineHeight = 22.sp, weight = FontWeight.Normal)
 
+    object SmallBodyBold :
+        PlanetTypography(size = 12.sp, lineHeight = 22.sp, weight = FontWeight.Bold)
+
     object CaptionHelper :
         PlanetTypography(size = 11.sp, lineHeight = 20.sp, weight = FontWeight.Normal)
 
