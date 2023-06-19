@@ -1,5 +1,6 @@
 package com.planetoto.customer_component.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.planetoto.customer_component.R
 import com.planetoto.customer_component.foundation.PlanetColors
@@ -28,14 +30,20 @@ fun PlanetToolbar(
     navigateUpIconColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
     showNavigateUp: Boolean = false,
     navigateUpIcon: @Composable () -> Unit = {
-        val drawable =
-            if (isLightToolbar) R.drawable.ic_back_rounded else R.drawable.ic_arrow_left_16
-        Icon(
-            painter = painterResource(id = drawable),
-            contentDescription = "up",
-            tint = navigateUpIconColor.color,
-            modifier = Modifier.size(24.dp)
-        )
+        if (isLightToolbar) {
+            Image(
+                modifier = Modifier.size(40.dp),
+                painter = painterResource(id = R.drawable.ic_back_rounded),
+                contentDescription = "ic_back"
+            )
+        } else {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_arrow_left_16),
+                contentDescription = "up",
+                tint = navigateUpIconColor.color,
+                modifier = Modifier.size(24.dp)
+            )
+        }
     },
     onNavigateUp: (() -> Unit)? = null
 ) {
@@ -95,5 +103,13 @@ fun PlanetToolbar(
         }
 
         title()
+    }
+}
+
+@Composable
+@Preview
+fun PPreview() {
+    PlanetToolbar(title = "AAAAAAAAAAAAAAAAA", isLightToolbar = true, showNavigateUp = true) {
+
     }
 }
