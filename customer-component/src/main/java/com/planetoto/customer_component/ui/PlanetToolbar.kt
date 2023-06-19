@@ -21,14 +21,17 @@ import com.planetoto.customer_component.foundation.PlanetTypography
 @Composable
 fun PlanetToolbar(
     modifier: Modifier = Modifier,
+    isLightToolbar: Boolean = false,
     title: String,
-    backgroundColor: PlanetColors.Solid = PlanetColors.Solid.blue07,
-    titleColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
+    backgroundColor: PlanetColors.Solid = if (isLightToolbar) PlanetColors.Solid.neutralWhite else PlanetColors.Solid.blue07,
+    titleColor: PlanetColors.Solid = if (isLightToolbar) PlanetColors.Solid.content01 else PlanetColors.Solid.neutralWhite,
     navigateUpIconColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
     showNavigateUp: Boolean = false,
     navigateUpIcon: @Composable () -> Unit = {
+        val drawable =
+            if (isLightToolbar) R.drawable.ic_back_rounded else R.drawable.ic_arrow_left_16
         Icon(
-            painter = painterResource(id = R.drawable.ic_arrow_left_16),
+            painter = painterResource(id = drawable),
             contentDescription = "up",
             tint = navigateUpIconColor.color,
             modifier = Modifier.size(24.dp)
