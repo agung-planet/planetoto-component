@@ -84,9 +84,10 @@ fun PlanetImageBadge(
     iconTint: PlanetColors.Solid,
     count: Int = 0,
     isRounded: Boolean = false,
-    onClick: () -> Unit
+    onClick: (() -> Unit)? = null
 ) {
-    ConstraintLayout(modifier = modifier.disableRipple(onClick = onClick)) {
+    val mModifier = if (onClick == null) modifier else modifier.disableRipple(onClick = onClick)
+    ConstraintLayout(modifier = mModifier) {
         val (icon, badge) = createRefs()
 
         val paddingTop = if (count > 0) 8.dp else 0.dp
