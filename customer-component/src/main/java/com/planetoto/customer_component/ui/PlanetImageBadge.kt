@@ -22,7 +22,7 @@ fun PlanetImageBadge(
     modifier: Modifier = Modifier,
     imageWidth: Dp = 20.dp,
     imageHeight: Dp = 24.dp,
-    badgeCorner: Dp = 20.dp,
+    badgeSize: Dp = 16.dp,
     badgeBorder: Dp = 1.5.dp,
     badgeEndPadding: Dp = (-10).dp,
     badgeBorderColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
@@ -62,7 +62,7 @@ fun PlanetImageBadge(
                         top.linkTo(parent.top)
                         end.linkTo(icon.end, badgeEndPadding)
                     },
-                badgeCorner = badgeCorner,
+                size = badgeSize,
                 badgeBorder = badgeBorder,
                 badgeBorderColor = badgeBorderColor,
                 count = count
@@ -76,7 +76,7 @@ fun PlanetImageBadge(
     modifier: Modifier = Modifier,
     iconWidth: Dp = 20.dp,
     iconHeight: Dp = 24.dp,
-    badgeCorner: Dp = 20.dp,
+    badgeSize: Dp = 16.dp,
     badgeBorder: Dp = 1.5.dp,
     badgeEndPadding: Dp = (-10).dp,
     badgeBorderColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
@@ -118,7 +118,7 @@ fun PlanetImageBadge(
                         top.linkTo(parent.top)
                         end.linkTo(icon.end, badgeEndPadding)
                     },
-                badgeCorner = badgeCorner,
+                size = badgeSize,
                 badgeBorder = badgeBorder,
                 badgeBorderColor = badgeBorderColor,
                 count = count
@@ -133,7 +133,7 @@ private fun PlanetImageBadgePreview() {
     Column() {
         Box {
             PlanetImageBadge(
-                count = 80,
+                count = 10,
                 iconHeight = 32.dp,
                 iconWidth = 32.dp,
                 iconTint = PlanetColors.Solid.blue07,
