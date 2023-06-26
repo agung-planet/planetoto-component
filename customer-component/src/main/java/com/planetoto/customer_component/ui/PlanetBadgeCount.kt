@@ -25,7 +25,7 @@ fun PlanetBadgeCount(
     badgeBackgroundColor: PlanetColors.Solid = PlanetColors.Solid.red07,
     count: Int = 0
 ) {
-    val mModifier = modifier
+    val mModifier = Modifier
         .widthIn(min = size)
         .heightIn(min = size)
         .border(
@@ -37,7 +37,7 @@ fun PlanetBadgeCount(
             color = badgeBackgroundColor.color,
             shape = CircleShape
         )
-    Box(modifier = Modifier.padding(1.dp)) {
+    Box(modifier = modifier.padding(1.dp)) {
         Box(
             modifier = mModifier,
             contentAlignment = Alignment.Center
@@ -56,5 +56,5 @@ fun PlanetBadgeCount(
 @Preview
 @Composable
 private fun Preview() {
-    PlanetBadgeCount(count = 999)
+    PlanetBadgeCount(count = 9)
 }
