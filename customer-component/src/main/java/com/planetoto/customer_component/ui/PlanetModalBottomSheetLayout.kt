@@ -122,7 +122,7 @@ fun PlanetModalBottomSheetLayout(
     sheetBackgroundColor: Color = MaterialTheme.colors.surface,
     showHandlebar: Boolean = true,
     tapOutsideToDismiss: Boolean = true,
-    scrimColor: Color = ModalBottomSheetDefaults.scrimColor,
+    scrimColor: Color = PlanetColors.Solid.black.alpha(0.8f).color,
     content: @Composable () -> Unit
 ) {
     val scope = rememberCoroutineScope()

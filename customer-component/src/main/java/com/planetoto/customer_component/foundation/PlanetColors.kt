@@ -86,6 +86,9 @@ object PlanetColors {
 
             //Transparent
             val transparent = Solid(Color.Transparent)
+
+            //Black
+            val black = Solid(Color.Black)
         }
 
         fun alpha(value: Float): Solid = Solid(color.copy(alpha = value))
