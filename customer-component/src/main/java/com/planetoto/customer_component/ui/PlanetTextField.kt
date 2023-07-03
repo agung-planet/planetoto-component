@@ -41,7 +41,7 @@ fun PlanetTextField(
     modifier: Modifier = Modifier,
     text: String,
     onTextChange: (String) -> Unit,
-    label: String,
+    label: String?,
     placeholder: String? = null,
     prefixPainter: Painter? = null,
     suffixPainter: Painter? = null,
@@ -145,7 +145,7 @@ fun PlanetTextField(
 fun PlanetTextField(
     modifier: Modifier = Modifier,
     text: String,
-    label: String,
+    label: String?,
     placeholder: String? = null,
     prefixPainter: Painter? = null,
     suffixPainter: Painter? = null,
