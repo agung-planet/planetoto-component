@@ -1,7 +1,11 @@
 package com.planetoto.customer_component.ui
 
 import androidx.compose.foundation.text.InlineTextContent
-import androidx.compose.material.*
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.LocalTextStyle
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -87,8 +91,9 @@ fun PlanetText(
     letterSpacing: TextUnit = TextUnit.Unspecified,
     textDecoration: TextDecoration? = null,
     textAlign: TextAlign? = null,
-    overflow: TextOverflow = TextOverflow.Clip,
+    overflow: TextOverflow = TextOverflow.Ellipsis,
     softWrap: Boolean = true,
+    minLines: Int = 1,
     maxLines: Int = Int.MAX_VALUE,
     onTextLayout: (TextLayoutResult) -> Unit = {},
     style: TextStyle = LocalTextStyle.current
@@ -113,6 +118,7 @@ fun PlanetText(
         lineHeight = lineHeight,
         overflow = overflow,
         softWrap = softWrap,
+        minLines = minLines,
         maxLines = maxLines,
         onTextLayout = onTextLayout,
         style = style
@@ -186,8 +192,9 @@ fun PlanetText(
     letterSpacing: TextUnit = TextUnit.Unspecified,
     textDecoration: TextDecoration? = null,
     textAlign: TextAlign? = null,
-    overflow: TextOverflow = TextOverflow.Clip,
+    overflow: TextOverflow = TextOverflow.Ellipsis,
     softWrap: Boolean = true,
+    minLines: Int = 1,
     maxLines: Int = Int.MAX_VALUE,
     inlineContent: Map<String, InlineTextContent> = mapOf(),
     onTextLayout: (TextLayoutResult) -> Unit = {},
@@ -207,6 +214,7 @@ fun PlanetText(
         lineHeight = lineHeight,
         overflow = overflow,
         softWrap = softWrap,
+        minLines = minLines,
         maxLines = maxLines,
         onTextLayout = onTextLayout,
         style = style,

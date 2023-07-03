@@ -47,6 +47,7 @@ dependencies {
     implementation "$libs.app_compat"
     implementation "$libs.material_component"
     implementation "$libs.facebook_shimmer"
+    implementation platform("$libs.bom_compose")
     implementation "$libs.ui_compose"
     implementation "$libs.ui_tooling"
     debugImplementation "$libs.ui_tooling"
