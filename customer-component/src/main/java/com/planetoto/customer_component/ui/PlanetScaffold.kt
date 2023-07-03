@@ -1,8 +1,32 @@
 package com.planetoto.customer_component.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.material.DrawerDefaults
+import androidx.compose.material.DrawerState
+import androidx.compose.material.DrawerValue
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.FabPosition
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ModalBottomSheetDefaults
+import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.contentColorFor
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
@@ -122,7 +146,7 @@ fun PlanetScaffold(
         Box(modifier = Modifier.fillMaxSize()) {
             it()
             Scaffold(
-                modifier = modifier.imePadding(),
+                modifier = modifier,
                 scaffoldState = scaffoldState,
                 topBar = {
                     Column {
@@ -159,7 +183,7 @@ fun PlanetScaffold(
         }
     } ?: run {
         Scaffold(
-            modifier = modifier.imePadding(),
+            modifier = modifier,
             scaffoldState = scaffoldState,
             topBar = {
                 Column {
