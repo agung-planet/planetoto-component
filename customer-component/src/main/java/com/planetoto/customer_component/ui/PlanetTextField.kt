@@ -41,7 +41,7 @@ fun PlanetTextField(
     modifier: Modifier = Modifier,
     text: String,
     onTextChange: (String) -> Unit,
-    label: String?,
+    label: String? = null,
     placeholder: String? = null,
     prefixPainter: Painter? = null,
     suffixPainter: Painter? = null,
@@ -145,7 +145,7 @@ fun PlanetTextField(
 fun PlanetTextField(
     modifier: Modifier = Modifier,
     text: String,
-    label: String?,
+    label: String? = null,
     placeholder: String? = null,
     prefixPainter: Painter? = null,
     suffixPainter: Painter? = null,
@@ -160,7 +160,7 @@ fun PlanetTextField(
 ) {
     if (prefixText != null && prefixPainter != null) throw Exception("You can't use more than one for prefix")
     if (suffixText != null && suffixPainter != null) throw Exception("You can't use more than one for suffix")
-    
+
     BaseTextField(modifier = modifier,
         text = text,
         onTextChange = {},

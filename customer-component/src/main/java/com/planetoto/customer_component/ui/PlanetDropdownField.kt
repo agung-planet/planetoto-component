@@ -25,8 +25,8 @@ import com.planetoto.customer_component.foundation.PlanetColors
 @Composable
 fun PlanetDropDownField(
     modifier: Modifier = Modifier,
-    label: String,
     onClick: () -> Unit,
+    label: String? = null,
     placeholder: String? = null,
     selectedValue: String? = null,
     enabled: Boolean = true,
