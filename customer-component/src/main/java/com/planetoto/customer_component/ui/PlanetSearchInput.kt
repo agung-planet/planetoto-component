@@ -57,6 +57,11 @@ fun PlanetSearchInput(
         helperText = helperText,
         isError = isError,
         hasClearAction = hasClearAction,
+        colors = BaseTextFieldColors(
+            disabledBorderColor = PlanetColors.Solid.neutralBorder01,
+            disabledPlaceholderColor = PlanetColors.Solid.neutralBorder01,
+            disabledIconTint = PlanetColors.Solid.neutralBorder01
+        ),
         suffixBox = {
             Box(
                 modifier = Modifier
@@ -107,6 +112,11 @@ fun PlanetSearchInput(
         helperText = helperText,
         isError = isError,
         hasClearAction = hasClearAction,
+        colors = BaseTextFieldColors(
+            disabledBorderColor = PlanetColors.Solid.neutralBorder01,
+            disabledPlaceholderColor = PlanetColors.Solid.neutralBorder01,
+            disabledIconTint = PlanetColors.Solid.neutralBorder01
+        ),
         suffixBox = {
             Box(
                 modifier = Modifier
@@ -157,6 +167,11 @@ fun PlanetSearchInput(
         isError = isError,
         hasClearAction = hasClearAction,
         onClick = onClick,
+        colors = BaseTextFieldColors(
+            disabledBorderColor = PlanetColors.Solid.neutralBorder01,
+            disabledPlaceholderColor = PlanetColors.Solid.neutralBorder01,
+            disabledIconTint = PlanetColors.Solid.neutralBorder01
+        ),
         suffixBox = {
             Box(
                 modifier = Modifier

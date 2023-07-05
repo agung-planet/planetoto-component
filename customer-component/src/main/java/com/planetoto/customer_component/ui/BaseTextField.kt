@@ -45,6 +45,21 @@ import com.planetoto.customer_component.foundation.LocalPadding
 import com.planetoto.customer_component.foundation.PlanetColors
 import com.planetoto.customer_component.foundation.PlanetTypography
 
+data class BaseTextFieldColors(
+    val defaultBorderColor: PlanetColors.Solid = PlanetColors.Solid.neutralBorder01,
+    val errorBorderColor: PlanetColors.Solid = PlanetColors.Solid.red05,
+    val disabledBorderColor: PlanetColors.Solid = PlanetColors.Solid.neutralBorder02,
+    val focusedBorderColor: PlanetColors.Solid = PlanetColors.Solid.blue05,
+    val defaultBackgroundColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
+    val disabledBackgroundColor: PlanetColors.Solid = PlanetColors.Solid.neutralBg,
+    val defaultPlaceholderColor: PlanetColors.Solid = PlanetColors.Solid.content03,
+    val disabledPlaceholderColor: PlanetColors.Solid = defaultPlaceholderColor,
+    val defaultIconTint: PlanetColors.Solid = PlanetColors.Solid.content03,
+    val disabledIconTint: PlanetColors.Solid = defaultIconTint,
+    val defaultHelperTextColor: PlanetColors.Solid = PlanetColors.Solid.content03,
+    val errorHelperTextColor: PlanetColors.Solid = PlanetColors.Solid.red05
+)
+
 @ExperimentalAnimationApi
 @Composable
 internal fun BaseTextField(
@@ -63,6 +78,7 @@ internal fun BaseTextField(
     helperText: String? = null,
     isError: Boolean = false,
     hasClearAction: Boolean = false,
+    colors: BaseTextFieldColors = BaseTextFieldColors(),
     onTextChange: (String) -> Unit,
     prefixBox: (@Composable (Dp) -> Unit)? = null,
     suffixBox: (@Composable (Dp) -> Unit)? = null,
@@ -78,20 +94,20 @@ internal fun BaseTextField(
     val borderColor by remember(enabled, isError) {
         derivedStateOf {
             when {
-                isError -> PlanetColors.Solid.red05
-                !enabled -> PlanetColors.Solid.neutralBorder02
-                isFocused -> PlanetColors.Solid.blue05
-                else -> PlanetColors.Solid.neutralBorder01
+                isError -> colors.errorBorderColor
+                !enabled -> colors.disabledBorderColor
+                isFocused -> colors.focusedBorderColor
+                else -> colors.defaultBorderColor
             }
         }
     }
     val background by remember(enabled, isError) {
         derivedStateOf {
-            if (enabled) PlanetColors.Solid.neutralWhite else PlanetColors.Solid.neutralBg
+            if (enabled) colors.disabledBackgroundColor else colors.defaultBackgroundColor
         }
     }
     val helperTextColor = remember(isError) {
-        if (isError) PlanetColors.Solid.red05 else PlanetColors.Solid.content03
+        if (isError) colors.errorHelperTextColor else colors.defaultHelperTextColor
     }
 
     BasicTextField(
@@ -204,6 +220,7 @@ internal fun BaseTextField(
     helperText: String? = null,
     isError: Boolean = false,
     hasClearAction: Boolean = false,
+    colors: BaseTextFieldColors = BaseTextFieldColors(),
     onTextChange: (TextFieldValue) -> Unit,
     prefixBox: (@Composable (Dp) -> Unit)? = null,
     suffixBox: (@Composable (Dp) -> Unit)? = null,
@@ -219,15 +236,20 @@ internal fun BaseTextField(
     val borderColor by remember(enabled, isError) {
         derivedStateOf {
             when {
-                !enabled -> PlanetColors.Solid.neutralBorder02
-                isFocused -> PlanetColors.Solid.blue05
-                isError -> PlanetColors.Solid.red05
-                else -> PlanetColors.Solid.neutralBorder01
+                isError -> colors.errorBorderColor
+                !enabled -> colors.disabledBorderColor
+                isFocused -> colors.focusedBorderColor
+                else -> colors.defaultBorderColor
             }
         }
     }
+    val background by remember(enabled, isError) {
+        derivedStateOf {
+            if (enabled) colors.disabledBackgroundColor else colors.defaultBackgroundColor
+        }
+    }
     val helperTextColor = remember(isError) {
-        if (isError) PlanetColors.Solid.red05 else PlanetColors.Solid.content03
+        if (isError) colors.errorHelperTextColor else colors.defaultHelperTextColor
     }
 
     BasicTextField(
@@ -257,7 +279,7 @@ internal fun BaseTextField(
                     modifier = Modifier
                         .height(height)
                         .clip(RoundedCornerShape(8.dp))
-                        .background(PlanetColors.Solid.neutralWhite.color)
+                        .background(background.color)
                         .border(
                             width = 1.5.dp,
                             color = borderColor.color,
