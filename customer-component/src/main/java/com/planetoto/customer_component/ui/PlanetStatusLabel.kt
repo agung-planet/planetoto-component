@@ -16,7 +16,8 @@ import com.planetoto.customer_component.foundation.PlanetTypography
 fun PlanetStatusLabel(
     modifier: Modifier = Modifier,
     statusName: String,
-    backgroundColor: Color
+    backgroundColor: Color,
+    textColor: Color
 ) {
     Box(
         modifier = modifier
@@ -29,7 +30,7 @@ fun PlanetStatusLabel(
         PlanetText(
             text = statusName,
             typography = PlanetTypography.CaptionLabelOrTag,
-            color = PlanetColors.Solid.neutralWhite
+            color = PlanetColors.Solid(textColor)
         )
     }
 }
@@ -39,6 +40,7 @@ fun PlanetStatusLabel(
 private fun PlanetStatusLabelPrev() {
     PlanetStatusLabel(
         statusName = "Proses Pengajuan",
-        backgroundColor = PlanetColors.Solid.blue05.color
+        backgroundColor = Color(android.graphics.Color.parseColor("#FFFFFF")),
+        textColor = Color(android.graphics.Color.parseColor("#000000"))
     )
 }
