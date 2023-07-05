@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.planetoto.customer_component.foundation.PlanetColors
@@ -14,12 +15,13 @@ import com.planetoto.customer_component.foundation.PlanetTypography
 @Composable
 fun PlanetStatusLabel(
     modifier: Modifier = Modifier,
-    statusName: String, backgroundColor: PlanetColors.Solid
+    statusName: String,
+    backgroundColor: Color
 ) {
     Box(
         modifier = modifier
             .background(
-                color = backgroundColor.color,
+                color = backgroundColor,
                 shape = RoundedCornerShape(16.dp)
             )
             .padding(vertical = 2.dp, horizontal = 10.dp)
@@ -35,5 +37,8 @@ fun PlanetStatusLabel(
 @Preview
 @Composable
 private fun PlanetStatusLabelPrev() {
-    PlanetStatusLabel(statusName = "Proses Pengajuan", backgroundColor = PlanetColors.Solid.blue05)
+    PlanetStatusLabel(
+        statusName = "Proses Pengajuan",
+        backgroundColor = PlanetColors.Solid.blue05.color
+    )
 }
