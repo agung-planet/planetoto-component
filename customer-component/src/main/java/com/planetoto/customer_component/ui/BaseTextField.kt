@@ -54,8 +54,6 @@ data class BaseTextFieldColors(
     val disabledBackgroundColor: PlanetColors.Solid = PlanetColors.Solid.neutralBg,
     val defaultPlaceholderColor: PlanetColors.Solid = PlanetColors.Solid.content03,
     val disabledPlaceholderColor: PlanetColors.Solid = defaultPlaceholderColor,
-    val defaultIconTint: PlanetColors.Solid = PlanetColors.Solid.content03,
-    val disabledIconTint: PlanetColors.Solid = defaultIconTint,
     val defaultHelperTextColor: PlanetColors.Solid = PlanetColors.Solid.content03,
     val errorHelperTextColor: PlanetColors.Solid = PlanetColors.Solid.red05
 )
@@ -108,6 +106,9 @@ internal fun BaseTextField(
     }
     val helperTextColor = remember(isError) {
         if (isError) colors.errorHelperTextColor else colors.defaultHelperTextColor
+    }
+    val placeholderTextColor = remember(enabled, placeholder) {
+        if (enabled) colors.defaultPlaceholderColor else colors.disabledPlaceholderColor
     }
 
     BasicTextField(
@@ -166,7 +167,7 @@ internal fun BaseTextField(
                             PlanetText(
                                 text = placeholder.orEmpty(),
                                 lineHeight = 16.8.sp,
-                                color = PlanetColors.Solid.content03
+                                color = placeholderTextColor
                             )
                         }
                         innerTextField()
@@ -251,6 +252,9 @@ internal fun BaseTextField(
     val helperTextColor = remember(isError) {
         if (isError) colors.errorHelperTextColor else colors.defaultHelperTextColor
     }
+    val placeholderTextColor = remember(enabled, placeholder) {
+        if (enabled) colors.defaultPlaceholderColor else colors.disabledPlaceholderColor
+    }
 
     BasicTextField(
         value = text,
@@ -308,7 +312,7 @@ internal fun BaseTextField(
                             PlanetText(
                                 text = placeholder.orEmpty(),
                                 lineHeight = 16.8.sp,
-                                color = PlanetColors.Solid.content03
+                                color = placeholderTextColor
                             )
                         }
                         innerTextField()
