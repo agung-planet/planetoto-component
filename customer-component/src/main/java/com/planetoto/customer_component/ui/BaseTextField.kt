@@ -101,7 +101,7 @@ internal fun BaseTextField(
     }
     val background by remember(enabled, isError) {
         derivedStateOf {
-            if (enabled) colors.disabledBackgroundColor else colors.defaultBackgroundColor
+            if (enabled) colors.defaultBackgroundColor else colors.disabledBackgroundColor
         }
     }
     val helperTextColor = remember(isError) {
@@ -246,7 +246,7 @@ internal fun BaseTextField(
     }
     val background by remember(enabled, isError) {
         derivedStateOf {
-            if (enabled) colors.disabledBackgroundColor else colors.defaultBackgroundColor
+            if (enabled) colors.defaultBackgroundColor else colors.disabledBackgroundColor
         }
     }
     val helperTextColor = remember(isError) {
