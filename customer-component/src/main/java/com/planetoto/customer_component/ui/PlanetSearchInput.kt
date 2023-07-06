@@ -43,6 +43,10 @@ fun PlanetSearchInput(
     onTextChange: (String) -> Unit,
     onSearchClicked: ((String) -> Unit)? = null
 ) {
+    val iconTint = remember(enabled) {
+        if (enabled) PlanetColors.Solid.content03 else PlanetColors.Solid.neutralBorder01
+    }
+
     BaseTextField(
         modifier = modifier,
         text = text,
@@ -59,8 +63,7 @@ fun PlanetSearchInput(
         hasClearAction = hasClearAction,
         colors = BaseTextFieldColors(
             disabledBorderColor = PlanetColors.Solid.neutralBorder01,
-            disabledPlaceholderColor = PlanetColors.Solid.neutralBorder01,
-            disabledIconTint = PlanetColors.Solid.neutralBorder01
+            disabledPlaceholderColor = PlanetColors.Solid.neutralBorder01
         ),
         suffixBox = {
             Box(
@@ -72,7 +75,7 @@ fun PlanetSearchInput(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_search),
                     contentDescription = "search",
-                    tint = PlanetColors.Solid.content03.color,
+                    tint = iconTint.color,
                     modifier = Modifier.padding(end = LocalPadding.current.small)
                 )
             }
@@ -98,6 +101,10 @@ fun PlanetSearchInput(
     onTextChange: (TextFieldValue) -> Unit,
     onSearchClicked: ((TextFieldValue) -> Unit)? = null
 ) {
+    val iconTint = remember(enabled) {
+        if (enabled) PlanetColors.Solid.content03 else PlanetColors.Solid.neutralBorder01
+    }
+
     BaseTextField(
         modifier = modifier,
         text = text,
@@ -114,8 +121,7 @@ fun PlanetSearchInput(
         hasClearAction = hasClearAction,
         colors = BaseTextFieldColors(
             disabledBorderColor = PlanetColors.Solid.neutralBorder01,
-            disabledPlaceholderColor = PlanetColors.Solid.neutralBorder01,
-            disabledIconTint = PlanetColors.Solid.neutralBorder01
+            disabledPlaceholderColor = PlanetColors.Solid.neutralBorder01
         ),
         suffixBox = {
             Box(
@@ -127,7 +133,7 @@ fun PlanetSearchInput(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_search),
                     contentDescription = "search",
-                    tint = PlanetColors.Solid.content03.color,
+                    tint = iconTint.color,
                     modifier = Modifier.padding(end = LocalPadding.current.small)
                 )
             }
@@ -153,6 +159,10 @@ fun PlanetSearchInput(
     onClearText: (() -> Unit)? = null,
     onClick: () -> Unit
 ) {
+    val iconTint = remember(enabled) {
+        if (enabled) PlanetColors.Solid.content03 else PlanetColors.Solid.neutralBorder01
+    }
+
     BaseTextField(
         modifier = modifier,
         text = text,
@@ -169,8 +179,7 @@ fun PlanetSearchInput(
         onClick = onClick,
         colors = BaseTextFieldColors(
             disabledBorderColor = PlanetColors.Solid.neutralBorder01,
-            disabledPlaceholderColor = PlanetColors.Solid.neutralBorder01,
-            disabledIconTint = PlanetColors.Solid.neutralBorder01
+            disabledPlaceholderColor = PlanetColors.Solid.neutralBorder01
         ),
         suffixBox = {
             Box(
@@ -182,7 +191,7 @@ fun PlanetSearchInput(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_search),
                     contentDescription = "search",
-                    tint = PlanetColors.Solid.content03.color,
+                    tint = iconTint.color,
                     modifier = Modifier
                         .size(24.dp)
                         .clickable(onClick = onClick)
