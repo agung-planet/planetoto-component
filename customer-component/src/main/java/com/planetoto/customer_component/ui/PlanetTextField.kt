@@ -57,7 +57,8 @@ fun PlanetTextField(
     size: PlanetTextFieldSize = PlanetTextFieldSize.Large,
     isError: Boolean = false,
     helperText: String? = null,
-    hasClearAction: Boolean = true
+    hasClearAction: Boolean = true,
+    colors: BaseTextFieldColors = BaseTextFieldColors()
 ) {
     if (prefixText != null && prefixPainter != null) throw Exception("You can't use more than one for prefix")
     if (suffixText != null && suffixPainter != null) throw Exception("You can't use more than one for suffix")
@@ -79,6 +80,7 @@ fun PlanetTextField(
         helperText = helperText,
         isError = isError,
         hasClearAction = hasClearAction,
+        colors = colors,
         prefixBox = if (prefixPainter != null || prefixText != null) {
             {
                 Box(
@@ -156,6 +158,7 @@ fun PlanetTextField(
     isError: Boolean = false,
     helperText: String? = null,
     hasClearAction: Boolean = false,
+    colors: BaseTextFieldColors = BaseTextFieldColors(),
     onClick: () -> Unit
 ) {
     if (prefixText != null && prefixPainter != null) throw Exception("You can't use more than one for prefix")
@@ -174,6 +177,7 @@ fun PlanetTextField(
         isError = isError,
         hasClearAction = hasClearAction,
         onClick = onClick,
+        colors = colors,
         prefixBox = if (prefixPainter != null || prefixText != null) {
             {
                 Box(
@@ -254,30 +258,10 @@ private fun PreviewSearchInput() {
             onTextChange = { text = it },
             placeholder = "Type here",
             label = "Search",
-            prefixPainter = painterResource(id = R.drawable.ic_search),
-            hasClearAction = true,
-            isError = true
-        )
-        PlanetTextField(
-            text = text,
-            onTextChange = { text = it },
-            placeholder = "Type here",
-            label = "Search",
             suffixPainter = painterResource(id = R.drawable.ic_search),
             hasClearAction = true,
-            isError = true
+            enabled = false
         )
-
-        PlanetTextField(
-            text = text,
-            onTextChange = { text = it },
-            placeholder = "Type here",
-            label = "Search",
-            suffixText = "+62",
-            hasClearAction = true,
-            isError = true
-        )
-
         PlanetTextField(
             text = text,
             onTextChange = { text = it },

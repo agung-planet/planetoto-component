@@ -48,12 +48,12 @@ import com.planetoto.customer_component.foundation.PlanetTypography
 data class BaseTextFieldColors(
     val defaultBorderColor: PlanetColors.Solid = PlanetColors.Solid.neutralBorder01,
     val errorBorderColor: PlanetColors.Solid = PlanetColors.Solid.red05,
-    val disabledBorderColor: PlanetColors.Solid = PlanetColors.Solid.neutralBorder02,
+    val disabledBorderColor: PlanetColors.Solid = PlanetColors.Solid.neutralBorder01,
     val focusedBorderColor: PlanetColors.Solid = PlanetColors.Solid.blue05,
     val defaultBackgroundColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
     val disabledBackgroundColor: PlanetColors.Solid = PlanetColors.Solid.neutralBg,
     val defaultPlaceholderColor: PlanetColors.Solid = PlanetColors.Solid.content03,
-    val disabledPlaceholderColor: PlanetColors.Solid = defaultPlaceholderColor,
+    val disabledPlaceholderColor: PlanetColors.Solid = PlanetColors.Solid.neutralBorder01,
     val defaultHelperTextColor: PlanetColors.Solid = PlanetColors.Solid.content03,
     val errorHelperTextColor: PlanetColors.Solid = PlanetColors.Solid.red05
 )

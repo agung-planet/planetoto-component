@@ -25,7 +25,6 @@ import com.planetoto.customer_component.foundation.PlanetColors
 @Composable
 fun PlanetDropDownField(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit,
     label: String? = null,
     placeholder: String? = null,
     selectedValue: String? = null,
@@ -33,8 +32,14 @@ fun PlanetDropDownField(
     size: PlanetTextFieldSize = PlanetTextFieldSize.Large,
     helperText: String? = null,
     isError: Boolean = false,
-    isSheetOpen: Boolean = false
+    isSheetOpen: Boolean = false,
+    colors: BaseTextFieldColors = BaseTextFieldColors(),
+    onClick: () -> Unit
 ) {
+    val iconTint = remember(enabled) {
+        if (enabled) PlanetColors.Solid.content03 else PlanetColors.Solid.neutralBorder01
+    }
+
     BaseTextField(
         modifier = modifier,
         text = selectedValue.orEmpty(),
@@ -47,6 +52,7 @@ fun PlanetDropDownField(
         size = size,
         isError = isError,
         helperText = helperText,
+        colors = colors,
         onClick = onClick,
         suffixBox = {
             val degree by animateFloatAsState(targetValue = if (isSheetOpen) 180f else 0f)
@@ -57,7 +63,7 @@ fun PlanetDropDownField(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_chevron_down),
                     contentDescription = "see options",
-                    tint = PlanetColors.Solid.content02.color,
+                    tint = iconTint.color,
                     modifier = Modifier
                         .size(24.dp)
                         .rotate(degree)
@@ -88,14 +94,8 @@ private fun PreviewSearchInput() {
             placeholder = "Type here",
             label = "Search",
             helperText = "",
-            onClick = {}
-        )
-        PlanetDropDownField(
-            selectedValue = text,
-            placeholder = "Type here",
-            label = "Search",
-            helperText = "",
-            onClick = {}
+            onClick = {},
+            enabled = false
         )
     }
 }

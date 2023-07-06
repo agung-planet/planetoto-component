@@ -2,7 +2,9 @@ package com.planetoto.customer_component.ui
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -40,6 +42,7 @@ fun PlanetSearchInput(
     size: PlanetTextFieldSize = PlanetTextFieldSize.Large,
     enabled: Boolean = true,
     hasClearAction: Boolean = true,
+    colors: BaseTextFieldColors = BaseTextFieldColors(),
     onTextChange: (String) -> Unit,
     onSearchClicked: ((String) -> Unit)? = null
 ) {
@@ -61,10 +64,7 @@ fun PlanetSearchInput(
         helperText = helperText,
         isError = isError,
         hasClearAction = hasClearAction,
-        colors = BaseTextFieldColors(
-            disabledBorderColor = PlanetColors.Solid.neutralBorder01,
-            disabledPlaceholderColor = PlanetColors.Solid.neutralBorder01
-        ),
+        colors = colors,
         suffixBox = {
             Box(
                 modifier = Modifier
@@ -98,6 +98,7 @@ fun PlanetSearchInput(
     size: PlanetTextFieldSize = PlanetTextFieldSize.Large,
     enabled: Boolean = true,
     hasClearAction: Boolean = true,
+    colors: BaseTextFieldColors = BaseTextFieldColors(),
     onTextChange: (TextFieldValue) -> Unit,
     onSearchClicked: ((TextFieldValue) -> Unit)? = null
 ) {
@@ -119,10 +120,7 @@ fun PlanetSearchInput(
         helperText = helperText,
         isError = isError,
         hasClearAction = hasClearAction,
-        colors = BaseTextFieldColors(
-            disabledBorderColor = PlanetColors.Solid.neutralBorder01,
-            disabledPlaceholderColor = PlanetColors.Solid.neutralBorder01
-        ),
+        colors = colors,
         suffixBox = {
             Box(
                 modifier = Modifier
@@ -156,6 +154,7 @@ fun PlanetSearchInput(
     size: PlanetTextFieldSize = PlanetTextFieldSize.Large,
     enabled: Boolean = true,
     hasClearAction: Boolean = false,
+    colors: BaseTextFieldColors = BaseTextFieldColors(),
     onClearText: (() -> Unit)? = null,
     onClick: () -> Unit
 ) {
@@ -177,10 +176,7 @@ fun PlanetSearchInput(
         isError = isError,
         hasClearAction = hasClearAction,
         onClick = onClick,
-        colors = BaseTextFieldColors(
-            disabledBorderColor = PlanetColors.Solid.neutralBorder01,
-            disabledPlaceholderColor = PlanetColors.Solid.neutralBorder01
-        ),
+        colors = colors,
         suffixBox = {
             Box(
                 modifier = Modifier
@@ -206,16 +202,23 @@ fun PlanetSearchInput(
 @Composable
 private fun PreviewSearchInput() {
     var text by remember {
-        mutableStateOf("abc")
+        mutableStateOf("")
     }
 
-    Box(modifier = Modifier.padding(16.dp)) {
+    Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         PlanetSearchInput(
             text = text,
             onTextChange = { text = it },
             onSearchClicked = {},
-            label = "Search",
-            helperText = "An error occurred"
+            placeholder = "Search",
+            enabled = true
+        )
+        PlanetSearchInput(
+            text = text,
+            onTextChange = { text = it },
+            onSearchClicked = {},
+            placeholder = "Search",
+            enabled = false
         )
     }
 }
