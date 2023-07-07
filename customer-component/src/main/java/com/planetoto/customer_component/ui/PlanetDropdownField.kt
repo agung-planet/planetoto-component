@@ -76,26 +76,24 @@ fun PlanetDropDownField(
 @ExperimentalAnimationApi
 @Preview(showBackground = true)
 @Composable
-private fun PreviewSearchInput() {
+private fun PreviewDropdown() {
     val text by remember {
-        mutableStateOf("")
+        mutableStateOf("selected")
     }
 
-    Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         PlanetDropDownField(
             selectedValue = text,
-            placeholder = "Type here",
-            label = "Search",
-            helperText = "",
+            placeholder = "Options",
+            label = "Enabled",
             onClick = {}
         )
         PlanetDropDownField(
             selectedValue = text,
-            placeholder = "Type here",
-            label = "Search",
-            helperText = "",
-            onClick = {},
-            enabled = false
+            placeholder = "Options",
+            label = "Disabled",
+            enabled = false,
+            onClick = {}
         )
     }
 }
