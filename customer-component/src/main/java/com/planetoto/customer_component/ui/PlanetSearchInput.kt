@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardActionScope
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
@@ -44,7 +46,8 @@ fun PlanetSearchInput(
     hasClearAction: Boolean = true,
     colors: BaseTextFieldColors = BaseTextFieldColors(),
     onTextChange: (String) -> Unit,
-    onSearchClicked: ((String) -> Unit)? = null
+    onSearchClicked: ((String) -> Unit)? = null,
+    onActionDone: (KeyboardActionScope.() -> Unit)? = null
 ) {
     val iconTint = remember(enabled) {
         if (enabled) PlanetColors.Solid.content03 else PlanetColors.Solid.neutralBorder01
@@ -59,6 +62,7 @@ fun PlanetSearchInput(
         enabled = enabled,
         readOnly = false,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+        keyboardActions = KeyboardActions(onDone = onActionDone),
         singleLine = true,
         size = size,
         helperText = helperText,
@@ -100,7 +104,8 @@ fun PlanetSearchInput(
     hasClearAction: Boolean = true,
     colors: BaseTextFieldColors = BaseTextFieldColors(),
     onTextChange: (TextFieldValue) -> Unit,
-    onSearchClicked: ((TextFieldValue) -> Unit)? = null
+    onSearchClicked: ((TextFieldValue) -> Unit)? = null,
+    onActionDone: (KeyboardActionScope.() -> Unit)? = null
 ) {
     val iconTint = remember(enabled) {
         if (enabled) PlanetColors.Solid.content03 else PlanetColors.Solid.neutralBorder01
@@ -115,6 +120,7 @@ fun PlanetSearchInput(
         enabled = enabled,
         readOnly = false,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+        keyboardActions = KeyboardActions(onDone = onActionDone),
         singleLine = true,
         size = size,
         helperText = helperText,
