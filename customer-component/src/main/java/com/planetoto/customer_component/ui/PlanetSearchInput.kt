@@ -47,7 +47,9 @@ fun PlanetSearchInput(
     colors: BaseTextFieldColors = BaseTextFieldColors(),
     onTextChange: (String) -> Unit,
     onSearchClicked: ((String) -> Unit)? = null,
-    onActionDone: (KeyboardActionScope.() -> Unit)? = null
+    onActionDone: (KeyboardActionScope.() -> Unit)? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+    keyboardActions: KeyboardActions = KeyboardActions(onDone = onActionDone),
 ) {
     val iconTint = remember(enabled) {
         if (enabled) PlanetColors.Solid.content03 else PlanetColors.Solid.neutralBorder01
@@ -61,8 +63,8 @@ fun PlanetSearchInput(
         placeholder = placeholder,
         enabled = enabled,
         readOnly = false,
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-        keyboardActions = KeyboardActions(onDone = onActionDone),
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
         singleLine = true,
         size = size,
         helperText = helperText,
