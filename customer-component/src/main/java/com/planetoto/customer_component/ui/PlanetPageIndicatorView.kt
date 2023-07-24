@@ -51,7 +51,7 @@ fun PlanetPageIndicatorView(
 
     val listState = rememberLazyListState()
 
-    val totalWidth: Dp = indicatorSize * indicatorCount + space * (indicatorCount - 1) + selectedLength
+    val totalWidth: Dp = indicatorSize * (indicatorCount - 1) + space * (indicatorCount - 1) + selectedLength
     val widthInPx = LocalDensity.current.run { indicatorSize.toPx() }
 
     val currentItem by remember {
