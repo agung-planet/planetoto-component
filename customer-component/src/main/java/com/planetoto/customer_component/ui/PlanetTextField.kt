@@ -159,25 +159,25 @@ fun PlanetTextField(
     helperText: String? = null,
     hasClearAction: Boolean = false,
     colors: BaseTextFieldColors = BaseTextFieldColors(),
+    onClearText: (() -> Unit)? = null,
     onClick: () -> Unit
 ) {
     if (prefixText != null && prefixPainter != null) throw Exception("You can't use more than one for prefix")
     if (suffixText != null && suffixPainter != null) throw Exception("You can't use more than one for suffix")
 
-    BaseTextField(modifier = modifier,
+    ClickableTextField(
+        modifier = modifier,
         text = text,
-        onTextChange = {},
         label = label,
         placeholder = placeholder,
         enabled = enabled,
-        readOnly = true,
-        singleLine = true,
         size = size,
         helperText = helperText,
         isError = isError,
         hasClearAction = hasClearAction,
         onClick = onClick,
         colors = colors,
+        onClearText = onClearText,
         prefixBox = if (prefixPainter != null || prefixText != null) {
             {
                 Box(

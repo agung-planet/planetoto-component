@@ -170,21 +170,19 @@ fun PlanetSearchInput(
         if (enabled) PlanetColors.Solid.content03 else PlanetColors.Solid.neutralBorder01
     }
 
-    BaseTextField(
+    ClickableTextField(
         modifier = modifier,
         text = text,
-        onTextChange = { if (it.isEmpty()) onClearText?.invoke() },
         label = label,
         placeholder = placeholder,
         enabled = enabled,
-        readOnly = true,
-        singleLine = true,
         size = size,
         helperText = helperText,
         isError = isError,
         hasClearAction = hasClearAction,
         onClick = onClick,
         colors = colors,
+        onClearText = onClearText,
         suffixBox = {
             Box(
                 modifier = Modifier

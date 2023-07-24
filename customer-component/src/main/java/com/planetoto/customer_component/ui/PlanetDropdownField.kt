@@ -34,26 +34,25 @@ fun PlanetDropDownField(
     isError: Boolean = false,
     isSheetOpen: Boolean = false,
     colors: BaseTextFieldColors = BaseTextFieldColors(),
+    onClearText: (() -> Unit)? = null,
     onClick: () -> Unit
 ) {
     val iconTint = remember(enabled) {
         if (enabled) PlanetColors.Solid.content03 else PlanetColors.Solid.neutralBorder01
     }
 
-    BaseTextField(
+    ClickableTextField(
         modifier = modifier,
         text = selectedValue.orEmpty(),
-        onTextChange = {},
         label = label,
         placeholder = placeholder,
         enabled = enabled,
-        readOnly = true,
-        singleLine = true,
         size = size,
         isError = isError,
         helperText = helperText,
         colors = colors,
         onClick = onClick,
+        onClearText = onClearText,
         suffixBox = {
             val degree by animateFloatAsState(targetValue = if (isSheetOpen) 180f else 0f)
             Box(
