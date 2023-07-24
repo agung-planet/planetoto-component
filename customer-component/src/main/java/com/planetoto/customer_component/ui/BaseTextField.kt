@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -21,6 +22,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
+import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -227,6 +229,128 @@ internal fun BaseTextField(
                 }
             }
         )
+    }
+}
+
+@ExperimentalAnimationApi
+@Composable
+internal fun ClickableTextField(
+    modifier: Modifier = Modifier,
+    text: String,
+    label: String?,
+    placeholder: String? = null,
+    enabled: Boolean = true,
+    maxLines: Int = 1,
+    size: PlanetTextFieldSize = PlanetTextFieldSize.Small,
+    helperText: String? = null,
+    isError: Boolean = false,
+    hasClearAction: Boolean = false,
+    colors: BaseTextFieldColors = BaseTextFieldColors(),
+    prefixBox: (@Composable (Dp) -> Unit)? = null,
+    suffixBox: (@Composable (Dp) -> Unit)? = null,
+    onClearText: (() -> Unit)? = null,
+    onClick: () -> Unit
+) {
+    var isFocused by remember { mutableStateOf(false) }
+    val height = remember(size) {
+        when (size) {
+            PlanetTextFieldSize.Small -> 40.dp
+            PlanetTextFieldSize.Large -> 50.dp
+        }
+    }
+    val borderColor by remember(enabled, isError) {
+        derivedStateOf {
+            when {
+                isError -> colors.errorBorderColor
+                !enabled -> colors.disabledBorderColor
+                isFocused -> colors.focusedBorderColor
+                else -> colors.defaultBorderColor
+            }
+        }
+    }
+    val background by remember(enabled, isError) {
+        derivedStateOf {
+            if (enabled) colors.defaultBackgroundColor else colors.disabledBackgroundColor
+        }
+    }
+    val helperTextColor = remember(isError) {
+        if (isError) colors.errorHelperTextColor else colors.defaultHelperTextColor
+    }
+    val placeholderTextColor = remember(enabled, placeholder) {
+        if (enabled) colors.defaultPlaceholderColor else colors.disabledPlaceholderColor
+    }
+
+    Column(modifier = modifier.onFocusChanged { isFocused = it.isFocused || it.hasFocus }) {
+        label?.let {
+            PlanetText(text = it, modifier = Modifier.padding(bottom = 4.dp))
+        }
+        Card(
+            elevation = 0.dp,
+            border = BorderStroke(1.5.dp, borderColor.color),
+            shape = RoundedCornerShape(8.dp),
+            backgroundColor = background.color
+        ) {
+            Row(
+                modifier = Modifier
+                    .height(height)
+                    .then(if (enabled) Modifier.clickable(onClick = onClick) else Modifier),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                prefixBox?.invoke(height)
+
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 16.dp),
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    androidx.compose.animation.AnimatedVisibility(
+                        visible = placeholder != null && text.isEmpty(),
+                        enter = fadeIn(),
+                        exit = fadeOut()
+                    ) {
+                        PlanetText(
+                            text = placeholder.orEmpty(),
+                            lineHeight = 16.8.sp,
+                            color = placeholderTextColor
+                        )
+                    }
+                    PlanetText(
+                        text = text,
+                        color = PlanetColors.Solid.content02,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.W600,
+                        lineHeight = 16.8.sp,
+                        maxLines = maxLines
+                    )
+                }
+                AnimatedVisibility(
+                    modifier = Modifier.padding(end = LocalPadding.current.xSmall),
+                    visible = text.isNotEmpty() && hasClearAction && isFocused,
+                    enter = scaleIn(),
+                    exit = scaleOut()
+                ) {
+                    Icon(
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable { onClearText?.invoke() },
+                        painter = painterResource(id = R.drawable.ic_close_rounded),
+                        contentDescription = "clear text",
+                        tint = PlanetColors.Solid.content03.color
+                    )
+                }
+
+                suffixBox?.invoke(height)
+            }
+        }
+        helperText?.let {
+            PlanetText(
+                modifier = Modifier.padding(top = 4.dp),
+                text = it,
+                typography = PlanetTypography.CaptionHelper,
+                color = helperTextColor
+            )
+        }
     }
 }
 

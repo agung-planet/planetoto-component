@@ -16,27 +16,23 @@ import com.mxalbert.zoomable.rememberZoomableState
 
 @Composable
 fun PlanetZoomableImage(
+    modifier: Modifier = Modifier,
     zoomableState: ZoomableState = rememberZoomableState(),
     imageUrl: String,
-    contentDescription: String?,
-    isTablet: Boolean
+    contentDescription: String?
 ) {
     var imageFillMaxWidth by remember { mutableStateOf(false) }
     val scale = remember(imageFillMaxWidth) {
         // prevent cropped image
         if (imageFillMaxWidth) ContentScale.FillWidth else ContentScale.FillHeight
     }
-    val imageModifier = remember(imageFillMaxWidth) {
-        // prevent blank space when zoomed in
-        if (imageFillMaxWidth || !isTablet) Modifier.fillMaxWidth() else Modifier
-    }
 
-    Zoomable(state = zoomableState) {
+    Zoomable(state = zoomableState, modifier = modifier) {
         AsyncImage(
             model = imageUrl,
             contentDescription = contentDescription,
             contentScale = scale,
-            modifier = imageModifier,
+            modifier = Modifier.fillMaxWidth(),
             onState = {
                 if (it is AsyncImagePainter.State.Success) {
                     it.painter.intrinsicSize.also { size ->
