@@ -3,6 +3,7 @@ ext {
     bom_compose = '2023.03.00'
     version_zoomable = '1.4.2'
     version_coil_github = '2.1.0'
+    version_accompanist = '0.24.11-rc'
 
     plugins = [
             android_gradle: "com.android.tools.build:gradle:7.0.4",
@@ -28,6 +29,7 @@ ext {
             paging            : "androidx.paging:paging-compose:3.2.0-beta01",
             insets            : "com.google.accompanist:accompanist-insets:0.22.0-rc",
             zoomable          : "com.mxalbert.zoomable:zoomable:$version_zoomable",
-            coil_github       : "io.coil-kt:coil-compose:$version_coil_github"
+            coil_github       : "io.coil-kt:coil-compose:$version_coil_github",
+            accompanist_pager : "com.google.accompanist:accompanist-pager:$version_accompanist"
     ]
 }
