@@ -42,12 +42,12 @@ fun PlanetImageBadge(
                 width = 1.dp,
                 color = PlanetColors.Solid.neutralBorder01.color,
                 shape = CircleShape
-            ) else Modifier.padding(vertical = 8.dp, horizontal = 10.dp)
+            ) else Modifier.padding(start = 10.dp, end = 10.dp, top = 5.dp)
 
         Image(
             modifier = imageModifier
                 .constrainAs(icon) {
-                    top.linkTo(parent.top, paddingTop)
+                    top.linkTo(parent.top)
                     start.linkTo(parent.start)
                 }
                 .size(width = imageWidth, height = imageHeight),
@@ -97,12 +97,12 @@ fun PlanetImageBadge(
                 width = 1.dp,
                 color = PlanetColors.Solid.neutralBorder01.color,
                 shape = CircleShape
-            ) else Modifier.padding(vertical = 8.dp, horizontal = 10.dp)
+            ) else Modifier.padding(start = 10.dp, end = 10.dp, top = 5.dp)
 
         Icon(
             modifier = imageModifier
                 .constrainAs(icon) {
-                    top.linkTo(parent.top, paddingTop)
+                    top.linkTo(parent.top)
                     start.linkTo(parent.start)
                 }
                 .size(width = iconWidth, height = iconHeight),
@@ -116,7 +116,7 @@ fun PlanetImageBadge(
                 modifier = Modifier
                     .constrainAs(badge) {
                         top.linkTo(parent.top)
-                        end.linkTo(icon.end, badgeEndPadding)
+                        end.linkTo(parent.end, badgeEndPadding)
                     },
                 size = badgeSize,
                 badgeBorder = badgeBorder,
