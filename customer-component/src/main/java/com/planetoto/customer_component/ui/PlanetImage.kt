@@ -23,7 +23,7 @@ fun PlanetImage(
     circularReveal: CircularReveal? = null,
     error: Any? = null,
     shimmerParams: ShimmerParams = ShimmerParams(
-        baseColor = PlanetColors.Solid.neutralBorder02.color,
+        baseColor = PlanetColors.Solid.neutralWhite.color,
         highlightColor = PlanetColors.Solid.neutralBorder01.color
     )
 ) {
