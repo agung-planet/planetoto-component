@@ -24,7 +24,6 @@ fun PlanetImageBadge(
     imageHeight: Dp = 24.dp,
     badgeSize: Dp = 16.dp,
     badgeBorder: Dp = 1.5.dp,
-    badgeEndPadding: Dp = (-10).dp,
     badgeBorderColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
     painter: Painter,
     count: Int = 0,
@@ -39,29 +38,26 @@ fun PlanetImageBadge(
         val imageModifier = if (isRounded) Modifier
             .clip(shape = CircleShape)
             .border(
-                width = 1.dp,
-                color = PlanetColors.Solid.neutralBorder01.color,
-                shape = CircleShape
+                width = 1.dp, color = PlanetColors.Solid.neutralBorder01.color, shape = CircleShape
             ) else Modifier.padding(start = 10.dp, end = 10.dp, top = 5.dp)
 
-        Image(
-            modifier = imageModifier
-                .constrainAs(icon) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                }
-                .size(width = imageWidth, height = imageHeight),
+        Image(modifier = imageModifier
+            .constrainAs(icon) {
+                top.linkTo(parent.top)
+                start.linkTo(parent.start)
+            }
+            .size(width = imageWidth, height = imageHeight),
             painter = painter,
-            contentDescription = "ic_image"
-        )
+            contentDescription = "ic_image")
+
+        val badgeEndPadding = if (count < 10) 0.dp else if (count > 99) (-10).dp else (-5).dp
 
         if (count > 0) {
             PlanetBadgeCount(
-                modifier = Modifier
-                    .constrainAs(badge) {
-                        top.linkTo(parent.top)
-                        end.linkTo(icon.end, badgeEndPadding)
-                    },
+                modifier = Modifier.constrainAs(badge) {
+                    top.linkTo(parent.top)
+                    end.linkTo(icon.end, badgeEndPadding)
+                },
                 size = badgeSize,
                 badgeBorder = badgeBorder,
                 badgeBorderColor = badgeBorderColor,
@@ -78,7 +74,6 @@ fun PlanetImageBadge(
     iconHeight: Dp = 24.dp,
     badgeSize: Dp = 16.dp,
     badgeBorder: Dp = 1.5.dp,
-    badgeEndPadding: Dp = (-10).dp,
     badgeBorderColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
     iconPainter: Painter,
     iconTint: PlanetColors.Solid,
@@ -94,30 +89,26 @@ fun PlanetImageBadge(
         val imageModifier = if (isRounded) Modifier
             .clip(shape = CircleShape)
             .border(
-                width = 1.dp,
-                color = PlanetColors.Solid.neutralBorder01.color,
-                shape = CircleShape
+                width = 1.dp, color = PlanetColors.Solid.neutralBorder01.color, shape = CircleShape
             ) else Modifier.padding(start = 10.dp, end = 10.dp, top = 5.dp)
 
-        Icon(
-            modifier = imageModifier
-                .constrainAs(icon) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                }
-                .size(width = iconWidth, height = iconHeight),
+        Icon(modifier = imageModifier
+            .constrainAs(icon) {
+                top.linkTo(parent.top)
+                start.linkTo(parent.start)
+            }
+            .size(width = iconWidth, height = iconHeight),
             painter = iconPainter,
             tint = iconTint.color,
-            contentDescription = "ic_image"
-        )
+            contentDescription = "ic_image")
+        val badgeEndPadding = if (count < 10) 0.dp else if (count > 99) (-10).dp else (-5).dp
 
         if (count > 0) {
             PlanetBadgeCount(
-                modifier = Modifier
-                    .constrainAs(badge) {
-                        top.linkTo(parent.top)
-                        end.linkTo(parent.end, badgeEndPadding)
-                    },
+                modifier = Modifier.constrainAs(badge) {
+                    top.linkTo(parent.top)
+                    end.linkTo(parent.end, badgeEndPadding)
+                },
                 size = badgeSize,
                 badgeBorder = badgeBorder,
                 badgeBorderColor = badgeBorderColor,
