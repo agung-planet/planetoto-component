@@ -22,8 +22,10 @@ fun PlanetImage(
     contentDescription: String? = null,
     circularReveal: CircularReveal? = null,
     error: Any? = null,
-    shimmerBaseColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
-    shimmerHighlightColor: PlanetColors.Solid = PlanetColors.Solid.neutralBorder01,
+    shimmerParams: ShimmerParams = ShimmerParams(
+        baseColor = PlanetColors.Solid.neutralWhite.color,
+        highlightColor = PlanetColors.Solid.neutralBorder01.color
+    )
 ) {
     if (imageLoader != null) {
         CoilImage(
@@ -36,10 +38,7 @@ fun PlanetImage(
             circularReveal = circularReveal,
             error = error,
             imageLoader = imageLoader,
-            shimmerParams = ShimmerParams(
-                baseColor = shimmerBaseColor.color,
-                highlightColor = shimmerHighlightColor.color
-            )
+            shimmerParams = shimmerParams
         )
     } else {
         CoilImage(
@@ -51,10 +50,7 @@ fun PlanetImage(
             contentDescription = contentDescription,
             circularReveal = circularReveal,
             error = error,
-            shimmerParams = ShimmerParams(
-                baseColor = shimmerBaseColor.color,
-                highlightColor = shimmerHighlightColor.color
-            )
+            shimmerParams = shimmerParams
         )
     }
 }
