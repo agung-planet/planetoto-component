@@ -23,7 +23,7 @@ fun PlanetImage(
     circularReveal: CircularReveal? = null,
     error: Any? = null,
     shimmerBaseColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
-    shimmerHighlightColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
+    shimmerHighlightColor: PlanetColors.Solid = PlanetColors.Solid.neutralBorder01,
 ) {
     if (imageLoader != null) {
         CoilImage(
