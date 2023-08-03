@@ -89,6 +89,9 @@ object PlanetColors {
 
             //Black
             val black = Solid(Color.Black)
+
+            //Shimmer
+            val shimmer = Solid(Color(0xFFD0D3D6))
         }
 
         fun alpha(value: Float): Solid = Solid(color.copy(alpha = value))
