@@ -2,18 +2,14 @@ package com.planetoto.customer_component.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.DrawerDefaults
 import androidx.compose.material.DrawerState
 import androidx.compose.material.DrawerValue
@@ -115,6 +111,9 @@ fun rememberPlanetScaffoldState(
     PlanetScaffoldState(scaffoldState, sideDialogState, modalBottomSheetState)
 }
 
+/**
+ * Simple PlanetScaffold just like Material's Scaffold with a few tweak
+ */
 @Composable
 fun PlanetScaffold(
     modifier: Modifier = Modifier,
@@ -138,10 +137,6 @@ fun PlanetScaffold(
     statusBarColor: Color = PlanetColors.Solid.neutralWhite.color,
     content: @Composable (PaddingValues) -> Unit
 ) {
-    val statusBarInset =
-        WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
-    val systemBarInset =
-        WindowInsets.systemBars.asPaddingValues().calculateBottomPadding()
     backgroundImage?.let {
         Box(modifier = Modifier.fillMaxSize()) {
             it()
@@ -149,20 +144,18 @@ fun PlanetScaffold(
                 modifier = modifier,
                 scaffoldState = scaffoldState,
                 topBar = {
-                    Column {
-                        Box(
-                            modifier = Modifier
-                                .height(statusBarInset)
-                                .background(color = statusBarColor)
-                                .fillMaxWidth()
-                        )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(color = statusBarColor)
+                            .statusBarsPadding()
+                    ) {
                         topBar()
                     }
                 },
                 bottomBar = {
-                    Column {
+                    Box(modifier = Modifier.navigationBarsPadding()) {
                         bottomBar()
-                        Spacer(modifier = Modifier.height(systemBarInset))
                     }
                 },
                 snackbarHost = snackbarHost,
@@ -186,18 +179,17 @@ fun PlanetScaffold(
             modifier = modifier,
             scaffoldState = scaffoldState,
             topBar = {
-                Column {
-                    Box(
-                        modifier = Modifier
-                            .height(statusBarInset)
-                            .background(color = statusBarColor)
-                            .fillMaxWidth()
-                    )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(color = statusBarColor)
+                        .statusBarsPadding()
+                ) {
                     topBar()
                 }
             },
             bottomBar = {
-                Column(modifier = Modifier.padding(bottom = systemBarInset)) {
+                Box(modifier = Modifier.navigationBarsPadding()) {
                     bottomBar()
                 }
             },
@@ -219,6 +211,11 @@ fun PlanetScaffold(
     }
 }
 
+/**
+ * PlanetScaffold with side dialog support for tablet
+ * @param addImePadding add IME padding on base PlanetScaffold
+ * instead of PlanetSideDialog (outer composable)
+ */
 @ExperimentalMaterialApi
 @Composable
 fun PlanetScaffold(
@@ -246,10 +243,15 @@ fun PlanetScaffold(
     backgroundImage: (@Composable () -> Unit)? = null,
     contentColor: Color = contentColorFor(backgroundColor),
     statusBarColor: Color = PlanetColors.Solid.neutralWhite.color,
+    addImePadding: Boolean = false,
     content: @Composable (PaddingValues) -> Unit
 ) {
     requireNotNull(planetScaffoldState.sideDialogState) {
         "PlanetScaffoldState.PlanetSideDialogState can not be null!"
+    }
+
+    val scaffoldModifier = remember(addImePadding) {
+        if (addImePadding) Modifier.imePadding() else Modifier
     }
 
     PlanetSideDialog(
@@ -261,7 +263,7 @@ fun PlanetScaffold(
         drawerWidth = sideDialogWidth,
         content = {
             PlanetScaffold(
-                modifier = Modifier,
+                modifier = scaffoldModifier,
                 scaffoldState = planetScaffoldState.mainScaffoldState,
                 snackbarHost = snackbarHost,
                 topBar = topBar,
@@ -286,7 +288,11 @@ fun PlanetScaffold(
     )
 }
 
-
+/**
+ * PlanetScaffold with modal bottom sheet support
+ * @param addImePadding add IME padding on base PlanetScaffold
+ * instead of PlanetModalBottomSheetLayout (outer composable)
+ */
 @ExperimentalMaterialApi
 @Composable
 fun PlanetScaffold(
@@ -317,15 +323,20 @@ fun PlanetScaffold(
     backgroundImage: (@Composable () -> Unit)? = null,
     contentColor: Color = contentColorFor(backgroundColor),
     statusBarColor: Color = PlanetColors.Solid.neutralWhite.color,
+    addImePadding: Boolean = false,
     content: @Composable (PaddingValues) -> Unit
 ) {
     requireNotNull(planetScaffoldState.modalBottomSheetState) {
         "PlanetScaffoldState.ModalBottomSheetState can not be null!"
     }
 
+    val scaffoldModifier = remember(addImePadding) {
+        if (addImePadding) Modifier.imePadding() else Modifier
+    }
+
     PlanetModalBottomSheetLayout(
-        sheetContent = sheetContent,
         modifier = modifier,
+        sheetContent = sheetContent,
         sheetState = planetScaffoldState.modalBottomSheetState,
         sheetShape = sheetShape,
         sheetElevation = sheetElevation,
@@ -334,7 +345,7 @@ fun PlanetScaffold(
         tapOutsideToDismiss = tapOutsideSheetToDismiss,
         content = {
             PlanetScaffold(
-                modifier = Modifier,
+                modifier = scaffoldModifier,
                 scaffoldState = planetScaffoldState.mainScaffoldState,
                 snackbarHost = snackbarHost,
                 topBar = topBar,
@@ -359,7 +370,11 @@ fun PlanetScaffold(
     )
 }
 
-
+/**
+ * PlanetScaffold with both side dialog and bottom sheet support
+ * @param addImePadding add IME padding on base PlanetScaffold
+ * instead of PlanetModalBottomSheetLayout (outer composable)
+ */
 @ExperimentalMaterialApi
 @Composable
 fun PlanetScaffold(
@@ -394,6 +409,7 @@ fun PlanetScaffold(
     contentColor: Color = contentColorFor(backgroundColor),
     backgroundImage: (@Composable () -> Unit)? = null,
     statusBarColor: Color = PlanetColors.Solid.neutralWhite.color,
+    addImePadding: Boolean = false,
     content: @Composable (PaddingValues) -> Unit
 ) {
     requireNotNull(planetScaffoldState.modalBottomSheetState) {
@@ -402,6 +418,10 @@ fun PlanetScaffold(
 
     requireNotNull(planetScaffoldState.sideDialogState) {
         "PlanetScaffoldState.PlanetSideDialogState can not be null!"
+    }
+
+    val scaffoldModifier = remember(addImePadding) {
+        if (addImePadding) Modifier.imePadding() else Modifier
     }
 
     PlanetSideDialog(
@@ -422,7 +442,7 @@ fun PlanetScaffold(
                 tapOutsideToDismiss = tapOutsideSheetToDismiss,
                 content = {
                     PlanetScaffold(
-                        modifier = Modifier,
+                        modifier = scaffoldModifier,
                         scaffoldState = planetScaffoldState.mainScaffoldState,
                         snackbarHost = snackbarHost,
                         topBar = topBar,
