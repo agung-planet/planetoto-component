@@ -69,6 +69,7 @@ fun PlanetOtpTextField(
     LaunchedEffect(otpFieldModels) {
         if (otpFieldModels.any { it.value.isEmpty() }) {
             if (isTapBackSpace) focusManager.moveFocus(FocusDirection.Up)
+            else if (otpFieldModels.first().value.isEmpty()) first.requestFocus()
             else focusManager.moveFocus(FocusDirection.Down)
         } else {
             everFullFilledOtp = true
