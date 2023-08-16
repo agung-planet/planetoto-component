@@ -149,7 +149,7 @@ internal fun BaseTextField(
                 color = PlanetColors.Solid.content02.color,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.W600,
-                fontFamily = FontFamily(Font(R.font.figtree)),
+                fontFamily = FontFamily(Font(R.font.figtree_variable)),
                 lineHeight = 16.8.sp
             ),
             readOnly = readOnly,
@@ -434,7 +434,7 @@ internal fun BaseTextField(
                 color = PlanetColors.Solid.content02.color,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.W600,
-                fontFamily = FontFamily(Font(R.font.figtree)),
+                fontFamily = FontFamily(Font(R.font.figtree_variable)),
                 lineHeight = 16.8.sp
             ),
             readOnly = readOnly,
