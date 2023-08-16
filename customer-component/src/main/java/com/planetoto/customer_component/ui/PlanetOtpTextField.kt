@@ -250,7 +250,7 @@ private fun OtpCodeTextField(
         textStyle = TextStyle(
             color = PlanetColors.Solid.content01.color,
             fontSize = 32.sp,
-            fontFamily = FontFamily(Font((R.font.figtree_variable))),
+            fontFamily = FontFamily(Font((R.font.figtree))),
             lineHeight = 38.sp,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight(700)

@@ -73,7 +73,7 @@ fun PlanetActionButton(
     ) {
         Text(
             text = text.capitalizeWords(),
-            fontFamily = FontFamily(Font(R.font.figtree_variable)),
+            fontFamily = FontFamily(Font(R.font.figtree)),
             fontSize = 11.sp,
             fontWeight = FontWeight.W600,
             lineHeight = 13.2.sp,
