@@ -22,8 +22,9 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.derivedStateOf
@@ -149,7 +150,7 @@ internal fun BaseTextField(
                 color = PlanetColors.Solid.content02.color,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.W600,
-                fontFamily = FontFamily(Font(R.font.figtree)),
+                fontFamily = FontFamily(Font(R.font.figtree_regular)),
                 lineHeight = 16.8.sp
             ),
             readOnly = readOnly,
@@ -285,10 +286,17 @@ internal fun ClickableTextField(
             PlanetText(text = it, modifier = Modifier.padding(bottom = 4.dp))
         }
         Card(
-            elevation = 0.dp,
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 0.dp,
+                pressedElevation = 0.dp,
+                focusedElevation = 0.dp,
+                hoveredElevation = 0.dp,
+                draggedElevation = 0.dp,
+                disabledElevation = 0.dp
+            ),
             border = BorderStroke(1.5.dp, borderColor.color),
             shape = RoundedCornerShape(8.dp),
-            backgroundColor = background.color
+            colors = CardDefaults.cardColors(containerColor = background.color)
         ) {
             Row(
                 modifier = Modifier
@@ -434,7 +442,7 @@ internal fun BaseTextField(
                 color = PlanetColors.Solid.content02.color,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.W600,
-                fontFamily = FontFamily(Font(R.font.figtree)),
+                fontFamily = FontFamily(Font(R.font.figtree_regular)),
                 lineHeight = 16.8.sp
             ),
             readOnly = readOnly,
