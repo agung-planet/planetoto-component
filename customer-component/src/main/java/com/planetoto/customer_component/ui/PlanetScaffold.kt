@@ -19,10 +19,7 @@ package com.planetoto.customer_component.ui
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.only
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
@@ -174,7 +171,7 @@ fun <T : Any> PlanetScaffold(
     isSheetDraggable: Boolean = false,
     tapScrimToDismissSheet: Boolean = true,
     contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
-    sheetWindowInsets: WindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Vertical),
+    sheetWindowInsets: WindowInsets = WindowInsets(top = 0, bottom = 0),
     sheetContent: @Composable (T) -> Unit,
     content: @Composable (PaddingValues) -> Unit
 ) {
@@ -246,11 +243,14 @@ class PlanetScaffoldState<T : Any>(
         sheetType = type
     }
 
-    fun hideBottomSheet() {
+    fun hideBottomSheet(onAfterSheetHidden: (() -> Unit)? = null) {
         coroutineScope.launch {
             sheetState.hide()
         }.invokeOnCompletion {
-            if (!isSheetVisible) resetSheetType()
+            if (!isSheetVisible) {
+                resetSheetType()
+                onAfterSheetHidden?.invoke()
+            }
         }
     }
 

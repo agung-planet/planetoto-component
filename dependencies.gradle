@@ -32,6 +32,6 @@ ext {
             zoomable                       : "com.mxalbert.zoomable:zoomable:$version_zoomable",
             coil_github                    : "io.coil-kt:coil-compose:$version_coil_github",
             accompanist_pager              : "com.google.accompanist:accompanist-pager:$version_accompanist",
-            accompanist_systemui_controller: 'com.google.accompanist:accompanist-systemuicontroller:0.30.1'
+            accompanist_systemui_controller: "com.google.accompanist:accompanist-systemuicontroller:$version_accompanist_systemui"
     ]
 }
