@@ -19,7 +19,10 @@ package com.planetoto.customer_component.ui
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
@@ -30,8 +33,6 @@ import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,10 +42,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.planetoto.customer_component.foundation.PlanetColors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -66,7 +65,6 @@ import kotlinx.coroutines.launch
  * [bottomBar] are not present, as the scaffold expect [topBar]/[bottomBar] to handle insets
  * instead
  * @param backgroundImage if background can not be passed using PlanetColors.Solid, use this
- * @param navigationBarBackground default to match the [backgroundColor]
  * @param content content of the screen. The lambda receives a [PaddingValues] that should be
  * applied to the content root via [Modifier.padding] and [Modifier.consumeWindowInsets] to
  * properly offset top and bottom bars. If using [Modifier.verticalScroll], apply this modifier to
@@ -82,12 +80,9 @@ fun PlanetScaffold(
     floatingActionButtonPosition: FabPosition = FabPosition.End,
     backgroundColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
     contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
-    backgroundImage: (@Composable () -> Unit)? = null,
-    navigationBarBackground: PlanetColors.Solid = backgroundColor,
+    backgroundImage: @Composable (() -> Unit)? = null,
     content: @Composable (PaddingValues) -> Unit
 ) {
-    val systemUiController = rememberSystemUiController()
-
     backgroundImage?.let {
         Box(modifier = Modifier.fillMaxSize()) {
             it()
@@ -114,10 +109,6 @@ fun PlanetScaffold(
         contentWindowInsets = contentWindowInsets,
         content = content
     )
-
-    LaunchedEffect(navigationBarBackground) {
-        systemUiController.setNavigationBarColor(navigationBarBackground.color)
-    }
 }
 
 /**
@@ -133,7 +124,6 @@ fun PlanetScaffold(
  * @param backgroundColor the color used for the background of this scaffold. Use [PlanetColors.Solid.transparent]
  * to have no color.
  * @param backgroundImage if background can not be passed using PlanetColors.Solid, use this
- * @param navigationBarBackground default to match the [backgroundColor]
  * @param state The state of the Scaffold, mainly used to control the bottom sheet
  * @param sheetShape The shape of the bottom sheet.
  * @param sheetBackgroundColor The color used for the background of this bottom sheet
@@ -162,7 +152,6 @@ fun <T : Any> PlanetScaffold(
     floatingActionButton: @Composable () -> Unit = {},
     floatingActionButtonPosition: FabPosition = FabPosition.End,
     backgroundColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
-    navigationBarBackground: PlanetColors.Solid = backgroundColor,
     backgroundImage: (@Composable () -> Unit)? = null,
     sheetShape: Shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
     sheetBackgroundColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
@@ -171,11 +160,10 @@ fun <T : Any> PlanetScaffold(
     isSheetDraggable: Boolean = false,
     tapScrimToDismissSheet: Boolean = true,
     contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
-    sheetWindowInsets: WindowInsets = WindowInsets(top = 0, bottom = 0),
+    sheetWindowInsets: WindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Vertical),
     sheetContent: @Composable (T) -> Unit,
     content: @Composable (PaddingValues) -> Unit
 ) {
-    val systemUiController = rememberSystemUiController()
 
     PlanetScaffold(
         modifier = modifier,
@@ -186,8 +174,7 @@ fun <T : Any> PlanetScaffold(
         floatingActionButtonPosition = floatingActionButtonPosition,
         backgroundColor = backgroundColor,
         contentWindowInsets = contentWindowInsets,
-        backgroundImage = backgroundImage,
-        navigationBarBackground = navigationBarBackground
+        backgroundImage = backgroundImage
     ) {
         state.sheetType?.let {
             PlanetModalBottomSheet(
@@ -207,25 +194,14 @@ fun <T : Any> PlanetScaffold(
 
         content(it)
     }
-
-    DisposableEffect(state.sheetState.targetValue) {
-        if (state.sheetState.targetValue == PlanetModalBottomSheetValue.Expanded) {
-            systemUiController.navigationBarDarkContentEnabled =
-                sheetBackgroundColor.color.luminance() > 0.5f
-        }
-
-        onDispose {
-            systemUiController.navigationBarDarkContentEnabled =
-                navigationBarBackground.color.luminance() > 0.5f
-        }
-    }
 }
 
 @Stable
 class PlanetScaffoldState<T : Any>(
     private val coroutineScope: CoroutineScope,
     initialSheetValue: PlanetModalBottomSheetValue,
-    initialSheetType: T?
+    initialSheetType: T?,
+    private val onSheetStateChange: ((PlanetModalBottomSheetValue) -> Unit)? = null
 ) {
     val sheetState = PlanetModalBottomSheetState(initialValue = initialSheetValue)
 
@@ -237,19 +213,23 @@ class PlanetScaffoldState<T : Any>(
 
     internal fun resetSheetType() {
         sheetType = null
+        onSheetStateChange?.invoke(PlanetModalBottomSheetValue.Hidden)
     }
 
     fun showBottomSheet(type: T) {
-        sheetType = type
+        coroutineScope.launch {
+            sheetType = type
+        }.invokeOnCompletion {
+            onSheetStateChange?.invoke(PlanetModalBottomSheetValue.Expanded)
+        }
     }
 
-    fun hideBottomSheet(onAfterSheetHidden: (() -> Unit)? = null) {
+    fun hideBottomSheet() {
         coroutineScope.launch {
             sheetState.hide()
         }.invokeOnCompletion {
             if (!isSheetVisible) {
                 resetSheetType()
-                onAfterSheetHidden?.invoke()
             }
         }
     }
@@ -258,13 +238,21 @@ class PlanetScaffoldState<T : Any>(
         /**
          * The default [Saver] implementation for [PlanetScaffoldState].
          */
-        fun <T : Any> Saver(coroutineScope: CoroutineScope, initialSheetType: T?) =
-            Saver<PlanetScaffoldState<T>, PlanetModalBottomSheetValue>(
-                save = { it.sheetState.currentValue },
-                restore = { savedValue ->
-                    PlanetScaffoldState(coroutineScope, savedValue, initialSheetType)
-                }
-            )
+        fun <T : Any> Saver(
+            coroutineScope: CoroutineScope,
+            initialSheetType: T?,
+            onSheetStateChange: ((PlanetModalBottomSheetValue) -> Unit)?
+        ) = Saver<PlanetScaffoldState<T>, PlanetModalBottomSheetValue>(
+            save = { it.sheetState.currentValue },
+            restore = { savedValue ->
+                PlanetScaffoldState(
+                    coroutineScope = coroutineScope,
+                    initialSheetValue = savedValue,
+                    initialSheetType = initialSheetType,
+                    onSheetStateChange = onSheetStateChange
+                )
+            }
+        )
     }
 }
 
@@ -272,9 +260,21 @@ class PlanetScaffoldState<T : Any>(
 fun <T : Any> rememberPlanetScaffoldState(
     initialSheetType: T?,
     initialSheetValue: PlanetModalBottomSheetValue = PlanetModalBottomSheetValue.Hidden,
-    coroutineScope: CoroutineScope = rememberCoroutineScope()
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
+    onSheetStateChange: ((PlanetModalBottomSheetValue) -> Unit)? = null
 ): PlanetScaffoldState<T> {
-    return rememberSaveable(saver = PlanetScaffoldState.Saver(coroutineScope, initialSheetType)) {
-        PlanetScaffoldState(coroutineScope, initialSheetValue, initialSheetType)
+    return rememberSaveable(
+        saver = PlanetScaffoldState.Saver(
+            coroutineScope = coroutineScope,
+            initialSheetType = initialSheetType,
+            onSheetStateChange = onSheetStateChange
+        )
+    ) {
+        PlanetScaffoldState(
+            coroutineScope = coroutineScope,
+            initialSheetValue = initialSheetValue,
+            initialSheetType = initialSheetType,
+            onSheetStateChange = onSheetStateChange
+        )
     }
 }

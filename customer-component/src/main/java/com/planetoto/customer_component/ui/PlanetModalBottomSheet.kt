@@ -74,7 +74,6 @@ import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.AbstractComposeView
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewRootForInspector
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -134,13 +133,13 @@ internal fun Scrim(
 fun PlanetModalBottomSheet(
     modifier: Modifier = Modifier,
     sheetState: PlanetModalBottomSheetState = rememberPlanetModalBottomSheetState(),
-    shape: Shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
+    shape: Shape = PlanetModalBottomSheetDefaults.SheetShape,
     backgroundColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
     tonalElevation: Dp = 1.dp,
-    scrimColor: PlanetColors.Solid = PlanetColors.Solid.black.alpha(0.8f),
+    scrimColor: PlanetColors.Solid = PlanetModalBottomSheetDefaults.ScrimColor,
     showHandlebar: Boolean = false,
     tapOutsideToDismiss: Boolean = true,
-    windowInsets: WindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Vertical),
+    windowInsets: WindowInsets = PlanetModalBottomSheetDefaults.NonFullScreenWindowInsets,
     onDismissRequest: () -> Unit,
     content: @Composable () -> Unit
 ) {
@@ -196,8 +195,7 @@ fun PlanetModalBottomSheet(
     ) {
         BoxWithConstraints(Modifier.fillMaxSize()) {
             val fullHeight = constraints.maxHeight
-            val statusBarInset = WindowInsets.statusBars
-            val statusBarHeight = statusBarInset.getTop(LocalDensity.current)
+            val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
 
             Scrim(
                 color = scrimColor,
@@ -209,6 +207,7 @@ fun PlanetModalBottomSheet(
                 modifier = modifier
                     .widthIn(max = BottomSheetMaxWidth)
                     .fillMaxWidth()
+                    .heightIn(max = maxHeight - statusBarHeight)
                     .align(Alignment.TopCenter)
                     .offset {
                         IntOffset(
@@ -224,7 +223,6 @@ fun PlanetModalBottomSheet(
                         sheetState = sheetState,
                         anchorChangeHandler = anchorChangeHandler,
                         screenHeight = fullHeight.toFloat(),
-                        statusBarHeight = statusBarHeight.toFloat(),
                         onDragStopped = {
                             settleToDismiss(it)
                         }
@@ -234,12 +232,9 @@ fun PlanetModalBottomSheet(
                 contentColor = contentColorFor(backgroundColor = backgroundColor.color),
                 tonalElevation = tonalElevation,
             ) {
-                val statusBarHeightInDp = statusBarInset.asPaddingValues().calculateTopPadding()
-
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(max = maxHeight - statusBarHeightInDp)
                         .navigationBarsPadding()
                 ) {
                     if (showHandlebar) {
@@ -360,7 +355,6 @@ private fun Modifier.modalBottomSheetSwipeable(
     sheetState: PlanetModalBottomSheetState,
     anchorChangeHandler: AnchorChangeHandler<PlanetModalBottomSheetValue>,
     screenHeight: Float,
-    statusBarHeight: Float,
     onDragStopped: CoroutineScope.(velocity: Float) -> Unit,
 ) = draggable(
     state = sheetState.swipeableState.swipeDraggableState,
@@ -379,7 +373,7 @@ private fun Modifier.modalBottomSheetSwipeable(
     when (value) {
         PlanetModalBottomSheetValue.Hidden -> screenHeight
         PlanetModalBottomSheetValue.Expanded -> if (sheetSize.height != 0) {
-            max(statusBarHeight, screenHeight - sheetSize.height)
+            max(0f, screenHeight - sheetSize.height)
         } else null
     }
 }
@@ -497,4 +491,18 @@ private class ModalBottomSheetWindow(
     override fun onGlobalLayout() {
         // No-op
     }
+}
+
+object PlanetModalBottomSheetDefaults {
+    val ScrimColor = PlanetColors.Solid.black.alpha(0.8f)
+
+    val SheetShape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
+
+    val NonFullScreenWindowInsets
+        @Composable
+        get() = WindowInsets.systemBars.only(WindowInsetsSides.Vertical)
+
+    val FullScreenWindowInsets
+        @Composable
+        get() = WindowInsets(top = 0, bottom = 0)
 }

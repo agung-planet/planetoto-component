@@ -99,8 +99,8 @@ fun PlanetText(
     onTextLayout: (TextLayoutResult) -> Unit = {},
     style: TextStyle = LocalTextStyle.current
 ) {
-    val fontId = remember(typography, fontWeight, fontStyle) {
-        when (fontWeight) {
+    val fontId = remember(typography, fontWeight, fontStyle, style.fontWeight) {
+        when (fontWeight ?: style.fontWeight) {
             FontWeight.SemiBold -> if (fontStyle == FontStyle.Italic) {
                 R.font.figtree_semibold_italic
             } else {
@@ -206,8 +206,8 @@ fun PlanetText(
     onTextLayout: (TextLayoutResult) -> Unit = {},
     style: TextStyle = LocalTextStyle.current
 ) {
-    val fontId = remember(typography, fontWeight, fontStyle) {
-        when (fontWeight) {
+    val fontId = remember(typography, fontWeight, fontStyle, style.fontWeight) {
+        when (fontWeight ?: style.fontWeight) {
             FontWeight.SemiBold -> if (fontStyle == FontStyle.Italic) {
                 R.font.figtree_semibold_italic
             } else {
