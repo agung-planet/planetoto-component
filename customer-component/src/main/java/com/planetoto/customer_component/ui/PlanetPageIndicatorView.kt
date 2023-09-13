@@ -2,7 +2,6 @@ package com.planetoto.customer_component.ui
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,13 +14,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
-import com.google.accompanist.pager.PagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -30,13 +26,12 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.pager.ExperimentalPagerApi
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun PlanetPageIndicatorView(
     modifier: Modifier = Modifier,
-    pagerState: PagerState,
+    currentPage: Int,
+    pageCount: Int,
     indicatorCount: Int = 5,
     animationDurationInMillis: Int = 500,
     indicatorSize: Dp = 16.dp,
@@ -51,27 +46,20 @@ fun PlanetPageIndicatorView(
 
     val listState = rememberLazyListState()
 
-    val totalWidth: Dp = indicatorSize * (indicatorCount - 1) + space * (indicatorCount - 1) + selectedLength
+    val totalWidth: Dp =
+        indicatorSize * (indicatorCount - 1) + space * (indicatorCount - 1) + selectedLength
     val widthInPx = LocalDensity.current.run { indicatorSize.toPx() }
 
-    val currentItem by remember {
-        derivedStateOf {
-            pagerState.currentPage
-        }
-    }
-
-    val itemCount = pagerState.pageCount
-
-    LaunchedEffect(key1 = currentItem) {
+    LaunchedEffect(key1 = currentPage) {
         val viewportSize = listState.layoutInfo.viewportSize
         if (orientation == IndicatorOrientation.Horizontal) {
             listState.animateScrollToItem(
-                currentItem,
+                currentPage,
                 (widthInPx / 2 - viewportSize.width / 2).toInt()
             )
         } else {
             listState.animateScrollToItem(
-                currentItem,
+                currentPage,
                 (widthInPx / 2 - viewportSize.height / 2).toInt()
             )
         }
@@ -86,8 +74,8 @@ fun PlanetPageIndicatorView(
             userScrollEnabled = false
         ) {
             indicatorItems(
-                itemCount,
-                currentItem,
+                pageCount,
+                currentPage,
                 indicatorCount,
                 animationDurationInMillis,
                 indicatorShape,
@@ -107,8 +95,8 @@ fun PlanetPageIndicatorView(
             userScrollEnabled = false
         ) {
             indicatorItems(
-                itemCount,
-                currentItem,
+                pageCount,
+                currentPage,
                 indicatorCount,
                 animationDurationInMillis,
                 indicatorShape,

@@ -8,7 +8,7 @@ group = 'com.github'
 
 android {
     namespace 'com.planetoto.customer_component'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         minSdk 24
@@ -25,18 +25,18 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
     buildFeatures {
         compose true
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion '1.3.2'
+        kotlinCompilerExtensionVersion '1.4.3'
     }
 }
 
@@ -56,11 +56,9 @@ dependencies {
     implementation "$libs.viewmodel_compose"
     implementation "$libs.coil"
     implementation "$libs.paging"
-    implementation "$libs.insets"
     implementation "$libs.constraint_compose"
     implementation libs.zoomable
     implementation libs.coil_github
-    implementation libs.accompanist_pager
 }
 
 task sources(type: Jar) {

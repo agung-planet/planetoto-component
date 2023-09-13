@@ -1,15 +1,27 @@
+/*
+ * Copyright 2023 PLANET
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.planetoto.customer_component.ui
 
 import androidx.compose.foundation.text.InlineTextContent
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Paragraph
 import androidx.compose.ui.text.TextLayoutResult
@@ -29,11 +41,6 @@ import com.planetoto.customer_component.foundation.PlanetTypography
 /**
  * High level element that displays text and provides semantics / accessibility information.
  *
- * The default [style] uses the [LocalTextStyle] provided by the [MaterialTheme] / components. If
- * you are setting your own style, you may want to consider first retrieving [LocalTextStyle],
- * and using [TextStyle.copy] to keep any theme defined attributes, only modifying the specific
- * attributes you want to override.
- *
  * For ease of use, commonly used parameters from [TextStyle] are also present here. The order of
  * precedence is as follows:
  * - If a parameter is explicitly set here (i.e, it is _not_ `null` or [TextUnit.Unspecified]),
@@ -41,41 +48,36 @@ import com.planetoto.customer_component.foundation.PlanetTypography
  * - If a parameter is _not_ set, (`null` or [TextUnit.Unspecified]), then the corresponding value
  * from [style] will be used instead.
  *
- * Additionally, for [color], if [color] is not set, and [style] does not have a color, then
- * [LocalContentColor] will be used with an alpha of [LocalContentAlpha]- this allows this
- * [Text] or element containing this [Text] to adapt to different background colors and still
- * maintain contrast and accessibility.
- *
- * @param text The text to be displayed.
- * @param modifier [Modifier] to apply to this layout node.
- * @param color [Color] to apply to the text. If [Color.Unspecified], and [style] has no color set,
- * this will be [LocalContentColor].
- * @param typography typography style to use from [PlanetTypography] class.
- * @param fontSize The size of glyphs to use when painting the text. See [TextStyle.fontSize].
- * @param fontStyle The typeface variant to use when drawing the letters (e.g., italic).
- * See [TextStyle.fontStyle].
- * @param fontWeight The typeface thickness to use when painting the text (e.g., [FontWeight.Bold]).
- * @param fontFamily The font family to be used when rendering the text. See [TextStyle.fontFamily].
- * @param letterSpacing The amount of space to add between each letter.
+ * @param text the text to be displayed
+ * @param modifier the [Modifier] to be applied to this layout node
+ * @param color [PlanetColors] to apply to the text.
+ * @param typography typography to use as a style for this text (e.g. font weight, font size, and letter spacing).
+ * @param fontSize the size of glyphs to use when painting the text. See [TextStyle.fontSize].
+ * @param fontWeight the typeface thickness to use when painting the text (e.g., [FontWeight.Bold]).
+ * @param letterSpacing the amount of space to add between each letter.
  * See [TextStyle.letterSpacing].
- * @param textDecoration The decorations to paint on the text (e.g., an underline).
+ * @param fontStyle the typeface variant to use when drawing the letters (e.g., italic).
+ * See [TextStyle.fontStyle].
+ * @param textDecoration the decorations to paint on the text (e.g., an underline).
  * See [TextStyle.textDecoration].
- * @param textAlign The alignment of the text within the lines of the paragraph.
+ * @param textAlign the alignment of the text within the lines of the paragraph.
  * See [TextStyle.textAlign].
- * @param lineHeight Line height for the [Paragraph] in [TextUnit] unit, e.g. SP or EM.
+ * @param lineHeight line height for the [Paragraph] in [TextUnit] unit, e.g. SP or EM.
  * See [TextStyle.lineHeight].
- * @param overflow How visual overflow should be handled.
- * @param softWrap Whether the text should break at soft line breaks. If false, the glyphs in the
+ * @param overflow how visual overflow should be handled.
+ * @param softWrap whether the text should break at soft line breaks. If false, the glyphs in the
  * text will be positioned as if there was unlimited horizontal space. If [softWrap] is false,
  * [overflow] and TextAlign may have unexpected effects.
  * @param maxLines An optional maximum number of lines for the text to span, wrapping if
  * necessary. If the text exceeds the given number of lines, it will be truncated according to
- * [overflow] and [softWrap]. If it is not null, then it must be greater than zero.
- * @param onTextLayout Callback that is executed when a new text layout is calculated. A
+ * [overflow] and [softWrap]. It is required that 1 <= [minLines] <= [maxLines].
+ * @param minLines The minimum height in terms of minimum number of visible lines. It is required
+ * that 1 <= [minLines] <= [maxLines].
+ * @param onTextLayout callback that is executed when a new text layout is calculated. A
  * [TextLayoutResult] object that callback provides contains paragraph information, size of the
  * text, baselines and other details. The callback can be used to add additional decoration or
  * functionality to the text. For example, to draw selection around the text.
- * @param style Style configuration for the text such as color, font, line height etc.
+ * @param style style configuration for the text such as color, font, line height etc.
  */
 @Composable
 fun PlanetText(
@@ -83,43 +85,58 @@ fun PlanetText(
     modifier: Modifier = Modifier,
     color: PlanetColors.Solid = PlanetColors.Solid.content01,
     typography: PlanetTypography = PlanetTypography.BodyDefault14,
-    lineHeight: TextUnit = typography.lineHeight ?: TextUnit.Unspecified,
     fontSize: TextUnit = typography.size,
     fontWeight: FontWeight? = typography.weight,
-    fontStyle: FontStyle? = null,
-    fontFamily: FontFamily? = FontFamily(Font(R.font.figtree)),
+    lineHeight: TextUnit = typography.lineHeight ?: TextUnit.Unspecified,
     letterSpacing: TextUnit = TextUnit.Unspecified,
-    textDecoration: TextDecoration? = null,
-    textAlign: TextAlign? = null,
+    fontStyle: FontStyle = FontStyle.Normal,
+    textDecoration: TextDecoration = TextDecoration.None,
+    textAlign: TextAlign = TextAlign.Start,
     overflow: TextOverflow = TextOverflow.Ellipsis,
     softWrap: Boolean = true,
-    minLines: Int = 1,
     maxLines: Int = Int.MAX_VALUE,
+    minLines: Int = 1,
     onTextLayout: (TextLayoutResult) -> Unit = {},
     style: TextStyle = LocalTextStyle.current
 ) {
-    val finalText = remember(typography, text) {
-        if (typography::class.simpleName?.contains("uppercase", ignoreCase = true) == true) {
-            text.uppercase()
-        } else text
+    val fontId = remember(typography, fontWeight, fontStyle, style.fontWeight) {
+        when (fontWeight ?: style.fontWeight) {
+            FontWeight.SemiBold -> if (fontStyle == FontStyle.Italic) {
+                R.font.figtree_semibold_italic
+            } else {
+                R.font.figtree_semibold
+            }
+
+            FontWeight.Bold -> if (fontStyle == FontStyle.Italic) {
+                R.font.figtree_bold_italic
+            } else {
+                R.font.figtree_bold
+            }
+
+            else -> if (fontStyle == FontStyle.Italic) {
+                R.font.figtree_italic
+            } else {
+                R.font.figtree_regular
+            }
+        }
     }
 
     Text(
-        text = finalText,
+        text = text,
         modifier = modifier,
         color = color.color,
         fontSize = fontSize,
         fontStyle = fontStyle,
         fontWeight = fontWeight,
-        fontFamily = fontFamily,
+        fontFamily = FontFamily(Font(fontId)),
         letterSpacing = letterSpacing,
         textDecoration = textDecoration,
         textAlign = textAlign,
         lineHeight = lineHeight,
         overflow = overflow,
         softWrap = softWrap,
-        minLines = minLines,
         maxLines = maxLines,
+        minLines = minLines,
         onTextLayout = onTextLayout,
         style = style
     )
@@ -128,11 +145,6 @@ fun PlanetText(
 /**
  * High level element that displays text and provides semantics / accessibility information.
  *
- * The default [style] uses the [LocalTextStyle] provided by the [MaterialTheme] / components. If
- * you are setting your own style, you may want to consider first retrieving [LocalTextStyle],
- * and using [TextStyle.copy] to keep any theme defined attributes, only modifying the specific
- * attributes you want to override.
- *
  * For ease of use, commonly used parameters from [TextStyle] are also present here. The order of
  * precedence is as follows:
  * - If a parameter is explicitly set here (i.e, it is _not_ `null` or [TextUnit.Unspecified]),
@@ -140,43 +152,38 @@ fun PlanetText(
  * - If a parameter is _not_ set, (`null` or [TextUnit.Unspecified]), then the corresponding value
  * from [style] will be used instead.
  *
- * Additionally, for [color], if [color] is not set, and [style] does not have a color, then
- * [LocalContentColor] will be used with an alpha of [LocalContentAlpha]- this allows this
- * [Text] or element containing this [Text] to adapt to different background colors and still
- * maintain contrast and accessibility.
- *
- * @param text The text to be displayed.
- * @param modifier [Modifier] to apply to this layout node.
- * @param color [Color] to apply to the text. If [Color.Unspecified], and [style] has no color set,
- * this will be [LocalContentColor].
- * @param typography typography style to use from [PlanetTypography] class.
- * @param fontSize The size of glyphs to use when painting the text. See [TextStyle.fontSize].
- * @param fontStyle The typeface variant to use when drawing the letters (e.g., italic).
+ * @param text the text to be displayed
+ * @param modifier the [Modifier] to be applied to this layout node
+ * @param color [PlanetColors] to apply to the text.
+ * @param typography typography to use as a style for this text (e.g. font weight, font size, and letter spacing).
+ * @param fontSize the size of glyphs to use when painting the text. See [TextStyle.fontSize].
+ * @param fontStyle the typeface variant to use when drawing the letters (e.g., italic).
  * See [TextStyle.fontStyle].
- * @param fontWeight The typeface thickness to use when painting the text (e.g., [FontWeight.Bold]).
- * @param fontFamily The font family to be used when rendering the text. See [TextStyle.fontFamily].
- * @param letterSpacing The amount of space to add between each letter.
+ * @param fontWeight the typeface thickness to use when painting the text (e.g., [FontWeight.Bold]).
+ * @param letterSpacing the amount of space to add between each letter.
  * See [TextStyle.letterSpacing].
- * @param textDecoration The decorations to paint on the text (e.g., an underline).
+ * @param textDecoration the decorations to paint on the text (e.g., an underline).
  * See [TextStyle.textDecoration].
- * @param textAlign The alignment of the text within the lines of the paragraph.
+ * @param textAlign the alignment of the text within the lines of the paragraph.
  * See [TextStyle.textAlign].
- * @param lineHeight Line height for the [Paragraph] in [TextUnit] unit, e.g. SP or EM.
+ * @param lineHeight line height for the [Paragraph] in [TextUnit] unit, e.g. SP or EM.
  * See [TextStyle.lineHeight].
- * @param overflow How visual overflow should be handled.
- * @param softWrap Whether the text should break at soft line breaks. If false, the glyphs in the
+ * @param overflow how visual overflow should be handled.
+ * @param softWrap whether the text should break at soft line breaks. If false, the glyphs in the
  * text will be positioned as if there was unlimited horizontal space. If [softWrap] is false,
  * [overflow] and TextAlign may have unexpected effects.
  * @param maxLines An optional maximum number of lines for the text to span, wrapping if
  * necessary. If the text exceeds the given number of lines, it will be truncated according to
- * [overflow] and [softWrap]. If it is not null, then it must be greater than zero.
- * @param inlineContent A map store composables that replaces certain ranges of the text. It's
- * used to insert composables into text layout. Check [InlineTextContent] for more information.
- * @param onTextLayout Callback that is executed when a new text layout is calculated. A
+ * [overflow] and [softWrap]. It is required that 1 <= [minLines] <= [maxLines].
+ * @param minLines The minimum height in terms of minimum number of visible lines. It is required
+ * that 1 <= [minLines] <= [maxLines].
+ * @param inlineContent a map storing composables that replaces certain ranges of the text, used to
+ * insert composables into text layout. See [InlineTextContent].
+ * @param onTextLayout callback that is executed when a new text layout is calculated. A
  * [TextLayoutResult] object that callback provides contains paragraph information, size of the
  * text, baselines and other details. The callback can be used to add additional decoration or
  * functionality to the text. For example, to draw selection around the text.
- * @param style Style configuration for the text such as color, font, line height etc.
+ * @param style style configuration for the text such as color, font, line height etc.
  */
 @Composable
 fun PlanetText(
@@ -184,22 +191,43 @@ fun PlanetText(
     modifier: Modifier = Modifier,
     color: PlanetColors.Solid = PlanetColors.Solid.content01,
     typography: PlanetTypography = PlanetTypography.BodyDefault14,
-    lineHeight: TextUnit = typography.lineHeight ?: TextUnit.Unspecified,
     fontSize: TextUnit = typography.size,
     fontWeight: FontWeight? = typography.weight,
-    fontStyle: FontStyle? = null,
-    fontFamily: FontFamily? = FontFamily(Font(R.font.figtree)),
+    fontStyle: FontStyle = FontStyle.Normal,
+    lineHeight: TextUnit = typography.lineHeight ?: TextUnit.Unspecified,
     letterSpacing: TextUnit = TextUnit.Unspecified,
-    textDecoration: TextDecoration? = null,
-    textAlign: TextAlign? = null,
+    textDecoration: TextDecoration = TextDecoration.None,
+    textAlign: TextAlign = TextAlign.Start,
     overflow: TextOverflow = TextOverflow.Ellipsis,
     softWrap: Boolean = true,
-    minLines: Int = 1,
     maxLines: Int = Int.MAX_VALUE,
+    minLines: Int = 1,
     inlineContent: Map<String, InlineTextContent> = mapOf(),
     onTextLayout: (TextLayoutResult) -> Unit = {},
     style: TextStyle = LocalTextStyle.current
 ) {
+    val fontId = remember(typography, fontWeight, fontStyle, style.fontWeight) {
+        when (fontWeight ?: style.fontWeight) {
+            FontWeight.SemiBold -> if (fontStyle == FontStyle.Italic) {
+                R.font.figtree_semibold_italic
+            } else {
+                R.font.figtree_semibold
+            }
+
+            FontWeight.Bold -> if (fontStyle == FontStyle.Italic) {
+                R.font.figtree_bold_italic
+            } else {
+                R.font.figtree_bold
+            }
+
+            else -> if (fontStyle == FontStyle.Italic) {
+                R.font.figtree_italic
+            } else {
+                R.font.figtree_regular
+            }
+        }
+    }
+
     Text(
         text = text,
         modifier = modifier,
@@ -207,15 +235,15 @@ fun PlanetText(
         fontSize = fontSize,
         fontStyle = fontStyle,
         fontWeight = fontWeight,
-        fontFamily = fontFamily,
+        fontFamily = FontFamily(Font(fontId)),
         letterSpacing = letterSpacing,
         textDecoration = textDecoration,
         textAlign = textAlign,
         lineHeight = lineHeight,
         overflow = overflow,
         softWrap = softWrap,
-        minLines = minLines,
         maxLines = maxLines,
+        minLines = minLines,
         onTextLayout = onTextLayout,
         style = style,
         inlineContent = inlineContent

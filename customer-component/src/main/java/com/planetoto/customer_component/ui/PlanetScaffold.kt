@@ -1,140 +1,86 @@
+/*
+ * Copyright 2023 PLANET
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.planetoto.customer_component.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material.DrawerDefaults
-import androidx.compose.material.DrawerState
-import androidx.compose.material.DrawerValue
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FabPosition
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ModalBottomSheetDefaults
-import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.SnackbarHost
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.contentColorFor
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.planetoto.customer_component.foundation.PlanetColors
-
-@Stable
-class PlanetScaffoldState(
-    val mainScaffoldState: ScaffoldState,
-    val sideDialogState: PlanetSideDialogState?,
-    val modalBottomSheetState: PlanetModalBottomSheetState?
-) {
-    constructor(
-        scaffoldState: ScaffoldState,
-        sideDialogState: PlanetSideDialogState?
-    ) : this(scaffoldState, sideDialogState, null)
-
-    constructor(
-        scaffoldState: ScaffoldState,
-        modalBottomSheetState: PlanetModalBottomSheetState?
-    ) : this(scaffoldState, null, modalBottomSheetState)
-
-    val drawerState: DrawerState
-        get() = mainScaffoldState.drawerState
-
-    val snackbarHostState: SnackbarHostState
-        get() = mainScaffoldState.snackbarHostState
-
-    val isSideDialogOpened: Boolean
-        get() = sideDialogState?.isOpen == true
-
-    val isSideDialogClosed: Boolean
-        get() = sideDialogState?.isClosed == true
-
-    val isModalBottomSheetVisible: Boolean
-        get() = modalBottomSheetState?.isVisible == true
-
-    suspend fun openSideDialog() {
-        checkNotNull(sideDialogState)
-        sideDialogState.open()
-    }
-
-    suspend fun closeSideDialog() {
-        checkNotNull(sideDialogState)
-        sideDialogState.close()
-    }
-
-    suspend fun showModalBottomSheet() {
-        checkNotNull(modalBottomSheetState)
-        modalBottomSheetState.show()
-    }
-
-    suspend fun hideModalBottomSheet() {
-        checkNotNull(modalBottomSheetState)
-        modalBottomSheetState.hide()
-    }
-}
-
-@Composable
-fun rememberPlanetScaffoldState(
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
-    sideDialogState: PlanetSideDialogState
-): PlanetScaffoldState = remember {
-    PlanetScaffoldState(scaffoldState, sideDialogState)
-}
-
-@Composable
-fun rememberPlanetScaffoldState(
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
-    modalBottomSheetState: PlanetModalBottomSheetState
-): PlanetScaffoldState = remember {
-    PlanetScaffoldState(scaffoldState, modalBottomSheetState)
-}
-
-@Composable
-fun rememberPlanetScaffoldState(
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
-    modalBottomSheetState: PlanetModalBottomSheetState,
-    sideDialogState: PlanetSideDialogState
-): PlanetScaffoldState = remember {
-    PlanetScaffoldState(scaffoldState, sideDialogState, modalBottomSheetState)
-}
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 /**
- * Simple PlanetScaffold just like Material's Scaffold with a few tweak
+ * Simple Scaffold
+ *
+ * @param modifier the [Modifier] to be applied to this scaffold
+ * @param topBar top app bar of the screen, typically a [PlanetToolbar]
+ * @param bottomBar bottom bar of the screen, typically a [NavigationBar]
+ * @param snackbarHost component to host [Snackbar]s that are pushed to be shown via
+ * [SnackbarHostState.showSnackbar], typically a [SnackbarHost]
+ * @param floatingActionButton Main action button of the screen, typically a [FloatingActionButton]
+ * @param floatingActionButtonPosition position of the FAB on the screen. See [FabPosition].
+ * @param backgroundColor the color used for the background of this scaffold. Use [PlanetColors.Solid.transparent]
+ * to have no color.
+ * @param contentWindowInsets window insets to be passed to [content] slot via [PaddingValues]
+ * params. Scaffold will take the insets into account from the top/bottom only if the [topBar]/
+ * [bottomBar] are not present, as the scaffold expect [topBar]/[bottomBar] to handle insets
+ * instead
+ * @param backgroundImage if background can not be passed using PlanetColors.Solid, use this
+ * @param content content of the screen. The lambda receives a [PaddingValues] that should be
+ * applied to the content root via [Modifier.padding] and [Modifier.consumeWindowInsets] to
+ * properly offset top and bottom bars. If using [Modifier.verticalScroll], apply this modifier to
+ * the child of the scroll, and not on the scroll itself.
  */
 @Composable
 fun PlanetScaffold(
     modifier: Modifier = Modifier,
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
     topBar: @Composable () -> Unit = {},
     bottomBar: @Composable () -> Unit = {},
-    snackbarHost: @Composable (SnackbarHostState) -> Unit = { SnackbarHost(it) },
+    snackbarHost: @Composable () -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
     floatingActionButtonPosition: FabPosition = FabPosition.End,
-    isFloatingActionButtonDocked: Boolean = false,
-    drawerContent: @Composable (ColumnScope.() -> Unit)? = null,
-    drawerGesturesEnabled: Boolean = true,
-    drawerShape: Shape = MaterialTheme.shapes.large,
-    drawerElevation: Dp = DrawerDefaults.Elevation,
-    drawerBackgroundColor: Color = MaterialTheme.colors.surface,
-    drawerContentColor: Color = contentColorFor(drawerBackgroundColor),
-    drawerScrimColor: Color = DrawerDefaults.scrimColor,
-    backgroundColor: Color = Color.White,
-    backgroundImage: (@Composable () -> Unit)? = null,
-    contentColor: Color = contentColorFor(backgroundColor),
-    statusBarColor: Color = PlanetColors.Solid.neutralWhite.color,
+    backgroundColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
+    contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
+    backgroundImage: @Composable (() -> Unit)? = null,
     content: @Composable (PaddingValues) -> Unit
 ) {
     backgroundImage?.let {
@@ -142,350 +88,193 @@ fun PlanetScaffold(
             it()
             Scaffold(
                 modifier = modifier,
-                scaffoldState = scaffoldState,
-                topBar = {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(color = statusBarColor)
-                            .statusBarsPadding()
-                    ) {
-                        topBar()
-                    }
-                },
-                bottomBar = {
-                    Box(modifier = Modifier.navigationBarsPadding()) {
-                        bottomBar()
-                    }
-                },
+                topBar = topBar,
+                bottomBar = bottomBar,
                 snackbarHost = snackbarHost,
                 floatingActionButton = floatingActionButton,
                 floatingActionButtonPosition = floatingActionButtonPosition,
-                isFloatingActionButtonDocked = isFloatingActionButtonDocked,
-                drawerContent = drawerContent,
-                drawerGesturesEnabled = drawerGesturesEnabled,
-                drawerShape = drawerShape,
-                drawerElevation = drawerElevation,
-                drawerBackgroundColor = drawerBackgroundColor,
-                drawerContentColor = drawerContentColor,
-                drawerScrimColor = drawerScrimColor,
-                backgroundColor = backgroundColor,
-                contentColor = contentColor,
+                containerColor = backgroundColor.color,
+                contentWindowInsets = contentWindowInsets,
                 content = content
             )
         }
-    } ?: run {
-        Scaffold(
-            modifier = modifier,
-            scaffoldState = scaffoldState,
-            topBar = {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(color = statusBarColor)
-                        .statusBarsPadding()
-                ) {
-                    topBar()
-                }
-            },
-            bottomBar = {
-                Box(modifier = Modifier.navigationBarsPadding()) {
-                    bottomBar()
-                }
-            },
-            snackbarHost = snackbarHost,
-            floatingActionButton = floatingActionButton,
-            floatingActionButtonPosition = floatingActionButtonPosition,
-            isFloatingActionButtonDocked = isFloatingActionButtonDocked,
-            drawerContent = drawerContent,
-            drawerGesturesEnabled = drawerGesturesEnabled,
-            drawerShape = drawerShape,
-            drawerElevation = drawerElevation,
-            drawerBackgroundColor = drawerBackgroundColor,
-            drawerContentColor = drawerContentColor,
-            drawerScrimColor = drawerScrimColor,
-            backgroundColor = backgroundColor,
-            contentColor = contentColor,
-            content = content
+    } ?: Scaffold(
+        modifier = modifier,
+        topBar = topBar,
+        bottomBar = bottomBar,
+        snackbarHost = snackbarHost,
+        floatingActionButton = floatingActionButton,
+        floatingActionButtonPosition = floatingActionButtonPosition,
+        containerColor = backgroundColor.color,
+        contentWindowInsets = contentWindowInsets,
+        content = content
+    )
+}
+
+/**
+ * Scaffold with Bottom Sheet support
+ *
+ * @param modifier the [Modifier] to be applied to this scaffold
+ * @param topBar top app bar of the screen, typically a [PlanetToolbar]
+ * @param bottomBar bottom bar of the screen, typically a [NavigationBar]
+ * @param snackbarHost component to host [Snackbar]s that are pushed to be shown via
+ * [SnackbarHostState.showSnackbar], typically a [SnackbarHost]
+ * @param floatingActionButton Main action button of the screen, typically a [FloatingActionButton]
+ * @param floatingActionButtonPosition position of the FAB on the screen. See [FabPosition].
+ * @param backgroundColor the color used for the background of this scaffold. Use [PlanetColors.Solid.transparent]
+ * to have no color.
+ * @param backgroundImage if background can not be passed using PlanetColors.Solid, use this
+ * @param state The state of the Scaffold, mainly used to control the bottom sheet
+ * @param sheetShape The shape of the bottom sheet.
+ * @param sheetBackgroundColor The color used for the background of this bottom sheet
+ * @param sheetTonalElevation The tonal elevation of this bottom sheet.
+ * @param scrimColor Color of the scrim that obscures content when the bottom sheet is open.
+ * @param isSheetDraggable Make the bottom sheet can be dismissed by dragging it
+ * @param tapScrimToDismissSheet Make the bottom sheet can be dismissed by tapping the [Scrim] area
+ * @param sheetWindowInsets window insets to be passed to the bottom sheet window via [PaddingValues]
+ * @param contentWindowInsets window insets to be passed to [content] slot via [PaddingValues]
+ * params. Scaffold will take the insets into account from the top/bottom only if the [topBar]/
+ * [bottomBar] are not present, as the scaffold expect [topBar]/[bottomBar] to handle insets
+ * instead
+ * @param sheetContent The content to be displayed inside the bottom sheet.
+ * @param content content of the screen. The lambda receives a [PaddingValues] that should be
+ * applied to the content root via [Modifier.padding] and [Modifier.consumeWindowInsets] to
+ * properly offset top and bottom bars. If using [Modifier.verticalScroll], apply this modifier to
+ * the child of the scroll, and not on the scroll itself.
+ */
+@Composable
+fun <T : Any> PlanetScaffold(
+    modifier: Modifier = Modifier,
+    state: PlanetScaffoldState<T>,
+    topBar: @Composable () -> Unit = {},
+    bottomBar: @Composable () -> Unit = {},
+    snackbarHost: @Composable () -> Unit = {},
+    floatingActionButton: @Composable () -> Unit = {},
+    floatingActionButtonPosition: FabPosition = FabPosition.End,
+    backgroundColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
+    backgroundImage: (@Composable () -> Unit)? = null,
+    sheetShape: Shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
+    sheetBackgroundColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
+    sheetTonalElevation: Dp = 1.dp,
+    scrimColor: PlanetColors.Solid = PlanetColors.Solid.black.alpha(0.8f),
+    isSheetDraggable: Boolean = false,
+    tapScrimToDismissSheet: Boolean = true,
+    contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
+    sheetWindowInsets: WindowInsets = WindowInsets.systemBars.only(WindowInsetsSides.Vertical),
+    sheetContent: @Composable (T) -> Unit,
+    content: @Composable (PaddingValues) -> Unit
+) {
+
+    PlanetScaffold(
+        modifier = modifier,
+        topBar = topBar,
+        bottomBar = bottomBar,
+        snackbarHost = snackbarHost,
+        floatingActionButton = floatingActionButton,
+        floatingActionButtonPosition = floatingActionButtonPosition,
+        backgroundColor = backgroundColor,
+        contentWindowInsets = contentWindowInsets,
+        backgroundImage = backgroundImage
+    ) {
+        state.sheetType?.let {
+            PlanetModalBottomSheet(
+                onDismissRequest = state::resetSheetType,
+                sheetState = state.sheetState,
+                shape = sheetShape,
+                backgroundColor = sheetBackgroundColor,
+                tonalElevation = sheetTonalElevation,
+                scrimColor = scrimColor,
+                showHandlebar = isSheetDraggable,
+                tapOutsideToDismiss = tapScrimToDismissSheet,
+                windowInsets = sheetWindowInsets
+            ) {
+                sheetContent(it)
+            }
+        }
+
+        content(it)
+    }
+}
+
+@Stable
+class PlanetScaffoldState<T : Any>(
+    private val coroutineScope: CoroutineScope,
+    initialSheetValue: PlanetModalBottomSheetValue,
+    initialSheetType: T?,
+    private val onSheetStateChange: ((PlanetModalBottomSheetValue) -> Unit)? = null
+) {
+    val sheetState = PlanetModalBottomSheetState(initialValue = initialSheetValue)
+
+    val isSheetVisible: Boolean
+        get() = sheetState.isVisible
+
+    var sheetType by mutableStateOf(initialSheetType)
+        private set
+
+    internal fun resetSheetType() {
+        sheetType = null
+        onSheetStateChange?.invoke(PlanetModalBottomSheetValue.Hidden)
+    }
+
+    fun showBottomSheet(type: T) {
+        coroutineScope.launch {
+            sheetType = type
+        }.invokeOnCompletion {
+            onSheetStateChange?.invoke(PlanetModalBottomSheetValue.Expanded)
+        }
+    }
+
+    fun hideBottomSheet() {
+        coroutineScope.launch {
+            sheetState.hide()
+        }.invokeOnCompletion {
+            if (!isSheetVisible) {
+                resetSheetType()
+            }
+        }
+    }
+
+    companion object {
+        /**
+         * The default [Saver] implementation for [PlanetScaffoldState].
+         */
+        fun <T : Any> Saver(
+            coroutineScope: CoroutineScope,
+            initialSheetType: T?,
+            onSheetStateChange: ((PlanetModalBottomSheetValue) -> Unit)?
+        ) = Saver<PlanetScaffoldState<T>, PlanetModalBottomSheetValue>(
+            save = { it.sheetState.currentValue },
+            restore = { savedValue ->
+                PlanetScaffoldState(
+                    coroutineScope = coroutineScope,
+                    initialSheetValue = savedValue,
+                    initialSheetType = initialSheetType,
+                    onSheetStateChange = onSheetStateChange
+                )
+            }
         )
     }
 }
 
-/**
- * PlanetScaffold with side dialog support for tablet
- * @param addImePadding add IME padding on base PlanetScaffold
- * instead of PlanetSideDialog (outer composable)
- */
-@ExperimentalMaterialApi
 @Composable
-fun PlanetScaffold(
-    modifier: Modifier = Modifier,
-    planetScaffoldState: PlanetScaffoldState = rememberPlanetScaffoldState(
-        sideDialogState = rememberPlanetSideDialogState(initialValue = DrawerValue.Closed)
-    ),
-    topBar: @Composable () -> Unit = {},
-    bottomBar: @Composable () -> Unit = {},
-    snackbarHost: @Composable (SnackbarHostState) -> Unit = { SnackbarHost(it) },
-    floatingActionButton: @Composable () -> Unit = {},
-    floatingActionButtonPosition: FabPosition = FabPosition.End,
-    isFloatingActionButtonDocked: Boolean = false,
-    drawerContent: @Composable (ColumnScope.() -> Unit)? = null,
-    drawerGesturesEnabled: Boolean = true,
-    drawerShape: Shape = MaterialTheme.shapes.large,
-    drawerElevation: Dp = DrawerDefaults.Elevation,
-    drawerBackgroundColor: Color = MaterialTheme.colors.surface,
-    drawerContentColor: Color = contentColorFor(drawerBackgroundColor),
-    drawerScrimColor: Color = DrawerDefaults.scrimColor,
-    sideDialogContent: @Composable ColumnScope.() -> Unit,
-    sideDialogWidth: Dp? = null,
-    sideDialogBackgroundColor: Color = MaterialTheme.colors.surface,
-    backgroundColor: Color = Color.White,
-    backgroundImage: (@Composable () -> Unit)? = null,
-    contentColor: Color = contentColorFor(backgroundColor),
-    statusBarColor: Color = PlanetColors.Solid.neutralWhite.color,
-    addImePadding: Boolean = false,
-    content: @Composable (PaddingValues) -> Unit
-) {
-    requireNotNull(planetScaffoldState.sideDialogState) {
-        "PlanetScaffoldState.PlanetSideDialogState can not be null!"
-    }
-
-    val scaffoldModifier = remember(addImePadding) {
-        if (addImePadding) Modifier.imePadding() else Modifier
-    }
-
-    PlanetSideDialog(
-        modifier = modifier,
-        sideDialogState = planetScaffoldState.sideDialogState,
-        gesturesEnabled = planetScaffoldState.sideDialogState.isOpen,
-        sideDialogContent = sideDialogContent,
-        sideDialogBackgroundColor = sideDialogBackgroundColor,
-        drawerWidth = sideDialogWidth,
-        content = {
-            PlanetScaffold(
-                modifier = scaffoldModifier,
-                scaffoldState = planetScaffoldState.mainScaffoldState,
-                snackbarHost = snackbarHost,
-                topBar = topBar,
-                bottomBar = bottomBar,
-                floatingActionButton = floatingActionButton,
-                floatingActionButtonPosition = floatingActionButtonPosition,
-                isFloatingActionButtonDocked = isFloatingActionButtonDocked,
-                drawerContent = drawerContent,
-                drawerGesturesEnabled = drawerGesturesEnabled,
-                drawerShape = drawerShape,
-                drawerElevation = drawerElevation,
-                drawerBackgroundColor = drawerBackgroundColor,
-                drawerContentColor = drawerContentColor,
-                drawerScrimColor = drawerScrimColor,
-                backgroundColor = backgroundColor,
-                backgroundImage = backgroundImage,
-                contentColor = contentColor,
-                statusBarColor = statusBarColor,
-                content = content
-            )
-        }
-    )
-}
-
-/**
- * PlanetScaffold with modal bottom sheet support
- * @param addImePadding add IME padding on base PlanetScaffold
- * instead of PlanetModalBottomSheetLayout (outer composable)
- */
-@ExperimentalMaterialApi
-@Composable
-fun PlanetScaffold(
-    modifier: Modifier = Modifier,
-    planetScaffoldState: PlanetScaffoldState = rememberPlanetScaffoldState(
-        modalBottomSheetState = rememberPlanetModalBottomSheetState(initialValue = PlanetModalBottomSheetValue.Hidden)
-    ),
-    topBar: @Composable () -> Unit = {},
-    bottomBar: @Composable () -> Unit = {},
-    snackbarHost: @Composable (SnackbarHostState) -> Unit = { SnackbarHost(it) },
-    floatingActionButton: @Composable () -> Unit = {},
-    floatingActionButtonPosition: FabPosition = FabPosition.End,
-    isFloatingActionButtonDocked: Boolean = false,
-    drawerContent: @Composable (ColumnScope.() -> Unit)? = null,
-    drawerGesturesEnabled: Boolean = true,
-    drawerShape: Shape = MaterialTheme.shapes.large,
-    drawerElevation: Dp = DrawerDefaults.Elevation,
-    drawerBackgroundColor: Color = MaterialTheme.colors.surface,
-    drawerContentColor: Color = contentColorFor(drawerBackgroundColor),
-    drawerScrimColor: Color = DrawerDefaults.scrimColor,
-    sheetContent: @Composable () -> Unit,
-    sheetBackgroundColor: Color = MaterialTheme.colors.surface,
-    sheetShape: Shape = MaterialTheme.shapes.large,
-    sheetElevation: Dp = ModalBottomSheetDefaults.Elevation,
-    isSheetDraggable: Boolean = true,
-    tapOutsideSheetToDismiss: Boolean = true,
-    backgroundColor: Color = Color.White,
-    backgroundImage: (@Composable () -> Unit)? = null,
-    contentColor: Color = contentColorFor(backgroundColor),
-    statusBarColor: Color = PlanetColors.Solid.neutralWhite.color,
-    addImePadding: Boolean = false,
-    content: @Composable (PaddingValues) -> Unit
-) {
-    requireNotNull(planetScaffoldState.modalBottomSheetState) {
-        "PlanetScaffoldState.ModalBottomSheetState can not be null!"
-    }
-
-    val scaffoldModifier = remember(addImePadding) {
-        if (addImePadding) Modifier.imePadding() else Modifier
-    }
-
-    PlanetModalBottomSheetLayout(
-        modifier = modifier,
-        sheetContent = sheetContent,
-        sheetState = planetScaffoldState.modalBottomSheetState,
-        sheetShape = sheetShape,
-        sheetElevation = sheetElevation,
-        sheetBackgroundColor = sheetBackgroundColor,
-        showHandlebar = isSheetDraggable,
-        tapOutsideToDismiss = tapOutsideSheetToDismiss,
-        content = {
-            PlanetScaffold(
-                modifier = scaffoldModifier,
-                scaffoldState = planetScaffoldState.mainScaffoldState,
-                snackbarHost = snackbarHost,
-                topBar = topBar,
-                bottomBar = bottomBar,
-                floatingActionButton = floatingActionButton,
-                floatingActionButtonPosition = floatingActionButtonPosition,
-                isFloatingActionButtonDocked = isFloatingActionButtonDocked,
-                drawerContent = drawerContent,
-                drawerGesturesEnabled = drawerGesturesEnabled,
-                drawerShape = drawerShape,
-                drawerElevation = drawerElevation,
-                drawerBackgroundColor = drawerBackgroundColor,
-                drawerContentColor = drawerContentColor,
-                drawerScrimColor = drawerScrimColor,
-                backgroundColor = backgroundColor,
-                backgroundImage = backgroundImage,
-                contentColor = contentColor,
-                statusBarColor = statusBarColor,
-                content = content
-            )
-        }
-    )
-}
-
-/**
- * PlanetScaffold with both side dialog and bottom sheet support
- * @param addImePadding add IME padding on base PlanetScaffold
- * instead of PlanetModalBottomSheetLayout (outer composable)
- */
-@ExperimentalMaterialApi
-@Composable
-fun PlanetScaffold(
-    modifier: Modifier = Modifier,
-    planetScaffoldState: PlanetScaffoldState = rememberPlanetScaffoldState(
-        sideDialogState = rememberPlanetSideDialogState(initialValue = DrawerValue.Closed),
-        modalBottomSheetState = rememberPlanetModalBottomSheetState(initialValue = PlanetModalBottomSheetValue.Hidden)
-    ),
-    topBar: @Composable () -> Unit = {},
-    bottomBar: @Composable () -> Unit = {},
-    snackbarHost: @Composable (SnackbarHostState) -> Unit = { SnackbarHost(it) },
-    floatingActionButton: @Composable () -> Unit = {},
-    floatingActionButtonPosition: FabPosition = FabPosition.End,
-    isFloatingActionButtonDocked: Boolean = false,
-    drawerContent: @Composable (ColumnScope.() -> Unit)? = null,
-    drawerGesturesEnabled: Boolean = true,
-    drawerShape: Shape = MaterialTheme.shapes.large,
-    drawerElevation: Dp = DrawerDefaults.Elevation,
-    drawerBackgroundColor: Color = MaterialTheme.colors.surface,
-    drawerContentColor: Color = contentColorFor(drawerBackgroundColor),
-    drawerScrimColor: Color = DrawerDefaults.scrimColor,
-    sideDialogContent: @Composable ColumnScope.() -> Unit,
-    sideDialogWidth: Dp? = null,
-    sideDialogBackgroundColor: Color = MaterialTheme.colors.surface,
-    sheetContent: @Composable () -> Unit,
-    sheetBackgroundColor: Color = MaterialTheme.colors.surface,
-    sheetShape: Shape = MaterialTheme.shapes.large,
-    sheetElevation: Dp = ModalBottomSheetDefaults.Elevation,
-    isSheetDraggable: Boolean = true,
-    tapOutsideSheetToDismiss: Boolean = true,
-    backgroundColor: Color = Color.White,
-    contentColor: Color = contentColorFor(backgroundColor),
-    backgroundImage: (@Composable () -> Unit)? = null,
-    statusBarColor: Color = PlanetColors.Solid.neutralWhite.color,
-    addImePadding: Boolean = false,
-    content: @Composable (PaddingValues) -> Unit
-) {
-    requireNotNull(planetScaffoldState.modalBottomSheetState) {
-        "PlanetScaffoldState.ModalBottomSheetState can not be null!"
-    }
-
-    requireNotNull(planetScaffoldState.sideDialogState) {
-        "PlanetScaffoldState.PlanetSideDialogState can not be null!"
-    }
-
-    val scaffoldModifier = remember(addImePadding) {
-        if (addImePadding) Modifier.imePadding() else Modifier
-    }
-
-    PlanetSideDialog(
-        modifier = modifier,
-        sideDialogState = planetScaffoldState.sideDialogState,
-        gesturesEnabled = planetScaffoldState.sideDialogState.isOpen,
-        sideDialogContent = sideDialogContent,
-        sideDialogBackgroundColor = sideDialogBackgroundColor,
-        drawerWidth = sideDialogWidth,
-        content = {
-            PlanetModalBottomSheetLayout(
-                sheetContent = sheetContent,
-                sheetState = planetScaffoldState.modalBottomSheetState,
-                sheetShape = sheetShape,
-                sheetElevation = sheetElevation,
-                sheetBackgroundColor = sheetBackgroundColor,
-                showHandlebar = isSheetDraggable,
-                tapOutsideToDismiss = tapOutsideSheetToDismiss,
-                content = {
-                    PlanetScaffold(
-                        modifier = scaffoldModifier,
-                        scaffoldState = planetScaffoldState.mainScaffoldState,
-                        snackbarHost = snackbarHost,
-                        topBar = topBar,
-                        bottomBar = bottomBar,
-                        floatingActionButton = floatingActionButton,
-                        floatingActionButtonPosition = floatingActionButtonPosition,
-                        isFloatingActionButtonDocked = isFloatingActionButtonDocked,
-                        drawerContent = drawerContent,
-                        drawerGesturesEnabled = drawerGesturesEnabled,
-                        drawerShape = drawerShape,
-                        drawerElevation = drawerElevation,
-                        drawerBackgroundColor = drawerBackgroundColor,
-                        drawerContentColor = drawerContentColor,
-                        drawerScrimColor = drawerScrimColor,
-                        backgroundColor = backgroundColor,
-                        backgroundImage = backgroundImage,
-                        contentColor = contentColor,
-                        statusBarColor = statusBarColor,
-                        content = content
-                    )
-                }
-            )
-        }
-    )
-}
-
-@Preview
-@Composable
-private fun Preview() {
-    PlanetScaffold(bottomBar = {
-        PlanetButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(24.dp),
-            text = "WOI WOI WOIW OI"
-        ) {
-
-        }
-    }) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = PlanetColors.Solid.red05.color)
+fun <T : Any> rememberPlanetScaffoldState(
+    initialSheetType: T?,
+    initialSheetValue: PlanetModalBottomSheetValue = PlanetModalBottomSheetValue.Hidden,
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
+    onSheetStateChange: ((PlanetModalBottomSheetValue) -> Unit)? = null
+): PlanetScaffoldState<T> {
+    return rememberSaveable(
+        saver = PlanetScaffoldState.Saver(
+            coroutineScope = coroutineScope,
+            initialSheetType = initialSheetType,
+            onSheetStateChange = onSheetStateChange
+        )
+    ) {
+        PlanetScaffoldState(
+            coroutineScope = coroutineScope,
+            initialSheetValue = initialSheetValue,
+            initialSheetType = initialSheetType,
+            onSheetStateChange = onSheetStateChange
         )
     }
 }
