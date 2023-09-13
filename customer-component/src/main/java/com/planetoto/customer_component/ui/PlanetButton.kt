@@ -180,7 +180,7 @@ private fun SecondaryButton(
     }
 
     val textColor = remember(enabled) {
-        if (enabled) PlanetColors.Solid.blue08 else PlanetColors.Solid.content03
+        if (enabled) PlanetColors.Solid.blue07 else PlanetColors.Solid.content03
     }
 
     Button(
@@ -196,7 +196,7 @@ private fun SecondaryButton(
         colors = ButtonDefaults.buttonColors(
             containerColor = PlanetColors.Solid.blue01.color,
             disabledContainerColor = PlanetColors.Solid.neutralBg.color,
-            contentColor = PlanetColors.Solid.blue08.color,
+            contentColor = PlanetColors.Solid.blue07.color,
             disabledContentColor = PlanetColors.Solid.content03.color
         ),
         elevation = ButtonDefaults.buttonElevation(
