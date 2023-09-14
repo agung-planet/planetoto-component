@@ -232,10 +232,15 @@ fun PlanetModalBottomSheet(
                 contentColor = contentColorFor(backgroundColor = backgroundColor.color),
                 tonalElevation = tonalElevation,
             ) {
+                val columnModifier = Modifier.fillMaxWidth()
+
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .navigationBarsPadding()
+                    modifier = columnModifier
+                        .then(
+                            if (windowInsets == PlanetModalBottomSheetDefaults.NonFullScreenWindowInsets) {
+                                Modifier.navigationBarsPadding()
+                            } else Modifier
+                        )
                 ) {
                     if (showHandlebar) {
                         val dismissActionLabel = "dismiss"
