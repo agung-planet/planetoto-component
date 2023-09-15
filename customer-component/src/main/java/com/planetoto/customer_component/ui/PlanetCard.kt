@@ -35,7 +35,7 @@ import com.planetoto.customer_component.foundation.PlanetColors
  */
 @Composable
 fun PlanetCard(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(LocalBorderRadius.current.medium),
     backgroundColor: PlanetColors.Solid = PlanetColors.Solid.neutralWhite,
     elevation: Dp = 1.dp,
