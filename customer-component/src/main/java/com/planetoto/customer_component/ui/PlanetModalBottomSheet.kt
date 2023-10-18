@@ -40,7 +40,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
@@ -232,16 +231,7 @@ fun PlanetModalBottomSheet(
                 contentColor = contentColorFor(backgroundColor = backgroundColor.color),
                 tonalElevation = tonalElevation,
             ) {
-                val columnModifier = Modifier.fillMaxWidth()
-
-                Column(
-                    modifier = columnModifier
-                        .then(
-                            if (windowInsets == PlanetModalBottomSheetDefaults.NonFullScreenWindowInsets) {
-                                Modifier.navigationBarsPadding()
-                            } else Modifier
-                        )
-                ) {
+                Column(modifier = Modifier.fillMaxWidth()) {
                     if (showHandlebar) {
                         val dismissActionLabel = "dismiss"
 
