@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         minSdk 24
-        targetSdk 33
+        targetSdk 34
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -36,7 +36,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion '1.5.2'
+        kotlinCompilerExtensionVersion '1.5.3'
     }
 }
 
@@ -55,6 +55,7 @@ dependencies {
     implementation "$libs.activity_compose"
     implementation "$libs.viewmodel_compose"
     implementation "$libs.coil"
+    implementation libs.coil_placeholder
     implementation "$libs.paging"
     implementation "$libs.constraint_compose"
     implementation libs.zoomable
