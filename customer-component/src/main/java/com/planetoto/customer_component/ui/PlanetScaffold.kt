@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
@@ -39,7 +38,6 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -86,19 +84,19 @@ fun PlanetScaffold(
         Box(modifier = Modifier.fillMaxSize()) {
             it()
             Scaffold(
-                modifier = modifier.navigationBarsPadding(),
+                modifier = modifier,
                 topBar = topBar,
                 bottomBar = bottomBar,
                 snackbarHost = snackbarHost,
                 floatingActionButton = floatingActionButton,
                 floatingActionButtonPosition = floatingActionButtonPosition,
-                containerColor = Color.Transparent,
+                containerColor = backgroundColor.color,
                 contentWindowInsets = contentWindowInsets,
                 content = content
             )
         }
     } ?: Scaffold(
-        modifier = modifier.navigationBarsPadding(),
+        modifier = modifier,
         topBar = topBar,
         bottomBar = bottomBar,
         snackbarHost = snackbarHost,
