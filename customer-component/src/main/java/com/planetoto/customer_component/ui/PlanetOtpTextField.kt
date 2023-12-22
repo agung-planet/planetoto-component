@@ -79,7 +79,7 @@ fun PlanetOtpTextField(
     var isTapBackSpace = false
 
     val focusManager = LocalFocusManager.current
-    val (first, second, third, fourth) = FocusRequester.createRefs()
+    val (first, second, third, fourth) = remember { FocusRequester.createRefs() }
     var everFullFilledOtp by remember { mutableStateOf(false) }
 
     val space = 12.dp
@@ -114,37 +114,39 @@ fun PlanetOtpTextField(
 
     Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(space)) {
         repeat(4) { i ->
-            val otpCodeFieldModifier = Modifier.weight(1f).let {
-                when (i) {
-                    0 -> it
-                        .focusRequester(first)
-                        .focusProperties {
-                            down = second
-                        }
+            val otpCodeFieldModifier = Modifier
+                .weight(1f)
+                .let {
+                    when (i) {
+                        0 -> it
+                            .focusRequester(first)
+                            .focusProperties {
+                                down = second
+                            }
 
-                    1 -> it
-                        .focusRequester(second)
-                        .focusProperties {
-                            down = third
-                            up = first
-                        }
+                        1 -> it
+                            .focusRequester(second)
+                            .focusProperties {
+                                down = third
+                                up = first
+                            }
 
-                    2 -> it
-                        .focusRequester(third)
-                        .focusProperties {
-                            down = fourth
-                            up = second
-                        }
+                        2 -> it
+                            .focusRequester(third)
+                            .focusProperties {
+                                down = fourth
+                                up = second
+                            }
 
-                    3 -> it
-                        .focusRequester(fourth)
-                        .focusProperties {
-                            up = third
-                        }
+                        3 -> it
+                            .focusRequester(fourth)
+                            .focusProperties {
+                                up = third
+                            }
 
-                    else -> it
+                        else -> it
+                    }
                 }
-            }
 
             OtpCodeTextField(
                 modifier = otpCodeFieldModifier,
