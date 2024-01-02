@@ -14,6 +14,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -81,13 +82,22 @@ fun PlanetOtpTextField(
     val focusManager = LocalFocusManager.current
     val (first, second, third, fourth) = remember { FocusRequester.createRefs() }
     var everFullFilledOtp by remember { mutableStateOf(false) }
+    var focusOnFirst by remember { mutableStateOf(false) }
 
     val space = 12.dp
+
+    SideEffect {
+        // request focus after composition where focusOnFirst == true
+        if (focusOnFirst) {
+            first.requestFocus()
+            focusOnFirst = false
+        }
+    }
 
     LaunchedEffect(otpFieldModels) {
         if (otpFieldModels.any { it.value.isEmpty() }) {
             if (isTapBackSpace) focusManager.moveFocus(FocusDirection.Up)
-            else if (otpFieldModels.first().value.isEmpty()) first.requestFocus()
+            else if (otpFieldModels.first().value.isEmpty()) focusOnFirst = true
             else focusManager.moveFocus(FocusDirection.Down)
         } else {
             everFullFilledOtp = true
